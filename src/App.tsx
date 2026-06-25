@@ -33,12 +33,12 @@ function PublicLayout() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/bridal" element={<Bridal />} />
+        <Route path="/bridal-packages" element={<Bridal />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/offers" element={<Offers />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/book" element={<Book />} />
+        <Route path="/book-appointment" element={<Book />} />
         <Route path="/testimonials" element={<Testimonials />} />
       </Routes>
       <Footer />

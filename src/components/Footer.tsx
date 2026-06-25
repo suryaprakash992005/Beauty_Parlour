@@ -48,11 +48,11 @@ export default function Footer() {
               {[
                 { label: 'Home',             to: '/'          },
                 { label: 'About Us',         to: '/about'     },
-                { label: 'Bridal Packages',  to: '/bridal'    },
+                { label: 'Bridal Packages',  to: '/bridal-packages' },
                 { label: 'Gallery',          to: '/gallery'   },
                 { label: 'Offers',           to: '/offers'    },
                 { label: 'Testimonials',     to: '/testimonials' },
-                { label: 'Book Appointment', to: '/book'      },
+                { label: 'Book Appointment', to: '/book-appointment' },
                 { label: 'Contact',          to: '/contact'   },
               ].map(({ label, to }) => (
                 <li key={label}><Link to={to} className="footer__link">{label}</Link></li>

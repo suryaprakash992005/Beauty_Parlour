@@ -183,7 +183,7 @@ export default function Home() {
             Where elegance meets transformation. Step into a world of curated luxury beauty rituals crafted exclusively for you.
           </p>
           <div className="hero__actions">
-            <Link to="/book" className="btn btn-gold">
+            <Link to="/book-appointment" className="btn btn-gold">
               Book Appointment <ArrowRight size={16} />
             </Link>
             <Link to="/services" className="btn btn-outline-white">
@@ -239,7 +239,7 @@ export default function Home() {
                     <div className="service-card__price">
                       {s.price} <small>onwards</small>
                     </div>
-                    <Link to="/book" className="btn btn-outline" style={{ padding: '8px 18px', fontSize: '0.75rem' }}>
+                    <Link to="/book-appointment" className="btn btn-outline" style={{ padding: '8px 18px', fontSize: '0.75rem' }}>
                       Book Now
                     </Link>
                   </div>
@@ -289,7 +289,7 @@ export default function Home() {
                 <p className="offer-card__desc">{o.desc}</p>
                 <span className="offer-card__tag">{o.tag}</span>
                 <br /><br />
-                <Link to="/book" className="btn btn-outline-white" style={{ width: '100%', justifyContent: 'center', fontSize: '0.78rem' }}>
+                <Link to="/book-appointment" className="btn btn-outline-white" style={{ width: '100%', justifyContent: 'center', fontSize: '0.78rem' }}>
                   Claim Offer
                 </Link>
               </div>

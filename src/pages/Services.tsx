@@ -80,7 +80,7 @@ export default function Services() {
                     <span className="service-card-full__dur">⏱ {s.dur}</span>
                     <span className="service-card-full__price">{s.price} <small>onwards</small></span>
                   </div>
-                  <Link to="/book" className="btn btn-primary service-card-full__cta">
+                  <Link to="/book-appointment" className="btn btn-primary service-card-full__cta">
                     Book Now <ArrowRight size={14} />
                   </Link>
                 </div>

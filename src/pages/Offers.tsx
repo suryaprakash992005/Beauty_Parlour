@@ -45,7 +45,7 @@ export default function Offers() {
                   <h3 className="offer-full-card__title">{o.title}</h3>
                   <p className="offer-full-card__desc">{o.desc}</p>
                   <div className="offer-full-card__validity">🗓 {o.validity}</div>
-                  <Link to="/book" className="btn btn-primary offer-full-card__cta">
+                  <Link to="/book-appointment" className="btn btn-primary offer-full-card__cta">
                     Claim Offer <ArrowRight size={14} />
                   </Link>
                 </div>

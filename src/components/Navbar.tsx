@@ -4,13 +4,14 @@ import { X } from 'lucide-react';
 import '../styles/layout.css';
 
 const NAV_LINKS = [
-  { label: 'Home',       to: '/' },
-  { label: 'Services',   to: '/services' },
-  { label: 'Bridal',     to: '/bridal' },
-  { label: 'Gallery',    to: '/gallery' },
-  { label: 'Offers',     to: '/offers' },
-  { label: 'About',      to: '/about' },
-  { label: 'Contact',    to: '/contact' },
+  { label: 'Home',            to: '/' },
+  { label: 'Services',        to: '/services' },
+  { label: 'Bridal Packages', to: '/bridal-packages' },
+  { label: 'Gallery',         to: '/gallery' },
+  { label: 'Offers',          to: '/offers' },
+  { label: 'Testimonials',    to: '/testimonials' },
+  { label: 'About',           to: '/about' },
+  { label: 'Contact',         to: '/contact' },
 ];
 
 export default function Navbar() {
@@ -58,7 +59,7 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <Link to="/book" className="btn btn-primary navbar__cta">
+          <Link to="/book-appointment" className="btn btn-primary navbar__cta">
             Book Appointment
           </Link>
 
@@ -105,7 +106,7 @@ export default function Navbar() {
           </NavLink>
         ))}
         <Link
-          to="/book"
+          to="/book-appointment"
           className="btn btn-primary mt-lg"
           onClick={() => setMenuOpen(false)}
           style={{ textAlign: 'center', justifyContent: 'center' }}

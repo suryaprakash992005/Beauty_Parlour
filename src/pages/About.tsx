@@ -71,7 +71,7 @@ export default function About() {
                   </div>
                 ))}
               </div>
-              <Link to="/book" className="btn btn-primary mt-xl">
+              <Link to="/book-appointment" className="btn btn-primary mt-xl">
                 Book Your Experience <ArrowRight size={16} />
               </Link>
             </div>

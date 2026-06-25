@@ -136,7 +136,7 @@ export default function Bridal() {
                   </ul>
 
                   <Link
-                    to="/book"
+                    to="/book-appointment"
                     className={`btn ${pkg.popular ? 'btn-gold' : 'btn-outline'} bridal-card__cta`}
                   >
                     Book Consultation
