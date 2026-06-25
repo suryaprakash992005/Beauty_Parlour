@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { Instagram } from '../components/BrandIcons';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
+import bridalBeforeImg from '../assets/bridal_before.png';
+import bridalAfterImg from '../assets/bridal_after.png';
 import '../styles/home.css';
 
 /* ─── Data ─── */
@@ -114,8 +116,8 @@ function BeforeAfterSlider() {
       onMouseMove={e => { if (dragging.current) setPos(e.clientX); }}
       onTouchMove={e => { if (dragging.current) setPos(e.touches[0].clientX); }}
     >
-      <img className="slider-img" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80" alt="Before" />
-      <img className="slider-img slider-after" ref={afterRef} src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=800&q=80" alt="After" />
+      <img className="slider-img" src={bridalBeforeImg} alt="Before" />
+      <img className="slider-img slider-after" ref={afterRef} src={bridalAfterImg} alt="After" />
       <div className="slider-handle" ref={handleRef} />
       <div className="slider-labels">
         <span className="slider-label">Before</span>
