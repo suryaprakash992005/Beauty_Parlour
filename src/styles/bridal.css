@@ -1,0 +1,138 @@
+/* ── Bridal Page ── */
+.bridal-hero { min-height: 60vh; }
+
+.bridal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl);
+  margin-top: var(--space-4xl);
+  align-items: start;
+}
+
+.bridal-card {
+  background: var(--color-white);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-border-gold);
+  padding: var(--space-3xl) var(--space-2xl);
+  position: relative;
+  transition: all var(--transition-slow);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+.bridal-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-gold);
+}
+
+.bridal-card--popular {
+  background: linear-gradient(160deg, #fff8f0 0%, #fff3e6 100%);
+  border-color: var(--color-champagne);
+  box-shadow: var(--shadow-gold);
+  transform: scale(1.02);
+}
+.bridal-card--popular:hover { transform: scale(1.02) translateY(-8px); }
+
+.bridal-card__popular-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--color-champagne), var(--color-champagne-light));
+  color: var(--color-brown-deep);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 20px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  box-shadow: var(--shadow-gold);
+}
+
+.bridal-card__header { text-align: center; }
+.bridal-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-champagne-pale);
+  margin-bottom: var(--space-md);
+}
+.bridal-card__name {
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--color-brown-deep);
+}
+.bridal-card__tagline {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-top: var(--space-xs);
+}
+.bridal-card__price {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 700;
+  color: var(--color-rose-gold);
+  margin-top: var(--space-md);
+}
+.bridal-card__duration {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+  letter-spacing: 0.05em;
+}
+
+.bridal-card__services {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.bridal-card__service-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--color-brown-mid);
+  line-height: 1.5;
+}
+.bridal-card__check { color: var(--color-rose-gold); flex-shrink: 0; margin-top: 2px; }
+
+.bridal-card__cta { width: 100%; justify-content: center; }
+
+/* Bridal FAQs */
+.bridal-faqs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  margin-top: var(--space-4xl);
+}
+.bridal-faq {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  border: 1px solid var(--color-border);
+  transition: box-shadow var(--transition-base);
+}
+.bridal-faq:hover { box-shadow: var(--shadow-md); }
+.bridal-faq__q {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  color: var(--color-brown-deep);
+  margin-bottom: var(--space-sm);
+}
+.bridal-faq__a {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+@media (max-width: 1024px) {
+  .bridal-grid { grid-template-columns: 1fr; max-width: 480px; margin-inline: auto; }
+  .bridal-card--popular { transform: scale(1); }
+  .bridal-faqs { grid-template-columns: 1fr; }
+}

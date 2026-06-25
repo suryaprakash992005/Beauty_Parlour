@@ -1,0 +1,3 @@
+/* Reuse book.css and about.css already imported in those pages */
+/* This file is intentionally minimal — about styles live in book.css */
+.about-page { /* placeholder */ }

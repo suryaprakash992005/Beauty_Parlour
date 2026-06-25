@@ -1,0 +1,26 @@
+/* WhatsApp FAB */
+.whatsapp-fab {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1.75rem;
+  width: 56px;
+  height: 56px;
+  background: #25D366;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: var(--z-overlay);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.4);
+  transition: all var(--transition-spring);
+  animation: fabBounce 3s ease-in-out infinite;
+}
+.whatsapp-fab:hover {
+  transform: scale(1.12) translateY(-4px);
+  box-shadow: 0 10px 32px rgba(37, 211, 102, 0.55);
+}
+@keyframes fabBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
