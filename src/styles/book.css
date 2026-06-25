@@ -229,6 +229,105 @@
   .about-story__img-accent { display: none; }
   .about-values { grid-template-columns: 1fr; }
 }
-@media (max-width: 640px) {
-  .team-grid { grid-template-columns: 1fr 1fr; }
+
+@media (max-width: 767px) {
+  /* Booking mobile refactor */
+  .book-layout {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-xl) !important;
+  }
+  .book-info {
+    position: static !important;
+    padding: var(--space-lg) !important;
+    border-radius: var(--radius-lg) !important;
+  }
+  .book-info__title {
+    font-size: 18px !important;
+    margin-bottom: var(--space-md) !important;
+  }
+  .book-info__list {
+    gap: var(--space-sm) !important;
+  }
+  .book-info__item {
+    font-size: 13px !important;
+  }
+  .book-info__icon {
+    font-size: 1.1rem !important;
+  }
+  .book-contact-strip {
+    margin-top: var(--space-xl) !important;
+    padding-top: var(--space-md) !important;
+  }
+  .book-phone {
+    font-size: 18px !important;
+  }
+  .book-form-wrap {
+    padding: var(--space-lg) !important;
+    border-radius: var(--radius-lg) !important;
+  }
+  .book-form__title {
+    font-size: 18px !important;
+    margin-bottom: var(--space-lg) !important;
+    padding-bottom: var(--space-sm) !important;
+  }
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-md) !important;
+  }
+  .form-input {
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    height: 44px !important;
+  }
+  .form-label {
+    font-size: 11px !important;
+  }
+  .book-form__submit {
+    padding: 12px !important;
+    font-size: 14px !important;
+    height: 44px !important;
+  }
+
+  /* About mobile refactor */
+  .about-story {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-xl) !important;
+  }
+  .about-story__img-main img {
+    aspect-ratio: 4/3 !important;
+  }
+  .about-values {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-md) !important;
+    margin-top: var(--space-lg) !important;
+  }
+  .about-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--space-md) !important;
+  }
+  .about-stat__num {
+    font-size: 26px !important;
+  }
+  .about-stat__label {
+    font-size: 11px !important;
+  }
+  .team-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-md) !important;
+    max-width: 300px !important;
+    margin-inline: auto !important;
+  }
+  .team-card {
+    border-radius: var(--radius-lg) !important;
+  }
+  .team-card__img-wrap {
+    height: 220px !important;
+  }
+  .team-card__name {
+    font-size: 16px !important;
+  }
+  .team-card__role {
+    font-size: 13px !important;
+  }
 }
+

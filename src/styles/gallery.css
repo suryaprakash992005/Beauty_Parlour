@@ -117,3 +117,34 @@
   font-style: italic;
   text-align: center;
 }
+
+/* ── Responsive Overrides ── */
+@media (max-width: 767px) {
+  .gallery-masonry {
+    columns: 2 !important;
+    column-gap: var(--space-xs) !important;
+  }
+  .gallery-item {
+    margin-bottom: var(--space-xs) !important;
+    border-radius: var(--radius-md) !important;
+  }
+  .gallery-item__cat {
+    font-size: 9px !important;
+    padding: 2px 6px !important;
+  }
+  .gallery-item__overlay {
+    font-size: 12px !important;
+  }
+  .lightbox {
+    padding: var(--space-md) !important;
+  }
+  .lightbox__close {
+    top: var(--space-md) !important;
+    right: var(--space-md) !important;
+  }
+  .lightbox__caption {
+    font-size: 15px !important;
+    padding: var(--space-md) !important;
+  }
+}
+
