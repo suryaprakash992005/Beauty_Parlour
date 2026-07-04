@@ -649,20 +649,19 @@
 @media (max-width: 767px) {
   /* Hero section mobile refactor */
   .hero {
-    min-height: auto;
-    height: auto;
+    min-height: 100dvh;
     padding-top: 80px;
     padding-bottom: var(--space-2xl);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     text-align: center;
   }
   .hero__bg {
-    animation: none; /* simple gradient for performance */
+    animation: heroBgShift 12s ease-in-out infinite alternate;
   }
   .hero__image-overlay {
-    animation: none;
+    animation: heroZoomMobile 24s ease-in-out infinite alternate;
   }
   .hero__content {
     padding: var(--space-md) 0 0 0;
@@ -826,5 +825,10 @@
     padding: 0 var(--space-lg) !important;
     font-size: 13px !important;
   }
+}
+
+@keyframes heroZoomMobile {
+  from { transform: scale(1); }
+  to   { transform: scale(1.15); }
 }
 
