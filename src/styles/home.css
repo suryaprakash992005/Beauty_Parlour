@@ -833,3 +833,7 @@
   to   { transform: scale(1.15); }
 }
 
+[data-theme="light"] .offers-banner {
+  background: linear-gradient(135deg, var(--color-rose-gold-deep) 0%, var(--color-brown-deep) 100%);
+}
+

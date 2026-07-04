@@ -107,37 +107,40 @@
 }
 
 [data-theme="light"] {
-  /* Brand Colors - Light Theme */
-  --color-blush:         #f5e6e8;
-  --color-blush-mid:     #e8c5cc;
-  --color-rose-gold:     #b76e79;       /* Rose Gold pink */
-  --color-rose-gold-deep:#9d5560;
+  /* Brand Colors - Light Theme (Luxury Green) */
+  --color-blush:         #eaf4f0;       /* Soft mint cream */
+  --color-blush-mid:     #b2d8c9;       /* Mid sage */
+  --color-rose-gold:     #1b4d3e;       /* Luxury Forest Green */
+  --color-rose-gold-deep:#0f352a;       /* Deep Forest Green */
   --color-champagne:     #d4af74;       /* Champagne gold */
   --color-champagne-light:#e8c98a;
   --color-champagne-pale: #f5e9d0;
-  --color-cream:         #fdf8f2;       /* Cream background */
-  --color-cream-dark:    #f7efe5;
-  --color-brown-deep:    #3e2723;       /* Deep brown text/accents */
-  --color-brown-mid:     #6d4c41;
-  --color-brown-light:   #a1887f;
+  --color-cream:         #f5f8f6;       /* Mint cream background */
+  --color-cream-dark:    #ebf1ee;       /* Secondary mint cream */
+  --color-brown-deep:    #0f2620;       /* Dark green-black text */
+  --color-brown-mid:     #3d5e55;       /* Muted green-gray */
+  --color-brown-light:   #6d8c83;       /* Light sage text */
   --color-white:         #ffffff;
-  --color-black:         #0d0d0d;
+  --color-black:         #050d0a;       /* Pure dark green-black */
 
   /* Semantic Colors - Light Theme */
   --color-primary:       var(--color-rose-gold);
   --color-secondary:     var(--color-champagne);
   --color-bg:            var(--color-cream);
   --color-bg-dark:       var(--color-brown-deep);
-  --color-card-bg:       #ffffff;               /* White card backgrounds in light theme */
-  --color-text:          var(--color-brown-deep);/* Deep brown text */
+  --color-card-bg:       #ffffff;               /* White card backgrounds */
+  --color-text:          var(--color-brown-deep);/* Dark green-black text */
   --color-text-muted:    var(--color-brown-mid);
   --color-text-light:    var(--color-brown-light);
-  --color-border:        rgba(180, 110, 121, 0.18);
+  --color-border:        rgba(27, 77, 62, 0.18);
   --color-border-gold:   rgba(212, 175, 116, 0.35);
-  --color-glass:         rgba(253, 248, 242, 0.75);
+  --color-glass:         rgba(245, 248, 246, 0.75);
   --color-btn-gold-text: var(--color-brown-deep);
   --color-gold-badge-text:var(--color-brown-deep);
-  --color-cursor-hover-bg: rgba(183, 110, 121, 0.08);
+  --color-cursor-hover-bg: rgba(27, 77, 62, 0.08);
+
+  /* Shadows override */
+  --shadow-rose: 0 8px 32px rgba(27, 77, 62, 0.15);
 }
 
 /* ── Reset ── */

@@ -91,7 +91,7 @@
   box-shadow: 0 0 0 3px rgba(212,175,55,0.12);
   background: var(--color-bg-dark);
 }
-.form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23b76e79' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+.form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23D4AF37' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
 .form-textarea { resize: vertical; min-height: 100px; }
 .book-form__submit { width: 100%; justify-content: center; padding: 16px; font-size: var(--text-base); }
 .book-form__note {
@@ -329,5 +329,9 @@
   .team-card__role {
     font-size: 13px !important;
   }
+}
+
+[data-theme="light"] .form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%231b4d3e' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
 }
 
