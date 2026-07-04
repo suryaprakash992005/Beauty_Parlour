@@ -10,40 +10,40 @@ import '../styles/home.css';
 /* ─── Data ─── */
 const SERVICES = [
   {
-    id: 1, name: 'Bridal Makeup', price: '₹8,999', tag: 'Most Popular',
-    desc: 'Timeless bridal transformations crafted with luxury cosmetics and expert artistry.',
-    img: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80&auto=format&fit=crop',
-  },
-  {
-    id: 2, name: 'Luxury Facial', price: '₹2,499', tag: null,
-    desc: 'Rejuvenating facial rituals using premium serums and advanced skin techniques.',
-    img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80&auto=format&fit=crop',
-  },
-  {
-    id: 3, name: 'Hair Styling', price: '₹1,499', tag: null,
-    desc: 'Bespoke hair styling by certified experts for every occasion.',
+    id: 1, name: 'Hair Cut', price: '₹499', tag: null,
+    desc: 'Professional precision haircut and styling tailored to your face shape.',
     img: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=80&auto=format&fit=crop',
   },
   {
-    id: 4, name: 'Keratin Treatment', price: '₹4,999', tag: 'Trending',
-    desc: 'Professional smoothing that transforms frizzy hair into silky perfection.',
+    id: 2, name: 'Hair Coloring', price: '₹2,499', tag: 'Trending',
+    desc: 'Premium global coloring and highlights using ammonia-free pigments.',
+    img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80&auto=format&fit=crop',
+  },
+  {
+    id: 3, name: 'Hair Spa', price: '₹1,499', tag: null,
+    desc: 'Nourishing hair spa treatment to restore scalp health, shine, and hair strength.',
+    img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80&auto=format&fit=crop',
+  },
+  {
+    id: 4, name: 'Keratin Treatment', price: '₹4,499', tag: 'Most Popular',
+    desc: 'Professional protein smoothing treatment for frizz-free, silky, and manageable hair.',
     img: 'https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?w=600&q=80&auto=format&fit=crop',
   },
   {
-    id: 5, name: 'Premium Spa', price: '₹3,499', tag: null,
-    desc: 'Full-body luxury spa therapy that restores and revitalises your senses.',
-    img: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80&auto=format&fit=crop',
+    id: 5, name: 'Facial', price: '₹1,999', tag: null,
+    desc: 'Deep cleansing luxury facial using premium organic serums for a radiant glow.',
+    img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80&auto=format&fit=crop',
   },
   {
-    id: 6, name: 'Nail Art', price: '₹999', tag: null,
-    desc: 'Intricate nail designs with premium gel and acrylic finishes.',
-    img: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80&auto=format&fit=crop',
+    id: 6, name: 'Bridal Makeup', price: '₹9,999', tag: 'Most Popular',
+    desc: 'Exquisite HD bridal makeup and hair styling for your special day.',
+    img: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80&auto=format&fit=crop',
   },
 ];
 
 const TESTIMONIALS = [
-  { id: 1, quote: 'My bridal makeup was absolutely flawless. Every guest was in awe. The team at Luxéora truly understands luxury beauty.', name: 'Priya Sharma', role: 'Bride, Mumbai', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80' },
-  { id: 2, quote: 'The facial treatment left my skin glowing for days. I have tried many salons, but Luxéora is in a completely different league.', name: 'Ananya Mehta', role: 'Regular Client', avatar: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=100&q=80' },
+  { id: 1, quote: 'My bridal makeup was absolutely flawless. Every guest was in awe. The team at ZHA Hair Saloon truly understands luxury beauty.', name: 'Priya Sharma', role: 'Bride, Mumbai', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80' },
+  { id: 2, quote: 'The facial treatment left my skin glowing for days. I have tried many salons, but ZHA Hair Saloon is in a completely different league.', name: 'Ananya Mehta', role: 'Regular Client', avatar: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=100&q=80' },
   { id: 3, quote: 'Hair spa here is an experience I look forward to every month. The products and expertise are truly world-class.', name: 'Kavitha Nair', role: 'Lifestyle Blogger', avatar: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&q=80' },
   { id: 4, quote: 'From the moment I walked in, I felt like royalty. The ambience, service, and results — simply exceptional.', name: 'Sneha Joshi', role: 'Entrepreneur', avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&q=80' },
   { id: 5, quote: 'The keratin treatment smoothened my hair beyond imagination. I wake up with perfect hair every single day now!', name: 'Divya Patel', role: 'Working Professional', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&q=80' },
@@ -169,20 +169,20 @@ export default function Home() {
         <img
           className="hero__deco-img"
           src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=900&q=80&auto=format&fit=crop"
-          alt="Luxéora Beauty Model"
+          alt="ZHA Hair Saloon Model"
           aria-hidden="true"
         />
 
         <div className="container hero__content">
           <div className="hero__eyebrow">
             <Sparkles size={12} />
-            Premium Luxury Beauty Studio
+            ZHA Hair Saloon
           </div>
           <h1 className="hero__title">
-            Luxury Beauty <em>Experience</em> Designed For Modern Women
+            Transform Your Style With <em>Professional</em> Beauty Experts
           </h1>
           <p className="hero__subtitle">
-            Where elegance meets transformation. Step into a world of curated luxury beauty rituals crafted exclusively for you.
+            Where premium style meets expert care. Experience the ultimate hair design, bridal cosmetics, nail artistry, and soothing spa therapies at ZHA Hair Saloon.
           </p>
           <div className="hero__actions">
             <Link to="/book-appointment" className="btn btn-gold">
@@ -206,7 +206,7 @@ export default function Home() {
           <div className="stats__grid">
             <Stat value={8000}  suffix="+"  label="Happy Clients" />
             <Stat value={12}    suffix="+"  label="Years of Excellence" />
-            <Stat value={50}    suffix="+"  label="Luxury Services" />
+            <Stat value={11}    suffix=""   label="Premium Offerings" />
             <Stat value={98}    suffix="%"  label="Client Satisfaction" />
           </div>
         </div>
@@ -265,7 +265,7 @@ export default function Home() {
             <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Transformations</div>
             <h2 className="section-title" style={{ color: 'var(--color-white)' }}>See The Difference We Make</h2>
             <p className="section-subtitle mx-auto" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              Drag the slider to witness the magical beauty transformations at Luxéora.
+              Drag the slider to witness the professional styling transformations at ZHA Hair Saloon.
             </p>
           </div>
           <BeforeAfterSlider />
@@ -330,8 +330,8 @@ export default function Home() {
         <div className="container">
           <div className="section__header section__header--center reveal">
             <div className="section-label">Follow Us</div>
-            <h2 className="section-title">@luxeorabeauty</h2>
-            <p className="section-subtitle mx-auto">Follow our journey of luxury beauty on Instagram and get inspired daily.</p>
+            <h2 className="section-title">@zhahairsaloon</h2>
+            <p className="section-subtitle mx-auto">Follow our journey of premium hair styling on Instagram and get inspired daily.</p>
           </div>
           <div className="instagram-grid">
             {INSTAGRAM_IMGS.map((src, i) => (

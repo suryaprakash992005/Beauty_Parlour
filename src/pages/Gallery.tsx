@@ -12,7 +12,7 @@ const GALLERY = [
   { id: 4,  cat: 'Nails',  alt: 'Nail Art',            img: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',  tall: true  },
   { id: 5,  cat: 'Spa',    alt: 'Spa Treatment',       img: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80',  tall: false },
   { id: 6,  cat: 'Hair',   alt: 'Hair Coloring',       img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80',  tall: true  },
-  { id: 7,  cat: 'Bridal', alt: 'Saree Draping',       img: 'https://images.unsplash.com/photo-1610189844544-e1ff75a3fec5?w=600&q=80',  tall: false },
+  { id: 7,  cat: 'Bridal', alt: 'Saree Draping',       img: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80',  tall: false },
   { id: 8,  cat: 'Hair',   alt: 'Hair Spa',            img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80',  tall: false },
   { id: 9,  cat: 'Makeup', alt: 'Eye Makeup',          img: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',  tall: true  },
   { id: 10, cat: 'Spa',    alt: 'Luxury Facial',       img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80',  tall: false },

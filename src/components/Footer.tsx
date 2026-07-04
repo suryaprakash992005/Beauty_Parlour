@@ -11,17 +11,17 @@ export default function Footer() {
         <div className="footer__grid">
           {/* Brand */}
           <div>
-            <div className="footer__logo-name">Luxéora</div>
-            <div className="footer__logo-tagline">Beauty Studio</div>
+            <div className="footer__logo-name">ZHA</div>
+            <div className="footer__logo-tagline">Hair Saloon</div>
             <p className="footer__desc">
-              A premier luxury beauty destination crafted for the modern woman.
-              Where every visit is an indulgent ritual of elegance and transformation.
+              A premier luxury salon destination for professional hair styling, 
+              bridal makeup, nail art, and skincare experts.
             </p>
             <div className="footer__socials">
               {[
-                { Icon: Instagram, href: '#', label: 'Instagram' },
-                { Icon: Facebook,  href: '#', label: 'Facebook'  },
-                { Icon: Youtube,   href: '#', label: 'YouTube'   },
+                { Icon: Instagram, href: 'https://instagram.com/zhahairsaloon', label: 'Instagram' },
+                { Icon: Facebook,  href: 'https://facebook.com/zhahairsaloon', label: 'Facebook'  },
+                { Icon: Youtube,   href: 'https://youtube.com/zhahairsaloon', label: 'YouTube'   },
               ].map(({ Icon, href, label }) => (
                 <a key={label} href={href} className="footer__social-link" aria-label={label}>
                   <Icon size={16} />
@@ -34,8 +34,8 @@ export default function Footer() {
           <div>
             <h3 className="footer__col-title">Services</h3>
             <ul className="footer__links">
-              {['Bridal Makeup', 'Hair Styling', 'Luxury Facial', 'Hair Spa', 'Nail Art',
-                'Keratin Treatment', 'Skin Rejuvenation', 'Premium Spa'].map(s => (
+              {['Hair Cut', 'Hair Coloring', 'Hair Spa', 'Keratin Treatment', 'Facial',
+                'Bridal Makeup', 'Nail Art', 'Pedicure'].map(s => (
                 <li key={s}><Link to="/services" className="footer__link">{s}</Link></li>
               ))}
             </ul>
@@ -74,7 +74,7 @@ export default function Footer() {
               </div>
               <div className="footer__contact-item">
                 <Mail size={15} className="footer__contact-icon" />
-                <span>hello@luxeorabeauty.com</span>
+                <span>hello@zhahairsaloon.com</span>
               </div>
               <div className="footer__contact-item">
                 <Clock size={15} className="footer__contact-icon" />
@@ -86,7 +86,7 @@ export default function Footer() {
 
         <div className="footer__bottom">
           <p className="footer__copyright">
-            © {year} Luxéora Beauty Studio. All rights reserved. Crafted with elegance.
+            © {year} ZHA Hair Saloon. All rights reserved. Crafted with luxury.
           </p>
           <div style={{ display: 'flex', gap: '1.5rem' }}>
             {['Privacy Policy', 'Terms of Service'].map(t => (

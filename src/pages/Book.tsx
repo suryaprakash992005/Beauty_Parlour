@@ -4,9 +4,8 @@ import { useScrollReveal } from '../components/shared';
 import '../styles/book.css';
 
 const SERVICES_LIST = [
-  'Bridal Makeup', 'Party Makeup', 'Hair Styling', 'Hair Spa', 'Hair Coloring',
-  'Keratin Treatment', 'Hair Smoothening', 'Luxury Facial', 'Skin Rejuvenation',
-  'Premium Spa Therapy', 'Nail Art', 'Saree Draping', 'Eyebrow Styling', 'Beauty Consultation',
+  'Hair Cut', 'Hair Coloring', 'Hair Spa', 'Keratin Treatment', 'Facial',
+  'Bridal Makeup', 'Nail Art', 'Waxing', 'Threading', 'Pedicure', 'Manicure',
   'Silver Bridal Package', 'Gold Bridal Package', 'Diamond Luxury Bridal Package',
 ];
 
@@ -61,15 +60,15 @@ export default function Book() {
           <div className="book-layout">
             {/* Info Panel */}
             <aside className="book-info reveal-left">
-              <h2 className="book-info__title">Why Choose Luxéora?</h2>
+              <h2 className="book-info__title">Why Choose ZHA Hair Saloon?</h2>
               <ul className="book-info__list">
                 {[
-                  ['🏅', 'Certified luxury beauty experts with 10+ years experience'],
-                  ['💎', 'Premium products from MAC, Dior, Charlotte Tilbury & more'],
-                  ['🕐', 'Flexible appointment slots from 9 AM to 8 PM'],
-                  ['✨', 'Personalized service tailored to your unique beauty'],
-                  ['🚗', 'Home service available for bridal packages'],
-                  ['📞', 'Dedicated client support team 7 days a week'],
+                  ['🏅', 'Certified Professionals with years of experience'],
+                  ['✂️', 'Premium Hair Styling and coloring services'],
+                  ['👰', 'Bridal Makeup Experts for your special day'],
+                  ['💅', 'Luxury Nail Care and creative nail art design'],
+                  ['✨', 'Aesthetic Environment built for ultimate relaxation'],
+                  ['❤️', '1000+ Happy Customers who trust us daily'],
                 ].map(([icon, text], i) => (
                   <li key={i} className="book-info__item">
                     <span className="book-info__icon">{icon}</span>

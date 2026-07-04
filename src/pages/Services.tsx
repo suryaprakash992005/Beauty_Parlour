@@ -7,20 +7,17 @@ import '../styles/services.css';
 type Category = 'All' | 'Hair Care' | 'Skin Care' | 'Makeup' | 'Bridal' | 'Spa' | 'Nails';
 
 const SERVICES = [
-  { id: 1,  category: 'Makeup',    name: 'Bridal Makeup',          price: '₹8,999',  dur: '3-4 hrs', desc: 'Timeless bridal looks with luxury cosmetics for your most special day.', img: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80' },
-  { id: 2,  category: 'Skin Care', name: 'Luxury Facial',          price: '₹2,499',  dur: '60 min',  desc: 'Deep-cleansing luxury facial with premium serums and advanced techniques.', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80' },
-  { id: 3,  category: 'Hair Care', name: 'Hair Styling',           price: '₹1,499',  dur: '45 min',  desc: 'Expert styling for every occasion — from everyday elegance to red-carpet glam.', img: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=80' },
-  { id: 4,  category: 'Hair Care', name: 'Keratin Treatment',      price: '₹4,999',  dur: '2-3 hrs', desc: 'Professional smoothing treatment for frizz-free, silky hair.', img: 'https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?w=600&q=80' },
-  { id: 5,  category: 'Spa',       name: 'Premium Spa Therapy',    price: '₹3,499',  dur: '90 min',  desc: 'Full-body luxury spa experience using aromatic oils and hot stone techniques.', img: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80' },
-  { id: 6,  category: 'Nails',     name: 'Nail Art',               price: '₹999',    dur: '60 min',  desc: 'Intricate nail art designs with premium gel, acrylic and chrome finishes.', img: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80' },
-  { id: 7,  category: 'Hair Care', name: 'Hair Spa',               price: '₹1,999',  dur: '60 min',  desc: 'Revitalising hair spa with nourishing masks and scalp massage.', img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80' },
-  { id: 8,  category: 'Makeup',    name: 'Party Makeup',           price: '₹2,999',  dur: '90 min',  desc: 'Glamorous party makeup for any celebration — from bold to elegant.', img: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600&q=80' },
-  { id: 9,  category: 'Skin Care', name: 'Skin Rejuvenation',      price: '₹3,999',  dur: '75 min',  desc: 'Advanced skin rejuvenation with LED therapy and premium actives.', img: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=600&q=80' },
-  { id: 10, category: 'Hair Care', name: 'Hair Coloring',          price: '₹2,999',  dur: '2 hrs',   desc: 'Premium hair color services using world-class ammonia-free pigments.', img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80' },
-  { id: 11, category: 'Bridal',    name: 'Saree Draping',          price: '₹1,499',  dur: '45 min',  desc: 'Expert saree draping in 20+ styles by our dedicated bridal stylists.', img: 'https://images.unsplash.com/photo-1610189844544-e1ff75a3fec5?w=600&q=80' },
-  { id: 12, category: 'Hair Care', name: 'Hair Smoothening',       price: '₹5,999',  dur: '3 hrs',   desc: 'Long-lasting hair smoothening for permanently manageable, frizz-free hair.', img: 'https://images.unsplash.com/photo-1523263685509-57c1d050d19b?w=600&q=80' },
-  { id: 13, category: 'Skin Care', name: 'Eyebrow Styling',        price: '₹499',    dur: '30 min',  desc: 'Perfect brow shaping and tinting by our expert aestheticians.', img: 'https://images.unsplash.com/photo-1583001931096-959e9a1a6223?w=600&q=80' },
-  { id: 14, category: 'Skin Care', name: 'Beauty Consultation',    price: '₹799',    dur: '45 min',  desc: 'One-on-one luxury beauty consultation with our certified specialists.', img: 'https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=600&q=80' },
+  { id: 1,  category: 'Hair Care', name: 'Hair Cut',            price: '₹499',   dur: '45 min',  desc: 'Professional precision haircut and styling tailored to your face shape. Includes wash.', img: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=80' },
+  { id: 2,  category: 'Hair Care', name: 'Hair Coloring',       price: '₹2,499', dur: '2 hrs',   desc: 'Premium global coloring and highlights using world-class ammonia-free pigments.', img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80' },
+  { id: 3,  category: 'Hair Care', name: 'Hair Spa',            price: '₹1,499', dur: '60 min',  desc: 'Nourishing hair spa treatment to restore scalp health, shine, and hair strength.', img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80' },
+  { id: 4,  category: 'Hair Care', name: 'Keratin Treatment',   price: '₹4,499', dur: '2-3 hrs', desc: 'Professional protein smoothing treatment for frizz-free, silky, and manageable hair.', img: 'https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?w=600&q=80' },
+  { id: 5,  category: 'Skin Care', name: 'Facial',              price: '₹1,999', dur: '60 min',  desc: 'Deep cleansing luxury facial using premium organic serums for a radiant glow.', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80' },
+  { id: 6,  category: 'Bridal',    name: 'Bridal Makeup',       price: '₹9,999', dur: '3-4 hrs', desc: 'Exquisite HD bridal makeup, hair styling, and saree draping for your special day.', img: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80' },
+  { id: 7,  category: 'Nails',     name: 'Nail Art',            price: '₹799',   dur: '45 min',  desc: 'Custom hand-painted nail art with premium gel, chrome, and acrylic extensions.', img: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80' },
+  { id: 8,  category: 'Skin Care', name: 'Waxing',              price: '₹999',   dur: '45 min',  desc: 'Gentle full body waxing using premium honey and chocolate organic wax.', img: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600&q=80' },
+  { id: 9,  category: 'Skin Care', name: 'Threading',           price: '₹149',   dur: '15 min',  desc: 'Precision threading for perfectly shaped eyebrows and facial hair removal.', img: 'https://images.unsplash.com/photo-1583001931096-959e9a1a6223?w=600&q=80' },
+  { id: 10, category: 'Spa',       name: 'Pedicure',            price: '₹999',   dur: '45 min',  desc: 'Relaxing luxury foot spa, scrub, and massage to revitalize your tired feet.', img: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80' },
+  { id: 11, category: 'Spa',       name: 'Manicure',            price: '₹799',   dur: '45 min',  desc: 'Classic hand massage, cuticle care, and nail shaping for beautiful hands.', img: 'https://images.unsplash.com/photo-1610189844544-e1ff75a3fec5?w=600&q=80' },
 ];
 
 const CATEGORIES: Category[] = ['All', 'Hair Care', 'Skin Care', 'Makeup', 'Bridal', 'Spa', 'Nails'];
@@ -40,7 +37,7 @@ export default function Services() {
         <div className="container page-hero__content">
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Offerings</div>
           <h1 className="page-hero__title">Luxury Services</h1>
-          <p className="page-hero__subtitle">14+ premium beauty services crafted to perfection for every modern woman.</p>
+          <p className="page-hero__subtitle">11 premium hair and beauty services crafted to perfection by ZHA Hair Saloon.</p>
         </div>
       </section>
 

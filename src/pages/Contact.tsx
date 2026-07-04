@@ -21,14 +21,14 @@ export default function Contact() {
           <div className="contact-layout">
             {/* Info */}
             <div className="contact-info reveal-left">
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem,3vw,2.5rem)', color: 'var(--color-brown-deep)', marginBottom: 'var(--space-xl)' }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem,3vw,2.5rem)', color: 'var(--color-text)', marginBottom: 'var(--space-xl)' }}>
                 We're Here For You
               </h2>
 
               {[
                 { Icon: MapPin,  label: 'Visit Us',   val: '42, Rose Garden Lane, Luxury District, Mumbai — 400001', href: 'https://maps.google.com' },
                 { Icon: Phone,   label: 'Call Us',    val: '+91 98765 43210', href: 'tel:+919876543210' },
-                { Icon: Mail,    label: 'Email Us',   val: 'hello@luxeorabeauty.com', href: 'mailto:hello@luxeorabeauty.com' },
+                { Icon: Mail,    label: 'Email Us',   val: 'hello@zhahairsaloon.com', href: 'mailto:hello@zhahairsaloon.com' },
                 { Icon: Clock,   label: 'Open Hours', val: 'Mon–Sat: 9 AM – 8 PM  |  Sunday: 10 AM – 6 PM', href: null },
               ].map(({ Icon, label, val, href }) => (
                 <div key={label} className="contact-item">
@@ -69,7 +69,7 @@ export default function Contact() {
             {/* Map */}
             <div className="contact-map reveal-right">
               <iframe
-                title="Luxéora Location"
+                title="ZHA Hair Saloon Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.1160907028!2d72.74109995!3d19.08250475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1687000000000"
                 width="100%"
                 height="420"
@@ -98,7 +98,7 @@ export default function Contact() {
           padding: var(--space-lg);
           border-radius: var(--radius-lg);
           border: 1px solid var(--color-border);
-          background: var(--color-white);
+          background: var(--color-bg-dark);
           transition: box-shadow 0.3s ease;
         }
         .contact-item:hover { box-shadow: var(--shadow-md); }
@@ -122,7 +122,7 @@ export default function Contact() {
         }
         .contact-item__val {
           font-size: var(--text-base);
-          color: var(--color-brown-deep);
+          color: var(--color-text);
           margin-top: 2px;
           line-height: 1.6;
           font-weight: 500;

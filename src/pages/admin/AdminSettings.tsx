@@ -3,9 +3,9 @@ import { Save, Check } from 'lucide-react';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState({
-    studioName: 'Luxéora Beauty Studio',
+    studioName: 'ZHA Hair Saloon',
     phone: '+91 98765 43210',
-    email: 'appointments@luxeorabeauty.com',
+    email: 'appointments@zhahairsaloon.com',
     address: '102, Gold Crest Plaza, Bandra West, Mumbai, Maharashtra 400050',
     openHoursWeekdays: '09:00 AM - 08:00 PM',
     openHoursWeekends: '10:00 AM - 09:00 PM',
@@ -32,7 +32,7 @@ export default function AdminSettings() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
           <div className="form-group">
-            <label className="form-label" htmlFor="settings-studioName">Studio Name</label>
+            <label className="form-label" htmlFor="settings-studioName">Salon Name</label>
             <input 
               id="settings-studioName"
               className="form-input" 
@@ -62,7 +62,7 @@ export default function AdminSettings() {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="settings-address">Studio Address</label>
+          <label className="form-label" htmlFor="settings-address">Salon Address</label>
           <textarea 
             id="settings-address"
             className="form-input" 

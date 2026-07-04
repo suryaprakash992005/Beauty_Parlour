@@ -235,7 +235,7 @@
 .sm-socials-link {
   font-size: var(--text-sm, 14px);
   font-weight: 500;
-  color: var(--color-brown-deep, #3e2723);
+  color: var(--color-text-muted, #d0d0d0);
   text-decoration: none;
   position: relative;
   padding: 2px 0;
@@ -269,7 +269,7 @@
 
 .sm-panel-item {
   position: relative;
-  color: var(--color-brown-deep, #3e2723);
+  color: var(--color-text, #ffffff);
   font-weight: 500;
   font-size: var(--text-3xl, 2.5rem);
   font-family: var(--font-serif), serif;
@@ -342,7 +342,7 @@
     color: var(--color-rose-gold) !important;
   }
   .staggered-menu-wrapper[data-open] .navbar__logo-tagline {
-    color: var(--color-brown-deep) !important;
+    color: var(--color-text-muted) !important;
     opacity: 0.6;
   }
 }

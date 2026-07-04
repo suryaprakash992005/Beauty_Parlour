@@ -6,12 +6,13 @@ interface Service {
 }
 
 const INITIAL: Service[] = [
-  { id: 1,  name: 'Bridal Makeup',       category: 'Makeup',    price: '8999',  duration: '3-4 hrs', active: true  },
-  { id: 2,  name: 'Luxury Facial',        category: 'Skin Care', price: '2499',  duration: '60 min',  active: true  },
-  { id: 3,  name: 'Hair Styling',         category: 'Hair Care', price: '1499',  duration: '45 min',  active: true  },
-  { id: 4,  name: 'Keratin Treatment',    category: 'Hair Care', price: '4999',  duration: '2-3 hrs', active: true  },
-  { id: 5,  name: 'Premium Spa Therapy',  category: 'Spa',       price: '3499',  duration: '90 min',  active: false },
-  { id: 6,  name: 'Nail Art',             category: 'Nails',     price: '999',   duration: '60 min',  active: true  },
+  { id: 1,  name: 'Hair Cut',            category: 'Hair Care', price: '499',   duration: '45 min',  active: true  },
+  { id: 2,  name: 'Hair Coloring',       category: 'Hair Care', price: '2499',  duration: '2 hrs',   active: true  },
+  { id: 3,  name: 'Hair Spa',            category: 'Hair Care', price: '1499',  duration: '60 min',  active: true  },
+  { id: 4,  name: 'Keratin Treatment',   category: 'Hair Care', price: '4499',  duration: '2-3 hrs', active: true  },
+  { id: 5,  name: 'Facial',              category: 'Skin Care', price: '1999',  duration: '60 min',  active: true  },
+  { id: 6,  name: 'Bridal Makeup',       category: 'Bridal',    price: '9999',  duration: '3-4 hrs', active: true  },
+  { id: 7,  name: 'Nail Art',            category: 'Nails',     price: '799',   duration: '45 min',  active: true  },
 ];
 
 export default function AdminServices() {

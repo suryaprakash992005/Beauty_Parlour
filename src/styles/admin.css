@@ -16,7 +16,7 @@
 .admin-login__card {
   width: 100%;
   max-width: 440px;
-  background: var(--color-white);
+  background: var(--color-bg-dark);
   padding: var(--space-3xl);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
@@ -49,7 +49,7 @@
 .admin-login__title {
   font-family: var(--font-serif);
   font-size: var(--text-2xl);
-  color: var(--color-brown-deep);
+  color: var(--color-text);
   text-align: center;
   margin-bottom: var(--space-xs);
 }
@@ -90,14 +90,14 @@
 .admin-layout {
   display: flex;
   min-height: 100vh;
-  background: var(--color-cream-dark);
+  background: var(--color-bg);
   font-family: var(--font-sans);
 }
 
 /* Sidebar */
 .admin-sidebar {
   width: 260px;
-  background: var(--color-brown-deep);
+  background: var(--color-bg-dark);
   color: var(--color-white);
   display: flex;
   flex-direction: column;
@@ -215,7 +215,7 @@
 
 .admin-topbar {
   height: 70px;
-  background: var(--color-white);
+  background: var(--color-bg-dark);
   border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
@@ -226,7 +226,7 @@
 .admin-topbar__title {
   font-family: var(--font-serif);
   font-size: var(--text-lg);
-  color: var(--color-brown-deep);
+  color: var(--color-text);
   margin: 0;
   font-weight: 600;
 }
@@ -253,7 +253,7 @@
 }
 
 .admin-topbar__action:hover {
-  background: var(--color-cream);
+  background: var(--color-bg);
   color: var(--color-rose-gold);
 }
 
@@ -295,7 +295,7 @@
 .admin-page-title {
   font-family: var(--font-serif);
   font-size: var(--text-3xl);
-  color: var(--color-brown-deep);
+  color: var(--color-text);
   margin-bottom: var(--space-xs);
   font-weight: 700;
 }
@@ -314,7 +314,7 @@
 }
 
 .admin-stat-card {
-  background: var(--color-white);
+  background: var(--color-bg-dark);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
   border: 1px solid var(--color-border);
@@ -348,7 +348,7 @@
 .admin-stat-card__value {
   font-size: var(--text-3xl);
   font-weight: 700;
-  color: var(--color-brown-deep);
+  color: var(--color-text);
   line-height: 1.2;
 }
 
@@ -360,7 +360,7 @@
 
 /* Card Wrapper */
 .admin-card {
-  background: var(--color-white);
+  background: var(--color-bg-dark);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
   border: 1px solid var(--color-border);
@@ -378,7 +378,7 @@
 .admin-card__title {
   font-family: var(--font-serif);
   font-size: var(--text-xl);
-  color: var(--color-brown-deep);
+  color: var(--color-text);
   font-weight: 700;
 }
 
@@ -412,9 +412,9 @@
 
 .admin-table td {
   padding: var(--space-lg);
-  border-bottom: 1px solid rgba(180, 110, 121, 0.08);
+  border-bottom: 1px solid var(--color-border);
   font-size: var(--text-sm);
-  color: var(--color-brown-deep);
+  color: var(--color-text);
   vertical-align: middle;
 }
 
@@ -457,7 +457,7 @@
 }
 
 .admin-quick-card {
-  background: var(--color-white);
+  background: var(--color-bg-dark);
   border-radius: var(--radius-md);
   padding: var(--space-lg);
   border: 1px solid var(--color-border);
@@ -480,7 +480,7 @@
 
 .admin-quick-card__label {
   font-size: var(--text-sm);
-  color: var(--color-brown-deep);
+  color: var(--color-text);
   font-weight: 700;
 }
 
@@ -496,7 +496,7 @@
   height: 28px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
-  background: var(--color-white);
+  background: var(--color-bg);
   color: var(--color-text-muted);
   cursor: pointer;
   display: flex;
@@ -506,7 +506,7 @@
 }
 
 .admin-action-btn:hover {
-  background: var(--color-cream);
+  background: var(--color-bg-dark);
   color: var(--color-rose-gold);
   border-color: var(--color-rose-gold);
 }

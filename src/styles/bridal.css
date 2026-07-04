@@ -10,7 +10,8 @@
 }
 
 .bridal-card {
-  background: var(--color-white);
+  position: relative;
+  background: var(--color-card-bg);
   border-radius: var(--radius-2xl);
   border: 1px solid var(--color-border-gold);
   padding: var(--space-3xl) var(--space-2xl);
@@ -26,7 +27,7 @@
 }
 
 .bridal-card--popular {
-  background: linear-gradient(160deg, #fff8f0 0%, #fff3e6 100%);
+  background: linear-gradient(160deg, #242424 0%, #1c1c1c 100%);
   border-color: var(--color-champagne);
   box-shadow: var(--shadow-gold);
   transform: scale(1.02);
@@ -39,7 +40,7 @@
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(135deg, var(--color-champagne), var(--color-champagne-light));
-  color: var(--color-brown-deep);
+  color: #0b0b0b;
   font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -58,14 +59,14 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: var(--color-champagne-pale);
+  background: rgba(212, 175, 55, 0.1);
   margin-bottom: var(--space-md);
 }
 .bridal-card__name {
   font-family: var(--font-serif);
   font-size: var(--text-2xl);
   font-weight: 600;
-  color: var(--color-brown-deep);
+  color: var(--color-text);
 }
 .bridal-card__tagline {
   font-size: var(--text-sm);
@@ -97,7 +98,7 @@
   align-items: flex-start;
   gap: var(--space-sm);
   font-size: var(--text-sm);
-  color: var(--color-brown-mid);
+  color: var(--color-text-muted);
   line-height: 1.5;
 }
 .bridal-card__check { color: var(--color-rose-gold); flex-shrink: 0; margin-top: 2px; }
@@ -112,7 +113,7 @@
   margin-top: var(--space-4xl);
 }
 .bridal-faq {
-  background: var(--color-white);
+  background: var(--color-card-bg);
   border-radius: var(--radius-lg);
   padding: var(--space-2xl);
   border: 1px solid var(--color-border);
@@ -122,7 +123,7 @@
 .bridal-faq__q {
   font-family: var(--font-serif);
   font-size: var(--text-xl);
-  color: var(--color-brown-deep);
+  color: var(--color-text);
   margin-bottom: var(--space-sm);
 }
 .bridal-faq__a {

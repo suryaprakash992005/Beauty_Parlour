@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import '../styles/layout.css';
 import StaggeredMenu from './StaggeredMenu';
+import ThemeToggle from './ThemeToggle';
 
 const NAV_LINKS = [
   { label: 'Home',            to: '/' },
@@ -24,15 +25,15 @@ const menuItems = [
 ];
 
 const socialItems = [
-  { label: 'Instagram', link: 'https://instagram.com/luxeorabeautystudio' },
-  { label: 'Facebook', link: 'https://facebook.com/luxeorabeautystudio' },
-  { label: 'YouTube', link: 'https://youtube.com/luxeorabeautystudio' }
+  { label: 'Instagram', link: 'https://instagram.com/zhahairsaloon' },
+  { label: 'Facebook', link: 'https://facebook.com/zhahairsaloon' },
+  { label: 'YouTube', link: 'https://youtube.com/zhahairsaloon' }
 ];
 
 const BrandLogo = () => (
   <Link to="/" className="navbar__logo">
-    <span className="navbar__logo-name">Luxéora</span>
-    <span className="navbar__logo-tagline">Beauty Studio</span>
+    <span className="navbar__logo-name">ZHA</span>
+    <span className="navbar__logo-tagline">Hair Saloon</span>
   </Link>
 );
 
@@ -69,9 +70,12 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <Link to="/book-appointment" className="btn btn-primary navbar__cta">
-            Book Appointment
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+            <ThemeToggle />
+            <Link to="/book-appointment" className="btn btn-primary navbar__cta">
+              Book Appointment
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -82,10 +86,10 @@ export default function Navbar() {
         socialItems={socialItems}
         displaySocials={true}
         displayItemNumbering={true}
-        menuButtonColor={solid ? 'var(--color-brown-deep)' : '#fff'}
-        openMenuButtonColor="var(--color-brown-deep)"
+        menuButtonColor={solid ? 'var(--color-rose-gold)' : '#fff'}
+        openMenuButtonColor="#fff"
         changeMenuColorOnOpen={true}
-        colors={['#3e2723', '#b76e79', '#d4af74']}
+        colors={['#0b0b0b', '#D4AF37', '#181818']}
         logoElement={<BrandLogo />}
         accentColor="var(--color-rose-gold)"
         isFixed={true}

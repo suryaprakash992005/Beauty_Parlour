@@ -13,11 +13,11 @@ export default function AdminLogin() {
     setLoading(true);
     setError('');
     setTimeout(() => {
-      if (creds.username === 'admin' && creds.password === 'luxeora2024') {
-        localStorage.setItem('luxeora_admin', 'true');
+      if (creds.username === 'admin' && creds.password === 'zhahair2026') {
+        localStorage.setItem('zha_admin', 'true');
         navigate('/admin/dashboard');
       } else {
-        setError('Invalid credentials. Use admin / luxeora2024');
+        setError('Invalid credentials. Use admin / zhahair2026');
         setLoading(false);
       }
     }, 1000);
@@ -27,11 +27,11 @@ export default function AdminLogin() {
     <div className="admin-login">
       <div className="admin-login__card">
         <div className="admin-login__logo">
-          <span className="admin-login__logo-name">Luxéora</span>
+          <span className="admin-login__logo-name">ZHA</span>
           <span className="admin-login__logo-sub">Admin Panel</span>
         </div>
         <h1 className="admin-login__title">Welcome Back</h1>
-        <p className="admin-login__desc">Sign in to manage your beauty studio</p>
+        <p className="admin-login__desc">Sign in to manage your salon</p>
 
         {error && <div className="admin-error">{error}</div>}
 
@@ -65,7 +65,7 @@ export default function AdminLogin() {
           </button>
         </form>
         <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', marginTop: 'var(--space-md)', textAlign: 'center' }}>
-          Demo: admin / luxeora2024
+          Demo: admin / zhahair2026
         </p>
       </div>
     </div>

@@ -2,6 +2,7 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './StaggeredMenu.css';
+import ThemeToggle from './ThemeToggle';
 
 export interface StaggeredMenuItem {
   label: string;
@@ -429,15 +430,17 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             )
           )}
         </div>
-        <button
-          ref={toggleBtnRef}
-          className="sm-toggle"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          aria-controls="staggered-menu-panel"
-          onClick={toggleMenu}
-          type="button"
-        >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', pointerEvents: 'auto' }}>
+          <ThemeToggle />
+          <button
+            ref={toggleBtnRef}
+            className="sm-toggle"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            aria-controls="staggered-menu-panel"
+            onClick={toggleMenu}
+            type="button"
+          >
           <span className="sm-toggle-textWrap" aria-hidden="true">
             <span ref={textInnerRef} className="sm-toggle-textInner">
               {textLines.map((l, i) => (
@@ -452,7 +455,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
           </span>
         </button>
-      </header>
+      </div>
+    </header>
 
       <aside id="staggered-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!open}>
         <div className="sm-panel-inner">

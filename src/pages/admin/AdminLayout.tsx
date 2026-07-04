@@ -20,14 +20,14 @@ export default function AdminLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAdmin = localStorage.getItem('luxeora_admin');
+    const isAdmin = localStorage.getItem('zha_admin');
     if (!isAdmin) {
       navigate('/admin-login', { replace: true });
     }
   }, [navigate]);
 
   const logout = () => {
-    localStorage.removeItem('luxeora_admin');
+    localStorage.removeItem('zha_admin');
     navigate('/admin-login');
   };
 
@@ -37,7 +37,7 @@ export default function AdminLayout() {
       <aside className={`admin-sidebar${sidebarOpen ? '' : ' admin-sidebar--collapsed'}`}>
         <div className="admin-sidebar__header">
           <div className="admin-sidebar__logo">
-            <span className="admin-sidebar__logo-name">Luxéora</span>
+            <span className="admin-sidebar__logo-name">ZHA</span>
             {sidebarOpen && <span className="admin-sidebar__logo-sub">Admin</span>}
           </div>
           <button className="admin-sidebar__toggle" onClick={() => setSidebarOpen(v => !v)} aria-label="Toggle sidebar">
@@ -69,7 +69,7 @@ export default function AdminLayout() {
       <div className="admin-main">
         {/* Top bar */}
         <header className="admin-topbar">
-          <h1 className="admin-topbar__title">Luxéora Beauty Studio</h1>
+          <h1 className="admin-topbar__title">ZHA Hair Saloon</h1>
           <div className="admin-topbar__actions">
             <button className="admin-topbar__action" aria-label="Notifications">
               <Bell size={18} />

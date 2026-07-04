@@ -8,32 +8,36 @@
 /* ── CSS Custom Properties ── */
 :root {
   /* Brand Colors */
-  --color-blush:         #f5e6e8;
-  --color-blush-mid:     #e8c5cc;
-  --color-rose-gold:     #b76e79;
-  --color-rose-gold-deep:#9d5560;
-  --color-champagne:     #d4af74;
-  --color-champagne-light:#e8c98a;
-  --color-champagne-pale: #f5e9d0;
-  --color-cream:         #fdf8f2;
-  --color-cream-dark:    #f7efe5;
-  --color-brown-deep:    #3e2723;
-  --color-brown-mid:     #6d4c41;
-  --color-brown-light:   #a1887f;
+  --color-blush:         #1a1a1a;
+  --color-blush-mid:     #242424;
+  --color-rose-gold:     #D4AF37;       /* Premium Gold */
+  --color-rose-gold-deep:#AA8010;       /* Darker Gold */
+  --color-champagne:     #D4AF37;       /* Premium Gold */
+  --color-champagne-light:#E5C158;      /* Light Gold */
+  --color-champagne-pale: #F3E5AB;      /* Pale Gold */
+  --color-cream:         #0B0B0B;       /* Luxury Black */
+  --color-cream-dark:    #181818;       /* Secondary Background */
+  --color-brown-deep:    #181818;       /* Secondary Background */
+  --color-brown-mid:     #D0D0D0;       /* Secondary Text */
+  --color-brown-light:   #A0A0A0;       /* Muted Text */
   --color-white:         #ffffff;
-  --color-black:         #0d0d0d;
+  --color-black:         #000000;
 
   /* Semantic Colors */
   --color-primary:       var(--color-rose-gold);
   --color-secondary:     var(--color-champagne);
   --color-bg:            var(--color-cream);
-  --color-bg-dark:       var(--color-brown-deep);
-  --color-text:          var(--color-brown-deep);
+  --color-bg-dark:       var(--color-cream-dark);
+  --color-card-bg:       #181818;               /* Card Background in dark theme */
+  --color-text:          #FFFFFF;               /* Primary Text */
   --color-text-muted:    var(--color-brown-mid);
   --color-text-light:    var(--color-brown-light);
-  --color-border:        rgba(180, 110, 121, 0.18);
-  --color-border-gold:   rgba(212, 175, 116, 0.35);
-  --color-glass:         rgba(253, 248, 242, 0.75);
+  --color-border:        rgba(212, 175, 55, 0.15); /* Gold borders */
+  --color-border-gold:   rgba(212, 175, 55, 0.35);
+  --color-glass:         rgba(11, 11, 11, 0.85); /* Dark Glass */
+  --color-btn-gold-text: #0b0b0b;
+  --color-gold-badge-text:#0b0b0b;
+  --color-cursor-hover-bg: rgba(212, 175, 55, 0.08);
 
   /* Typography */
   --font-serif:     'Cormorant Garamond', Georgia, serif;
@@ -102,6 +106,40 @@
   --container-max: 1320px;
 }
 
+[data-theme="light"] {
+  /* Brand Colors - Light Theme */
+  --color-blush:         #f5e6e8;
+  --color-blush-mid:     #e8c5cc;
+  --color-rose-gold:     #b76e79;       /* Rose Gold pink */
+  --color-rose-gold-deep:#9d5560;
+  --color-champagne:     #d4af74;       /* Champagne gold */
+  --color-champagne-light:#e8c98a;
+  --color-champagne-pale: #f5e9d0;
+  --color-cream:         #fdf8f2;       /* Cream background */
+  --color-cream-dark:    #f7efe5;
+  --color-brown-deep:    #3e2723;       /* Deep brown text/accents */
+  --color-brown-mid:     #6d4c41;
+  --color-brown-light:   #a1887f;
+  --color-white:         #ffffff;
+  --color-black:         #0d0d0d;
+
+  /* Semantic Colors - Light Theme */
+  --color-primary:       var(--color-rose-gold);
+  --color-secondary:     var(--color-champagne);
+  --color-bg:            var(--color-cream);
+  --color-bg-dark:       var(--color-brown-deep);
+  --color-card-bg:       #ffffff;               /* White card backgrounds in light theme */
+  --color-text:          var(--color-brown-deep);/* Deep brown text */
+  --color-text-muted:    var(--color-brown-mid);
+  --color-text-light:    var(--color-brown-light);
+  --color-border:        rgba(180, 110, 121, 0.18);
+  --color-border-gold:   rgba(212, 175, 116, 0.35);
+  --color-glass:         rgba(253, 248, 242, 0.75);
+  --color-btn-gold-text: var(--color-brown-deep);
+  --color-gold-badge-text:var(--color-brown-deep);
+  --color-cursor-hover-bg: rgba(183, 110, 121, 0.08);
+}
+
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -115,12 +153,11 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: none;
 }
 
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
-button { cursor: none; border: none; background: none; font-family: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
 ul { list-style: none; }
 input, textarea, select { font-family: inherit; }
 
@@ -164,7 +201,7 @@ h4, h5, h6 { font-family: var(--font-sans);  font-weight: 600; line-height: 1.3;
 .section-title {
   font-family: var(--font-serif);
   font-size: clamp(2rem, 4vw, 3.25rem);
-  color: var(--color-brown-deep);
+  color: var(--color-text);
   line-height: 1.15;
 }
 
@@ -189,7 +226,7 @@ h4, h5, h6 { font-family: var(--font-sans);  font-weight: 600; line-height: 1.3;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  cursor: none;
+  cursor: pointer;
   transition: all var(--transition-spring);
   position: relative;
   overflow: hidden;
@@ -217,7 +254,7 @@ h4, h5, h6 { font-family: var(--font-sans);  font-weight: 600; line-height: 1.3;
 
 .btn-gold {
   background: linear-gradient(135deg, var(--color-champagne), var(--color-champagne-light));
-  color: var(--color-brown-deep);
+  color: var(--color-btn-gold-text);
   box-shadow: var(--shadow-gold);
 }
 .btn-gold:hover {
@@ -319,7 +356,7 @@ h4, h5, h6 { font-family: var(--font-sans);  font-weight: 600; line-height: 1.3;
 .loading-screen {
   position: fixed;
   inset: 0;
-  background: var(--color-brown-deep);
+  background: var(--color-bg);
   z-index: var(--z-cursor);
   display: flex;
   flex-direction: column;
@@ -369,7 +406,7 @@ h4, h5, h6 { font-family: var(--font-sans);  font-weight: 600; line-height: 1.3;
   z-index: var(--z-cursor);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  mix-blend-mode: multiply;
+  mix-blend-mode: screen;
   transition: width var(--transition-fast), height var(--transition-fast),
               background var(--transition-fast), opacity var(--transition-fast);
 }
@@ -388,7 +425,7 @@ h4, h5, h6 { font-family: var(--font-sans);  font-weight: 600; line-height: 1.3;
 .cursor--ring.hovered {
   width: 56px;
   height: 56px;
-  background: rgba(183, 110, 121, 0.08);
+  background: var(--color-cursor-hover-bg);
 }
 
 /* ── Gold Badge ── */
@@ -397,7 +434,7 @@ h4, h5, h6 { font-family: var(--font-sans);  font-weight: 600; line-height: 1.3;
   align-items: center;
   gap: 6px;
   background: linear-gradient(135deg, var(--color-champagne-pale), var(--color-champagne));
-  color: var(--color-brown-deep);
+  color: var(--color-gold-badge-text);
   padding: 6px 16px;
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
@@ -439,5 +476,5 @@ h4, h5, h6 { font-family: var(--font-sans);  font-weight: 600; line-height: 1.3;
 /* Selection */
 ::selection {
   background: rgba(183, 110, 121, 0.2);
-  color: var(--color-brown-deep);
+  color: var(--color-btn-gold-text);
 }

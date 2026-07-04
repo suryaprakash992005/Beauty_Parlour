@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import { Cursor, WhatsAppButton, ScrollToTop } from './components/shared';
+import { WhatsAppButton, ScrollToTop } from './components/shared';
 
 // Public Pages
 import Home from './pages/Home';
@@ -50,7 +50,6 @@ function PublicLayout() {
 export default function App() {
   return (
     <Router>
-      <Cursor />
       <Routes>
         {/* Admin Login - No headers, footers or floating FABs */}
         <Route path="/admin-login" element={<AdminLogin />} />
