@@ -33,6 +33,7 @@
   background-position: center 25%;
   opacity: 0.22;
   animation: heroParallax 20s ease-in-out infinite alternate;
+  pointer-events: none;
 }
 @keyframes heroParallax {
   from { background-position: center 20%; }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { Instagram } from '../components/BrandIcons';
@@ -8,6 +8,12 @@ import bridalAfterImg from '../assets/bridal_after.png';
 import '../styles/home.css';
 
 /* ─── Data ─── */
+const HERO_BGS = [
+  '/salon_green_theme_1.jpg',
+  '/salon_green_theme_2.jpg',
+  '/salon_green_theme_3.jpg'
+];
+
 const SERVICES = [
   {
     id: 1, name: 'Hair Cut', price: '₹499', tag: null,
@@ -130,6 +136,14 @@ function BeforeAfterSlider() {
 /* ─── Home Page ─── */
 export default function Home() {
   useScrollReveal();
+  const [bgIndex, setBgIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setBgIndex(prev => (prev + 1) % HERO_BGS.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Particle data
   const particles = Array.from({ length: 12 }, (_, i) => ({
@@ -148,7 +162,18 @@ export default function Home() {
       {/* ── HERO ── */}
       <section className="hero" aria-label="Hero">
         <div className="hero__bg" />
-        <div className="hero__image-overlay" aria-hidden="true" />
+        {HERO_BGS.map((bg, idx) => (
+          <div
+            key={idx}
+            className="hero__image-overlay"
+            style={{
+              backgroundImage: `url('${bg}')`,
+              opacity: idx === bgIndex ? 0.5 : 0,
+              transition: 'opacity 1.5s ease-in-out'
+            }}
+            aria-hidden="true"
+          />
+        ))}
 
         {/* Floating particles */}
         <div className="hero__particles" aria-hidden="true">
@@ -165,13 +190,6 @@ export default function Home() {
             />
           ))}
         </div>
-
-        <img
-          className="hero__deco-img"
-          src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=900&q=80&auto=format&fit=crop"
-          alt="ZHA Hair Saloon Model"
-          aria-hidden="true"
-        />
 
         <div className="container hero__content">
           <div className="hero__eyebrow">
