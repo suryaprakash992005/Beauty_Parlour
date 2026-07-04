@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react';
 import { Instagram, Facebook, Youtube } from '../components/BrandIcons';
 import { useScrollReveal } from '../components/shared';
+import { SparklesText } from '../components/SparklesText';
 
 export default function Contact() {
   useScrollReveal();
@@ -11,7 +12,9 @@ export default function Contact() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Get In Touch</div>
-          <h1 className="page-hero__title">Contact Us</h1>
+          <h1 className="page-hero__title">
+            <SparklesText>Contact Us</SparklesText>
+          </h1>
           <p className="page-hero__subtitle">We would love to hear from you. Reach out for appointments, queries, and collaborations.</p>
         </div>
       </section>

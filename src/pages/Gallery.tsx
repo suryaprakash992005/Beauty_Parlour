@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, ZoomIn } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
+import { SparklesText } from '../components/SparklesText';
 import '../styles/gallery.css';
 
 type GalleryCategory = 'All' | 'Bridal' | 'Hair' | 'Makeup' | 'Nails' | 'Spa';
@@ -41,7 +42,9 @@ export default function Gallery() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Work</div>
-          <h1 className="page-hero__title">Beauty Gallery</h1>
+          <h1 className="page-hero__title">
+            <SparklesText>Beauty Gallery</SparklesText>
+          </h1>
           <p className="page-hero__subtitle">A curated showcase of transformations, artistry, and luxury experiences.</p>
         </div>
       </section>

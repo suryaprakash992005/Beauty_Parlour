@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useScrollReveal } from '../components/shared';
 import '../styles/book.css';
 
@@ -23,8 +23,17 @@ interface FormState {
 
 export default function Book() {
   useScrollReveal();
+  const location = useLocation();
+  const prefilled = (location.state as Partial<FormState> | null) || {};
+
   const [form, setForm] = useState<FormState>({
-    name: '', phone: '', email: '', service: '', date: '', time: '', request: '',
+    name: prefilled.name || '',
+    phone: prefilled.phone || '',
+    email: prefilled.email || '',
+    service: prefilled.service || '',
+    date: prefilled.date || '',
+    time: prefilled.time || '',
+    request: prefilled.request || '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,8 +43,39 @@ export default function Book() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!form.name.trim() || !form.phone.trim() || !form.service || !form.date || !form.time) {
+      alert('Please fill out all required fields marked with *');
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => { setLoading(false); setSubmitted(true); }, 1800);
+
+    const formattedDate = new Date(form.date).toLocaleDateString(undefined, { dateStyle: 'medium' });
+
+    const message = `🌸 *APPOINTMENT BOOKED - ZHA HAIR SALOON* 🌸
+----------------------------------------------
+*Date:* ${formattedDate}
+*Time:* ${form.time}
+
+✨ *CUSTOMER DETAILS:*
+• *Name:* ${form.name}
+• *Phone:* ${form.phone}
+${form.email ? `• *Email:* ${form.email}` : ''}
+
+💅 *SERVICE REQUESTED:*
+• *Service:* ${form.service}
+${form.request ? `• *Special Request:* ${form.request}` : ''}
+
+----------------------------------------------
+Thank you for booking with us! We look forward to serving you!`;
+
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+      const whatsappUrl = `https://wa.me/918270904659?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }, 1500);
   };
 
   const tomorrow = new Date();

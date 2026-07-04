@@ -1,5 +1,6 @@
 import { Star } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
+import { SparklesText } from '../components/SparklesText';
 
 const TESTIMONIALS = [
   { id: 1,  name: 'Priya Sharma',    role: 'Bride',                rating: 5, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80', quote: 'My bridal makeup was absolutely flawless. Every guest was in awe. The team at Luxéora truly understands luxury beauty. I felt like a queen on my most special day.' },
@@ -22,7 +23,9 @@ export default function Testimonials() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Client Stories</div>
-          <h1 className="page-hero__title">Love From Our Clients</h1>
+          <h1 className="page-hero__title">
+            <SparklesText>Love From Our Clients</SparklesText>
+          </h1>
           <p className="page-hero__subtitle">Real experiences from real women who chose Luxéora for their most beautiful moments.</p>
         </div>
       </section>

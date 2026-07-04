@@ -1,0 +1,24 @@
+# ZHA Hair Saloon Tasks
+
+- [x] Rebrand website and admin layout to ZHA Hair Saloon
+- [x] Apply luxury dark gold styling variables and layouts
+- [x] Fix staggered mobile navigation link text contrast issues
+- [x] Replace broken/404 image links in the Gallery page
+- [x] Add dynamic Light/Dark theme switching button (Sun/Moon toggle)
+- [x] Restore default browser cursor (removing the custom dot/ring chasing animations)
+- [x] Configure mobile hero view to display full screen background image (`100dvh`) and center elements vertically
+- [x] Add smooth Ken Burns zoom animation (`heroZoomMobile` keyframe) to mobile hero background image
+- [x] Integrate 3 real images of your green-themed salon interior as the rotating background slideshow
+- [x] Remove decorative makeup brushes overlay image from the hero banner
+- [x] Set banner overlay opacity to 0.5 to show your salon details clearly
+- [x] Fix background slideshow layers blocking button clicks (add `pointer-events: none;` overlay rule)
+- [x] Replace the soft pink light theme with a premium custom Emerald Green & Cream theme matching your store branding
+- [x] Resolve all select dropdown options and focused input text contrast visibility issues (light theme)
+- [x] Resolve solid navbar text readability contrast issues (light theme)
+- [x] Resolve popular bridal package card text readability contrast issues (light theme)
+- [x] Resolve admin dashboard panel, cards, and tables text contrast visibility issues (light theme)
+- [x] Implement `<InteractiveHoverButton>` component with outline-to-solid expansion effect
+- [x] Replace all primary CTAs ("Book Appointment", "Book Now", "Claim Offer", "Book Consultation") on Home, Services, About, Offers, and Bridal pages with the dynamic hover button
+- [x] Implement `<SparklesText>` text component using hardware-accelerated CSS keyframe animations
+- [x] Apply `<SparklesText>` to primary headers of all 7 main pages (Services, Bridal, Gallery, Offers, Testimonials, About, Contact)
+- [x] Run full TS compiler and Vite build checks (`npm run build`)

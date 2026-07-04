@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight, Tag } from 'lucide-react';
+import { Tag } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
+import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
+import { SparklesText } from '../components/SparklesText';
 
 export default function Offers() {
   useScrollReveal();
@@ -20,7 +21,9 @@ export default function Offers() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Exclusive Deals</div>
-          <h1 className="page-hero__title">Luxury Offers</h1>
+          <h1 className="page-hero__title">
+            <SparklesText>Luxury Offers</SparklesText>
+          </h1>
           <p className="page-hero__subtitle">Premium beauty experiences at exceptional value. Limited time only.</p>
         </div>
       </section>
@@ -45,9 +48,9 @@ export default function Offers() {
                   <h3 className="offer-full-card__title">{o.title}</h3>
                   <p className="offer-full-card__desc">{o.desc}</p>
                   <div className="offer-full-card__validity">🗓 {o.validity}</div>
-                  <Link to="/book-appointment" className="btn btn-primary offer-full-card__cta">
-                    Claim Offer <ArrowRight size={14} />
-                  </Link>
+                  <InteractiveHoverButton to="/book-appointment" className="offer-full-card__cta">
+                    Claim Offer
+                  </InteractiveHoverButton>
                 </div>
               </article>
             ))}

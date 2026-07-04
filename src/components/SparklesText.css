@@ -1,0 +1,35 @@
+/* SparklesText.css */
+
+.sparkles-text-container {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.sparkles-text-inner {
+  position: relative;
+  display: inline-block;
+}
+
+@keyframes sparkleAnim {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(75deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(var(--sparkle-scale)) rotate(120deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(150deg);
+  }
+}
+
+.sparkle-svg {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  animation: sparkleAnim 1.0s infinite ease-in-out;
+}

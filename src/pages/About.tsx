@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight, Award, Heart, Leaf, Users } from 'lucide-react';
+import { Award, Heart, Leaf, Users } from 'lucide-react';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
+import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
+import { SparklesText } from '../components/SparklesText';
 import '../styles/about.css';
 
 const TEAM = [
@@ -29,7 +30,9 @@ export default function About() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Story</div>
-          <h1 className="page-hero__title">About ZHA Hair Saloon</h1>
+          <h1 className="page-hero__title">
+            <SparklesText>About ZHA Hair Saloon</SparklesText>
+          </h1>
           <p className="page-hero__subtitle">Born from a passion for premium hair styling, redefined for professional elegance.</p>
         </div>
       </section>
@@ -71,9 +74,9 @@ export default function About() {
                   </div>
                 ))}
               </div>
-              <Link to="/book-appointment" className="btn btn-primary mt-xl">
-                Book Your Experience <ArrowRight size={16} />
-              </Link>
+              <InteractiveHoverButton to="/book-appointment" className="mt-xl">
+                Book Your Experience
+              </InteractiveHoverButton>
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import ThemeToggle from './ThemeToggle';
 const NAV_LINKS = [
   { label: 'Home',            to: '/' },
   { label: 'Services',        to: '/services' },
-  { label: 'Bridal Packages', to: '/bridal-packages' },
+  { label: 'Bridal Planner',  to: '/bridal-planner' },
   { label: 'Gallery',         to: '/gallery' },
   { label: 'Offers',          to: '/offers' },
   { label: 'Testimonials',    to: '/testimonials' },

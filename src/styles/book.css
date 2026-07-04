@@ -86,10 +86,17 @@
   appearance: none;
   width: 100%;
 }
+.form-input option {
+  background: var(--color-card-bg);
+  color: var(--color-text);
+}
 .form-input:focus {
   border-color: var(--color-rose-gold);
   box-shadow: 0 0 0 3px rgba(212,175,55,0.12);
   background: var(--color-bg-dark);
+}
+[data-theme="light"] .form-input:focus {
+  background: var(--color-card-bg);
 }
 .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23D4AF37' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
 .form-textarea { resize: vertical; min-height: 100px; }

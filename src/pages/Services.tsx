@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, Filter } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
+import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
+import { SparklesText } from '../components/SparklesText';
 import '../styles/services.css';
 
 type Category = 'All' | 'Hair Care' | 'Skin Care' | 'Makeup' | 'Bridal' | 'Spa' | 'Nails';
@@ -36,7 +37,9 @@ export default function Services() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Offerings</div>
-          <h1 className="page-hero__title">Luxury Services</h1>
+          <h1 className="page-hero__title">
+            <SparklesText>Luxury Services</SparklesText>
+          </h1>
           <p className="page-hero__subtitle">11 premium hair and beauty services crafted to perfection by ZHA Hair Saloon.</p>
         </div>
       </section>
@@ -77,9 +80,9 @@ export default function Services() {
                     <span className="service-card-full__dur">⏱ {s.dur}</span>
                     <span className="service-card-full__price">{s.price} <small>onwards</small></span>
                   </div>
-                  <Link to="/book-appointment" className="btn btn-primary service-card-full__cta">
-                    Book Now <ArrowRight size={14} />
-                  </Link>
+                  <InteractiveHoverButton to="/book-appointment" className="service-card-full__cta">
+                    Book Now
+                  </InteractiveHoverButton>
                 </div>
               </article>
             ))}

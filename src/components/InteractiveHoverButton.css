@@ -1,0 +1,106 @@
+/* InteractiveHoverButton.css */
+
+.interactive-hover-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-full, 9999px);
+  padding: 12px 28px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base);
+  outline: none;
+  font-size: var(--text-sm, 14px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  user-select: none;
+  text-align: center;
+  font-family: var(--font-sans);
+  min-width: 140px;
+}
+
+.interactive-hover-btn__visible {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.interactive-hover-btn__dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  transform-origin: center;
+}
+
+.interactive-hover-btn__text {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+}
+
+/* Hover visible state */
+.interactive-hover-btn:hover .interactive-hover-btn__dot {
+  transform: scale(100);
+}
+
+.interactive-hover-btn:hover .interactive-hover-btn__text {
+  transform: translateX(40px);
+  opacity: 0;
+}
+
+/* Hidden elements */
+.interactive-hover-btn__hidden {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--color-bg); /* Contrast color on filled background */
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.interactive-hover-btn:hover .interactive-hover-btn__hidden {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Theme overrides for better contrast */
+[data-theme="light"] .interactive-hover-btn__hidden {
+  color: var(--color-bg); /* on forest green active background, use mint cream text */
+}
+
+/* Small variation for lists/cards */
+.interactive-hover-btn--sm {
+  padding: 8px 20px;
+  font-size: 0.75rem;
+  min-width: 110px;
+}
+
+.interactive-hover-btn--sm .interactive-hover-btn__dot {
+  width: 6px;
+  height: 6px;
+}
+
+.interactive-hover-btn--sm:hover .interactive-hover-btn__dot {
+  transform: scale(80);
+}

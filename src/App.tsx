@@ -6,7 +6,7 @@ import { WhatsAppButton, ScrollToTop } from './components/shared';
 // Public Pages
 import Home from './pages/Home';
 import Services from './pages/Services';
-import Bridal from './pages/Bridal';
+import BridalPlanner from './pages/BridalPlanner';
 import Gallery from './pages/Gallery';
 import Offers from './pages/Offers';
 import About from './pages/About';
@@ -33,7 +33,7 @@ function PublicLayout() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/bridal-packages" element={<Bridal />} />
+        <Route path="/bridal-planner" element={<BridalPlanner />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/offers" element={<Offers />} />
         <Route path="/about" element={<About />} />

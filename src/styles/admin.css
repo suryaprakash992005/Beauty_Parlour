@@ -534,3 +534,16 @@
     display: none;
   }
 }
+
+[data-theme="light"] .admin-login__card,
+[data-theme="light"] .admin-topbar,
+[data-theme="light"] .admin-stat-card,
+[data-theme="light"] .admin-card,
+[data-theme="light"] .admin-quick-card {
+  background: var(--color-card-bg);
+}
+
+[data-theme="light"] .admin-action-btn:hover {
+  background: var(--color-cream-dark);
+  color: var(--color-rose-gold);
+}

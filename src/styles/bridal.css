@@ -197,3 +197,8 @@
   }
 }
 
+[data-theme="light"] .bridal-card--popular {
+  background: linear-gradient(160deg, var(--color-cream-dark) 0%, var(--color-blush-mid) 100%);
+  border-color: var(--color-rose-gold);
+}
+

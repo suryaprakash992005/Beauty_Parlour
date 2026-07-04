@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { Instagram } from '../components/BrandIcons';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
+import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import bridalBeforeImg from '../assets/bridal_before.png';
 import bridalAfterImg from '../assets/bridal_after.png';
 import '../styles/home.css';
@@ -203,9 +204,9 @@ export default function Home() {
             Where premium style meets expert care. Experience the ultimate hair design, bridal cosmetics, nail artistry, and soothing spa therapies at ZHA Hair Saloon.
           </p>
           <div className="hero__actions">
-            <Link to="/book-appointment" className="btn btn-gold">
-              Book Appointment <ArrowRight size={16} />
-            </Link>
+            <InteractiveHoverButton to="/book-appointment">
+              Book Appointment
+            </InteractiveHoverButton>
             <Link to="/services" className="btn btn-outline-white">
               Explore Services
             </Link>
@@ -259,9 +260,9 @@ export default function Home() {
                     <div className="service-card__price">
                       {s.price} <small>onwards</small>
                     </div>
-                    <Link to="/book-appointment" className="btn btn-outline" style={{ padding: '8px 18px', fontSize: '0.75rem' }}>
+                    <InteractiveHoverButton to="/book-appointment" className="interactive-hover-btn--sm">
                       Book Now
-                    </Link>
+                    </InteractiveHoverButton>
                   </div>
                 </div>
               </article>
