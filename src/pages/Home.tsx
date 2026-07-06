@@ -6,7 +6,6 @@ import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import bridalBeforeImg from '../assets/bridal_before.png';
 import bridalAfterImg from '../assets/bridal_after.png';
-import VirtualTour from '../components/VirtualTour';
 import '../styles/home.css';
 
 /* ─── Data ─── */
@@ -291,9 +290,6 @@ export default function Home() {
           <BeforeAfterSlider />
         </div>
       </section>
-
-      {/* ── 360 VIRTUAL TOUR ── */}
-      <VirtualTour />
 
       {/* ── OFFERS ── */}
       <section className="offers-banner" aria-label="Current Offers">
