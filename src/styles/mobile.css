@@ -1,0 +1,828 @@
+/* ============================================================
+   ZHA HAIR SALOON — Premium Mobile-First Responsive System
+   Mobile experience: Luxury app-grade polish
+   Desktop: Completely untouched
+   ============================================================ */
+
+/* ──────────────────────────────────────────────────────────
+   GLOBAL MOBILE FOUNDATION
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Prevent horizontal scrolling */
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  /* Mobile container padding */
+  .container {
+    padding-inline: 20px !important;
+    width: 100% !important;
+  }
+
+  /* Section spacing */
+  .section {
+    padding: 80px 0 !important;
+  }
+
+  .section__header {
+    gap: 12px !important;
+  }
+
+  /* Typography scaling */
+  .section-title {
+    font-size: clamp(1.75rem, 8vw, 2.25rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  .section-subtitle {
+    font-size: 15px !important;
+    max-width: 100% !important;
+    line-height: 1.65 !important;
+  }
+
+  .section-label {
+    font-size: 10px !important;
+    letter-spacing: 0.15em !important;
+  }
+
+  /* Buttons — mobile touch-friendly */
+  .btn {
+    padding: 14px 28px !important;
+    font-size: 14px !important;
+    min-height: 48px !important;
+    touch-action: manipulation !important;
+  }
+
+  /* Hide custom cursor on mobile */
+  .cursor { display: none !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   NAVBAR
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .navbar { display: none !important; }
+}
+
+@media (max-width: 767px) {
+  .staggered-menu-header {
+    padding: 0 20px !important;
+    height: 60px !important;
+  }
+
+  .staggered-menu-header.sm-header--solid {
+    height: 56px !important;
+    padding: 0 20px !important;
+  }
+
+  .navbar__logo-name { font-size: 1.6rem !important; }
+  .navbar__logo-tagline { font-size: 0.5rem !important; }
+
+  .sm-toggle {
+    padding: 10px 14px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+  }
+
+  .staggered-menu-panel {
+    width: 100% !important;
+    padding: 80px 28px 32px !important;
+  }
+
+  .sm-prelayers { width: 100% !important; }
+
+  .sm-panel-item {
+    font-size: 2rem !important;
+    letter-spacing: -0.5px !important;
+  }
+
+  .sm-panel-inner { gap: 1.5rem !important; }
+  .sm-socials { padding-top: 1.5rem !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   HERO SECTION
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding-top: 60px !important;
+    padding-bottom: 40px !important;
+  }
+
+  .hero__content {
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .hero__eyebrow {
+    font-size: 10px !important;
+    letter-spacing: 0.2em !important;
+    margin-bottom: 16px !important;
+  }
+
+  .hero__title {
+    font-size: clamp(2rem, 9vw, 2.75rem) !important;
+    line-height: 1.2 !important;
+    max-width: 92% !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+  }
+
+  .hero__subtitle {
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    max-width: 88% !important;
+    margin: 16px auto 0 !important;
+    text-align: center !important;
+  }
+
+  .hero__actions {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 340px !important;
+    margin: 28px auto 0 !important;
+    gap: 12px !important;
+  }
+
+  .hero__actions .btn {
+    width: 100% !important;
+    height: 56px !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+    border-radius: 100px !important;
+  }
+
+  .hero__scroll-indicator { display: none !important; }
+
+  .hero__bg,
+  .hero__image-overlay {
+    background-position: center center !important;
+    background-size: cover !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero__title { font-size: 1.85rem !important; }
+  .hero__subtitle { font-size: 14px !important; }
+  .hero__actions { max-width: 300px !important; }
+  .hero__actions .btn { height: 52px !important; font-size: 13px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   STATS SECTION
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .stats { padding: 48px 0 !important; }
+
+  .stats__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    background: transparent !important;
+  }
+
+  .stats__item {
+    padding: 24px 16px !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  .stats__number { font-size: 2rem !important; }
+  .stats__suffix { font-size: 1.25rem !important; }
+  .stats__label { font-size: 11px !important; margin-top: 6px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   HOME SERVICE CARDS
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .services-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-top: 32px !important;
+  }
+
+  .service-card {
+    max-width: 380px !important;
+    margin-inline: auto !important;
+    border-radius: var(--radius-xl) !important;
+  }
+
+  .service-card__img-wrap { height: 200px !important; }
+  .service-card__body { padding: 20px !important; }
+  .service-card__name { font-size: 18px !important; }
+  .service-card__desc { font-size: 14px !important; line-height: 1.6 !important; margin-top: 8px !important; }
+  .service-card__footer { margin-top: 16px !important; padding-top: 16px !important; }
+  .service-card__price { font-size: 18px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   BEFORE/AFTER SLIDER
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .before-after { padding: 64px 0 !important; }
+  .slider-wrap {
+    margin-top: 32px !important;
+    max-width: 100% !important;
+    border-radius: var(--radius-xl) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   OFFERS SECTION
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .offers-banner { padding: 64px 0 !important; }
+
+  .offers-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-top: 32px !important;
+  }
+
+  .offer-card {
+    max-width: 380px !important;
+    margin-inline: auto !important;
+    padding: 24px 20px !important;
+    border-radius: var(--radius-xl) !important;
+  }
+
+  .offer-card__discount { font-size: 2.5rem !important; }
+  .offer-card__title { font-size: 17px !important; margin-top: 8px !important; }
+  .offer-card__desc { font-size: 14px !important; line-height: 1.6 !important; }
+  .offer-card__tag { margin-top: 16px !important; font-size: 11px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   TESTIMONIALS
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .testimonials { padding: 64px 0 !important; overflow: hidden !important; }
+
+  .testimonials-track {
+    margin-top: 32px !important;
+    gap: 16px !important;
+    padding-left: 20px !important;
+  }
+
+  .testimonial-card {
+    width: 300px !important;
+    padding: 24px 20px !important;
+    border-radius: var(--radius-xl) !important;
+    flex-shrink: 0 !important;
+  }
+
+  .testimonial-card__quote { font-size: 15px !important; line-height: 1.6 !important; }
+  .testimonial-card__stars { font-size: 1rem !important; margin-bottom: 12px !important; }
+  .testimonial-card__avatar { width: 42px !important; height: 42px !important; }
+  .testimonial-card__name { font-size: 13px !important; }
+  .testimonial-card__role { font-size: 11px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   INSTAGRAM GRID
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .instagram-section { padding: 64px 0 !important; }
+  .instagram-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    margin-top: 24px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .instagram-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   FLOATING BOOK CTA
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .book-cta-fab { bottom: 20px !important; right: 16px !important; }
+  .book-cta-fab .btn {
+    height: 48px !important;
+    padding: 0 20px !important;
+    font-size: 13px !important;
+    border-radius: 100px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   PAGE HERO (inner pages)
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .page-hero {
+    height: auto !important;
+    min-height: 220px !important;
+    padding-top: 60px !important;
+    padding-bottom: 0 !important;
+  }
+
+  .page-hero__content {
+    align-items: center !important;
+    text-align: center !important;
+    padding-top: 20px !important;
+    padding-bottom: 24px !important;
+    gap: 10px !important;
+  }
+
+  .page-hero__title {
+    font-size: clamp(1.6rem, 7vw, 2rem) !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+  }
+
+  .page-hero__subtitle {
+    font-size: 14px !important;
+    max-width: 100% !important;
+    text-align: center !important;
+    line-height: 1.6 !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   SERVICES PAGE
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .services-filter {
+    top: 56px !important;
+    padding: 10px 0 !important;
+    z-index: 50 !important;
+  }
+
+  .services-filter__inner {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 8px !important;
+    padding: 0 20px 4px !important;
+  }
+
+  .services-filter__inner::-webkit-scrollbar { display: none !important; }
+
+  .services-filter__btn {
+    padding: 8px 16px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    min-height: 36px !important;
+    touch-action: manipulation !important;
+  }
+
+  .services-grid-full {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-top: 24px !important;
+  }
+
+  .service-card-full {
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+    border-radius: var(--radius-xl) !important;
+  }
+
+  .service-card-full__img-wrap { height: 200px !important; }
+  .service-card-full__img { object-position: center top !important; }
+  .service-card-full__body { padding: 20px !important; gap: 10px !important; }
+  .service-card-full__name { font-size: 18px !important; }
+  .service-card-full__desc { font-size: 14px !important; line-height: 1.65 !important; }
+  .service-card-full__meta { padding: 12px 0 !important; }
+  .service-card-full__price { font-size: 17px !important; }
+  .service-card-full__dur { font-size: 12px !important; }
+
+  .service-card-full__cta {
+    width: 100% !important;
+    justify-content: center !important;
+    height: 48px !important;
+    font-size: 13px !important;
+    margin-top: 4px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   GALLERY PAGE
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .gallery-masonry {
+    columns: 2 !important;
+    column-gap: 8px !important;
+  }
+
+  .gallery-item {
+    margin-bottom: 8px !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  .gallery-item__cat {
+    font-size: 9px !important;
+    padding: 3px 8px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .lightbox { padding: 16px !important; }
+  .lightbox__close { top: 16px !important; right: 16px !important; width: 48px !important; height: 48px !important; }
+  .lightbox__img-wrap { max-width: 100% !important; max-height: 85vh !important; border-radius: var(--radius-lg) !important; }
+  .lightbox__img { max-width: 100% !important; max-height: 75vh !important; }
+  .lightbox__caption { font-size: 14px !important; padding: 16px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   BOOKING FORM PAGE
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .book-layout {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .book-info {
+    position: static !important;
+    padding: 24px 20px !important;
+    border-radius: var(--radius-xl) !important;
+    border: 1px solid var(--color-border) !important;
+  }
+
+  .book-info__title { font-size: 18px !important; margin-bottom: 16px !important; }
+  .book-info__list { gap: 12px !important; }
+  .book-info__item { font-size: 14px !important; line-height: 1.6 !important; gap: 12px !important; }
+  .book-info__icon { font-size: 1.2rem !important; flex-shrink: 0 !important; }
+  .book-contact-strip { margin-top: 24px !important; padding-top: 16px !important; }
+  .book-phone { font-size: 20px !important; }
+
+  .book-form-wrap {
+    padding: 24px 20px !important;
+    border-radius: var(--radius-xl) !important;
+  }
+
+  .book-form__title {
+    font-size: 18px !important;
+    margin-bottom: 20px !important;
+    padding-bottom: 12px !important;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .book-form { gap: 16px !important; }
+
+  /* Inputs — large touch targets, 16px font prevents iOS zoom */
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: 14px 16px !important;
+    font-size: 16px !important;
+    border-radius: var(--radius-md) !important;
+    min-height: 52px !important;
+  }
+
+  .form-textarea { min-height: 110px !important; resize: vertical !important; }
+  .form-label { font-size: 11px !important; letter-spacing: 0.08em !important; }
+
+  .book-form__submit {
+    width: 100% !important;
+    height: 56px !important;
+    font-size: 15px !important;
+    justify-content: center !important;
+    border-radius: 100px !important;
+    margin-top: 4px !important;
+  }
+
+  .book-form__note {
+    font-size: 12px !important;
+    line-height: 1.6 !important;
+    text-align: center !important;
+  }
+
+  .book-success { padding: 48px 16px !important; gap: 16px !important; }
+  .book-success__icon { font-size: 3.5rem !important; }
+  .book-success__title { font-size: 1.5rem !important; }
+  .book-success__desc { font-size: 15px !important; max-width: 100% !important; text-align: center !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   ABOUT PAGE
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .about-story {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  .about-story__img-main img {
+    aspect-ratio: 4/3 !important;
+    border-radius: var(--radius-xl) !important;
+  }
+
+  .about-story__img-accent { display: none !important; }
+
+  .about-values {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-top: 24px !important;
+  }
+
+  .about-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  .about-stat__num { font-size: 2rem !important; }
+  .about-stat__label { font-size: 12px !important; }
+
+  .team-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px !important;
+    margin-top: 32px !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+  }
+
+  .team-card { border-radius: var(--radius-lg) !important; }
+  .team-card__img-wrap { height: 180px !important; }
+  .team-card__info { padding: 12px !important; }
+  .team-card__name { font-size: 15px !important; }
+  .team-card__role { font-size: 11px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   BRIDAL PACKAGE PLANNER
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .bridal-planner-page { padding-bottom: 60px !important; }
+
+  .planner-container {
+    margin-top: 24px !important;
+    padding: 0 16px !important;
+  }
+
+  .planner-card {
+    padding: 24px 20px !important;
+    border-radius: var(--radius-xl) !important;
+  }
+
+  .planner-steps {
+    margin-bottom: 36px !important;
+    padding: 0 !important;
+  }
+
+  .planner-step {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 12px !important;
+  }
+
+  .planner-step__label { display: none !important; }
+  .planner-step--active .planner-step__label { display: block !important; }
+
+  .planner-title {
+    font-size: 18px !important;
+    margin-bottom: 20px !important;
+    padding-bottom: 12px !important;
+    gap: 10px !important;
+  }
+
+  .family-row {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 16px !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  .btn-remove {
+    width: 100% !important;
+    height: 40px !important;
+    border-radius: var(--radius-md) !important;
+    justify-content: center !important;
+    font-size: 13px !important;
+  }
+
+  .btn-add {
+    width: 100% !important;
+    padding: 14px 20px !important;
+    font-size: 14px !important;
+    min-height: 48px !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  .package-select-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .package-select-card {
+    padding: 20px 16px !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  .package-select-card__name { font-size: 16px !important; }
+  .package-select-card__price { font-size: 18px !important; }
+  .package-select-card__desc { font-size: 13px !important; }
+
+  .custom-options {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding-top: 16px !important;
+    margin-top: 16px !important;
+  }
+
+  .checkbox-option { font-size: 14px !important; gap: 12px !important; padding: 4px 0 !important; }
+  .checkbox-option input { width: 18px !important; height: 18px !important; flex-shrink: 0 !important; }
+
+  .planner-actions {
+    margin-top: 28px !important;
+    padding-top: 20px !important;
+    gap: 12px !important;
+  }
+
+  .planner-actions .btn {
+    min-height: 52px !important;
+    font-size: 13px !important;
+    padding: 12px 24px !important;
+  }
+
+  .summary-invoice {
+    padding: 20px 16px !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  .invoice-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .invoice-title { font-size: 16px !important; }
+  .invoice-subtitle { font-size: 11px !important; }
+  .invoice-label { font-size: 11px !important; }
+  .invoice-value { font-size: 15px !important; }
+
+  .invoice-table th,
+  .invoice-table td { padding: 8px 6px !important; font-size: 13px !important; }
+
+  .invoice-total-row td { font-size: 15px !important; }
+
+  .success-view { padding: 40px 0 !important; gap: 16px !important; }
+  .success-icon { font-size: 3.5rem !important; }
+  .success-actions { max-width: 100% !important; gap: 12px !important; margin-top: 16px !important; }
+  .success-actions .btn {
+    width: 100% !important;
+    height: 52px !important;
+    font-size: 14px !important;
+    justify-content: center !important;
+  }
+
+  .planner-error-message {
+    font-size: 13px !important;
+    padding: 10px 14px !important;
+    margin-bottom: 16px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   FOOTER
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .footer { padding: 48px 0 0 !important; }
+
+  .footer__grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    padding-bottom: 32px !important;
+    text-align: center !important;
+  }
+
+  .footer__logo-name { font-size: 2rem !important; }
+  .footer__logo-tagline { font-size: 10px !important; letter-spacing: 0.15em !important; }
+  .footer__desc {
+    font-size: 14px !important;
+    max-width: 100% !important;
+    margin-top: 12px !important;
+    margin-inline: auto !important;
+  }
+
+  .footer__socials {
+    justify-content: center !important;
+    gap: 10px !important;
+    margin-top: 20px !important;
+  }
+
+  .footer__social-link {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1rem !important;
+    touch-action: manipulation !important;
+  }
+
+  .footer__col-title {
+    text-align: center !important;
+    margin-bottom: 16px !important;
+  }
+
+  .footer__links {
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .footer__link {
+    font-size: 14px !important;
+    display: block !important;
+    min-height: 32px !important;
+    line-height: 32px !important;
+  }
+
+  .footer__contact-item {
+    justify-content: center !important;
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .footer__bottom {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 16px 0 !important;
+    gap: 8px !important;
+  }
+
+  .footer__copyright { font-size: 11px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   TABLET (768px – 1024px)
+   ────────────────────────────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container { padding-inline: 32px !important; }
+  .section { padding: 80px 0 !important; }
+
+  .page-hero { min-height: 300px !important; padding-top: 60px !important; }
+  .page-hero__title { font-size: 2.5rem !important; }
+
+  .stats__grid { grid-template-columns: repeat(4, 1fr) !important; }
+  .services-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .services-grid-full { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+  .offers-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .gallery-masonry { columns: 3 !important; }
+  .team-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .package-select-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  .book-layout { grid-template-columns: 1fr !important; gap: 28px !important; }
+  .book-info { position: static !important; }
+
+  .about-story { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
+  .about-stats { grid-template-columns: repeat(4, 1fr) !important; }
+
+  .footer__grid { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   SAFETY — prevent overflow on any element
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  img, video, iframe, table { max-width: 100% !important; }
+
+  .section__header--center {
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .mt-3xl { margin-top: 2rem !important; }
+  .mt-2xl { margin-top: 1.5rem !important; }
+  .mt-xl  { margin-top: 1.25rem !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   TINY SCREENS (max 375px)
+   ────────────────────────────────────────────────────────── */
+@media (max-width: 375px) {
+  .container { padding-inline: 16px !important; }
+  .hero__title { font-size: 1.75rem !important; }
+  .section-title { font-size: 1.6rem !important; }
+  .planner-card { padding: 20px 14px !important; }
+  .book-form-wrap { padding: 20px 16px !important; }
+  .offer-card { padding: 20px 16px !important; }
+  .testimonial-card { width: 270px !important; }
+  .footer__grid { gap: 24px !important; }
+}
+
+/* ──────────────────────────────────────────────────────────
+   LARGE MOBILE / PHABLET (390px – 430px)
+   ────────────────────────────────────────────────────────── */
+@media (min-width: 390px) and (max-width: 430px) {
+  .hero__title { font-size: 2.25rem !important; }
+  .hero__actions .btn { height: 56px !important; }
+  .service-card { max-width: 100% !important; }
+  .testimonial-card { width: 310px !important; }
+}
