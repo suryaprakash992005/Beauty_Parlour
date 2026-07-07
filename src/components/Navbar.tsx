@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import '../styles/layout.css';
 import StaggeredMenu from './StaggeredMenu';
+import type { StaggeredMenuGroup } from './StaggeredMenu';
 import ThemeToggle from './ThemeToggle';
 
 const NAV_LINKS = [
@@ -15,19 +16,42 @@ const NAV_LINKS = [
   { label: 'Contact',         to: '/contact' },
 ];
 
-const menuItems = [
-  ...NAV_LINKS.map(l => ({
-    label: l.label,
-    ariaLabel: `Go to ${l.label} page`,
-    link: l.to
-  })),
-  { label: 'Book Appointment', ariaLabel: 'Book an appointment', link: '/book-appointment' }
+/** Two-section grouped menu for the mobile panel */
+const menuGroups: StaggeredMenuGroup[] = [
+  {
+    heading: 'Services',
+    items: [
+      { label: 'Hair Cut',       link: '/services' },
+      { label: 'Hair Coloring',  link: '/services' },
+      { label: 'Hair Spa',       link: '/services' },
+      { label: 'Keratin',        link: '/services' },
+      { label: 'Facial',         link: '/services' },
+      { label: 'Bridal Makeup',  link: '/services' },
+      { label: 'Nail Art',       link: '/services' },
+      { label: 'Waxing',         link: '/services' },
+      { label: 'Pedicure',       link: '/services' },
+      { label: 'Manicure',       link: '/services' },
+    ],
+  },
+  {
+    heading: 'Quick Links',
+    items: [
+      { label: 'Home',            link: '/' },
+      { label: 'About',           link: '/about' },
+      { label: 'Gallery',         link: '/gallery' },
+      { label: 'Offers',          link: '/offers' },
+      { label: 'Testimonials',    link: '/testimonials' },
+      { label: 'Bridal Planner',  link: '/bridal-planner' },
+      { label: 'Contact',         link: '/contact' },
+      { label: 'Book Appointment',link: '/book-appointment' },
+    ],
+  },
 ];
 
 const socialItems = [
   { label: 'Instagram', link: 'https://instagram.com/zhahairsaloon' },
-  { label: 'Facebook', link: 'https://facebook.com/zhahairsaloon' },
-  { label: 'YouTube', link: 'https://youtube.com/zhahairsaloon' }
+  { label: 'Facebook',  link: 'https://facebook.com/zhahairsaloon' },
+  { label: 'YouTube',   link: 'https://youtube.com/zhahairsaloon' },
 ];
 
 const BrandLogo = () => (
@@ -82,10 +106,10 @@ export default function Navbar() {
       {/* Premium Staggered Mobile Menu (displays on <= 1024px) */}
       <StaggeredMenu
         position="right"
-        items={menuItems}
+        menuGroups={menuGroups}
         socialItems={socialItems}
         displaySocials={true}
-        displayItemNumbering={true}
+        displayItemNumbering={false}
         menuButtonColor={solid ? 'var(--color-rose-gold)' : '#fff'}
         openMenuButtonColor="#fff"
         changeMenuColorOnOpen={true}
