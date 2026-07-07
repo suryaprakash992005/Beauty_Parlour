@@ -15,18 +15,10 @@ export interface StaggeredMenuSocialItem {
   link: string;
 }
 
-/** A named group of items shown as a 2-column grid section in the mobile panel */
-export interface StaggeredMenuGroup {
-  heading: string;
-  items: StaggeredMenuItem[];
-}
-
 export interface StaggeredMenuProps {
   position?: 'left' | 'right';
   colors?: string[];
   items?: StaggeredMenuItem[];
-  /** If provided, renders grouped 2-column grid sections instead of a flat list */
-  menuGroups?: StaggeredMenuGroup[];
   socialItems?: StaggeredMenuSocialItem[];
   displaySocials?: boolean;
   displayItemNumbering?: boolean;
@@ -47,7 +39,6 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   position = 'right',
   colors = ['#B497CF', '#5227FF'],
   items = [],
-  menuGroups,
   socialItems = [],
   displaySocials = true,
   displayItemNumbering = true,
@@ -125,11 +116,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     }
     itemEntranceTweenRef.current?.kill();
 
-    // Animate compact-link labels AND flat-list labels, but NOT group-section headings
-    const itemEls = Array.from(panel.querySelectorAll(
-      '.sm-panel-item--compact .sm-panel-itemLabel, .sm-panel-list .sm-panel-itemLabel'
-    )) as HTMLElement[];
-
+    const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[];
     const numberEls = Array.from(panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item')) as HTMLElement[];
     const socialTitle = panel.querySelector('.sm-socials-title') as HTMLElement;
     const socialLinks = Array.from(panel.querySelectorAll('.sm-socials-link')) as HTMLElement[];
@@ -261,10 +248,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       ease: 'power3.in',
       overwrite: 'auto',
       onComplete: () => {
-        const itemEls = Array.from(panel.querySelectorAll(
-          '.sm-panel-item--compact .sm-panel-itemLabel, .sm-panel-list .sm-panel-itemLabel'
-        )) as HTMLElement[];
-
+        const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[];
         if (itemEls.length) {
           gsap.set(itemEls, { yPercent: 140, rotate: 10 });
         }
@@ -476,98 +460,49 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
       <aside id="staggered-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!open}>
         <div className="sm-panel-inner">
-
-          {/* ── GROUPED MODE: 2-column grid sections ── */}
-          {menuGroups && menuGroups.length > 0 ? (
-            <div className="sm-groups-wrap">
-              {menuGroups.map((group, gIdx) => (
-                <div className="sm-group" key={group.heading + gIdx}>
-                  <h3 className="sm-group-heading sm-panel-itemLabel">{group.heading}</h3>
-                  <ul className="sm-group-grid" role="list">
-                    {group.items.map((it, idx) => {
-                      const isExternal = it.link.startsWith('http') || it.link.startsWith('//');
-                      const globalIdx = gIdx * 100 + idx;
-                      return (
-                        <li className="sm-group-item-wrap" key={it.label + idx}>
-                          <div className="sm-panel-itemWrap">
-                            {isExternal ? (
-                              <a
-                                className="sm-panel-item sm-panel-item--compact"
-                                href={it.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label={it.ariaLabel}
-                                data-index={globalIdx + 1}
-                                onClick={closeMenu}
-                              >
-                                <span className="sm-panel-itemLabel">{it.label}</span>
-                              </a>
-                            ) : (
-                              <Link
-                                className="sm-panel-item sm-panel-item--compact"
-                                to={it.link}
-                                aria-label={it.ariaLabel}
-                                data-index={globalIdx + 1}
-                                onClick={closeMenu}
-                              >
-                                <span className="sm-panel-itemLabel">{it.label}</span>
-                              </Link>
-                            )}
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          ) : (
-            /* ── FLAT MODE: single list (original behaviour) ── */
-            <ul className="sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
-              {items && items.length ? (
-                items.map((it, idx) => {
-                  const isExternal = it.link.startsWith('http') || it.link.startsWith('//');
-                  return (
-                    <li className="sm-panel-itemWrap" key={it.label + idx}>
-                      {isExternal ? (
-                        <a
-                          className="sm-panel-item"
-                          href={it.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={it.ariaLabel}
-                          data-index={idx + 1}
-                          onClick={closeMenu}
-                        >
-                          <span className="sm-panel-itemLabel">{it.label}</span>
-                        </a>
-                      ) : (
-                        <Link
-                          className="sm-panel-item"
-                          to={it.link}
-                          aria-label={it.ariaLabel}
-                          data-index={idx + 1}
-                          onClick={closeMenu}
-                        >
-                          <span className="sm-panel-itemLabel">{it.label}</span>
-                        </Link>
-                      )}
-                    </li>
-                  );
-                })
-              ) : (
-                <li className="sm-panel-itemWrap" aria-hidden="true">
-                  <span className="sm-panel-item">
-                    <span className="sm-panel-itemLabel">No items</span>
-                  </span>
-                </li>
-              )}
-            </ul>
-          )}
-
+          <ul className="sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
+            {items && items.length ? (
+              items.map((it, idx) => {
+                const isExternal = it.link.startsWith('http') || it.link.startsWith('//');
+                return (
+                  <li className="sm-panel-itemWrap" key={it.label + idx}>
+                    {isExternal ? (
+                      <a
+                        className="sm-panel-item"
+                        href={it.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={it.ariaLabel}
+                        data-index={idx + 1}
+                        onClick={closeMenu}
+                      >
+                        <span className="sm-panel-itemLabel">{it.label}</span>
+                      </a>
+                    ) : (
+                      <Link
+                        className="sm-panel-item"
+                        to={it.link}
+                        aria-label={it.ariaLabel}
+                        data-index={idx + 1}
+                        onClick={closeMenu}
+                      >
+                        <span className="sm-panel-itemLabel">{it.label}</span>
+                      </Link>
+                    )}
+                  </li>
+                );
+              })
+            ) : (
+              <li className="sm-panel-itemWrap" aria-hidden="true">
+                <span className="sm-panel-item">
+                  <span className="sm-panel-itemLabel">No items</span>
+                </span>
+              </li>
+            )}
+          </ul>
           {displaySocials && socialItems && socialItems.length > 0 && (
             <div className="sm-socials" aria-label="Social links">
-              <h3 className="sm-socials-title">Follow Us</h3>
+              <h3 className="sm-socials-title">Socials</h3>
               <ul className="sm-socials-list" role="list">
                 {socialItems.map((s, i) => (
                   <li key={s.label + i} className="sm-socials-item">
