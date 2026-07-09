@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollReveal } from '../components/shared';
+import { getSalonSettings } from '../services/settings';
 import '../styles/book.css';
 
 const SERVICES_LIST = [
@@ -37,6 +38,15 @@ export default function Book() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [whatsapp, setWhatsapp] = useState('8270904659');
+
+  useEffect(() => {
+    getSalonSettings().then(data => {
+      if (data.whatsapp) {
+        setWhatsapp(data.whatsapp.replace(/[^0-9]/g, ''));
+      }
+    }).catch(err => console.error('Failed to load booking whatsapp:', err));
+  }, []);
 
   const set = (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm(prev => ({ ...prev, [key]: e.target.value }));
@@ -73,7 +83,7 @@ Thank you for booking with us! We look forward to serving you!`;
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
-      const whatsappUrl = `https://wa.me/918270904659?text=${encodeURIComponent(message)}`;
+      const whatsappUrl = `https://wa.me/91${whatsapp}?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
     }, 1500);
   };

@@ -1,16 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Eye, Check } from 'lucide-react';
+import { getHomepageBanner, updateHomepageBanner, uploadHeroAsset } from '../../services/homepage';
+import type { HomepageBanner } from '../../services/homepage';
 
 export default function AdminBanner() {
-  const [banner, setBanner] = useState({
+  const [banner, setBanner] = useState<HomepageBanner>({
     smallHeading: 'Bespoke Hair Artistry',
     mainHeading: 'Transform Your Style, Reveal Your Confidence',
     description: 'Experience premium luxury hair styling, organic skincare therapies, and celebrity-grade bridal makeovers at ZHA Hair Saloon.',
     primaryBtn: 'Book Appointment',
     secondaryBtn: 'Explore Services',
     imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80',
+    videoUrl: ''
   });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    getHomepageBanner()
+      .then(data => {
+        setBanner(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load banner settings:', err);
+        setLoading(false);
+      });
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -23,12 +40,59 @@ export default function AdminBanner() {
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaved(true);
-    localStorage.setItem('zha_hero_banner', JSON.stringify(banner));
-    setTimeout(() => setSaved(false), 3000);
+  const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBanner(prev => ({ ...prev, videoUrl: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      let finalImageUrl = banner.imageUrl;
+      if (banner.imageUrl && banner.imageUrl.startsWith('data:')) {
+        finalImageUrl = await uploadHeroAsset(banner.imageUrl, false);
+      }
+
+      let finalVideoUrl = banner.videoUrl;
+      if (banner.videoUrl && banner.videoUrl.startsWith('data:')) {
+        finalVideoUrl = await uploadHeroAsset(banner.videoUrl, true);
+      }
+
+      const updated = await updateHomepageBanner({
+        smallHeading: banner.smallHeading,
+        mainHeading: banner.mainHeading,
+        description: banner.description,
+        primaryBtn: banner.primaryBtn,
+        secondaryBtn: banner.secondaryBtn,
+        imageUrl: finalImageUrl,
+        videoUrl: finalVideoUrl
+      });
+
+      setBanner(updated);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (err: any) {
+      console.error('Error saving banner settings:', err);
+      alert(`Error saving banner: ${err.message || err}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '100px' }}>
+        <div className="book-loader" style={{ width: '32px', height: '32px', borderTopColor: 'var(--admin-accent)' }} />
+      </div>
+    );
+  }
 
   return (
     <div className="admin-page-wrapper">
@@ -44,22 +108,39 @@ export default function AdminBanner() {
         <form onSubmit={handleSave} className="admin-card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
           <h3 className="admin-card__title">Banner Configuration</h3>
 
-          <div className="form-group">
-            <label className="form-label">Upload Hero Background Image</label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              {banner.imageUrl && (
-                <img 
-                  src={banner.imageUrl} 
-                  alt="Hero Preview" 
-                  style={{ width: '42px', height: '42px', borderRadius: '4px', objectFit: 'cover', border: '1px solid var(--admin-border)' }} 
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
+            <div className="form-group">
+              <label className="form-label">Hero Background Image</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {banner.imageUrl && (
+                  <img 
+                    src={banner.imageUrl} 
+                    alt="Hero Preview" 
+                    style={{ width: '42px', height: '42px', borderRadius: '4px', objectFit: 'cover', border: '1px solid var(--admin-border)' }} 
+                  />
+                )}
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleFileChange}
+                  style={{ fontSize: '0.78rem', color: 'var(--admin-text-muted)', width: '100%' }}
                 />
-              )}
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleFileChange}
-                style={{ fontSize: '0.78rem', color: 'var(--admin-text-muted)', width: '100%' }}
-              />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Hero Video Cover (Optional)</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {banner.videoUrl && (
+                  <span style={{ fontSize: '0.75rem', color: '#22c55e', fontWeight: 600 }}>✓ Video Selected</span>
+                )}
+                <input 
+                  type="file" 
+                  accept="video/*" 
+                  onChange={handleVideoFileChange}
+                  style={{ fontSize: '0.78rem', color: 'var(--admin-text-muted)', width: '100%' }}
+                />
+              </div>
             </div>
           </div>
 
@@ -125,8 +206,8 @@ export default function AdminBanner() {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', marginTop: 'var(--space-lg)' }}>
-            <button className="btn btn-primary" type="submit" style={{ fontSize: '0.82rem' }}>
-              <Save size={14} /> Update Banner
+            <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
+              <Save size={14} /> {saving ? 'Saving...' : 'Update Banner'}
             </button>
             {saved && (
               <div style={{ color: '#22c55e', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem' }}>

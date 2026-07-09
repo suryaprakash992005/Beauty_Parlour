@@ -1,10 +1,55 @@
+import { useEffect, useState } from 'react';
 import { Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react';
 import { Instagram, Facebook, Youtube } from '../components/BrandIcons';
 import { useScrollReveal } from '../components/shared';
 import { SparklesText } from '../components/SparklesText';
+import { getSalonSettings } from '../services/settings';
+import type { SalonSettings } from '../services/settings';
 
 export default function Contact() {
   useScrollReveal();
+  const [settings, setSettings] = useState<SalonSettings | null>(null);
+
+  useEffect(() => {
+    getSalonSettings()
+      .then(data => setSettings(data))
+      .catch(err => console.error('Failed to load contact settings:', err));
+  }, []);
+
+  const contactItems = [
+    { 
+      Icon: MapPin,  
+      label: 'Visit Us',   
+      val: settings?.address || '42, Rose Garden Lane, Luxury District, Mumbai — 400001', 
+      href: 'https://maps.google.com' 
+    },
+    { 
+      Icon: Phone,   
+      label: 'Call Us',    
+      val: settings?.phone || '+91 98765 43210', 
+      href: `tel:${(settings?.phone || '+919876543210').replace(/[^+\d]/g, '')}` 
+    },
+    { 
+      Icon: Mail,    
+      label: 'Email Us',   
+      val: settings?.email || 'hello@zhahairsaloon.com', 
+      href: `mailto:${settings?.email || 'hello@zhahairsaloon.com'}` 
+    },
+    { 
+      Icon: Clock,   
+      label: 'Open Hours', 
+      val: `${settings?.openHoursWeekdays || 'Mon–Sat: 9 AM – 8 PM'}  |  ${settings?.openHoursWeekends || 'Sunday: 10 AM – 6 PM'}`, 
+      href: null 
+    },
+  ];
+
+  const socialLinks = [
+    { Icon: Instagram,      href: settings?.instagram || 'https://instagram.com/zhahairsaloon', label: 'Instagram' },
+    { Icon: Facebook,       href: settings?.facebook || 'https://facebook.com/zhahairsaloon',  label: 'Facebook'  },
+    { Icon: Youtube,        href: settings?.youtube || 'https://youtube.com/zhahairsaloon',   label: 'YouTube'   },
+    { Icon: MessageCircle,  href: `https://wa.me/91${settings?.whatsapp || '8270904659'}`, label: 'WhatsApp' },
+  ];
+
   return (
     <main>
       <section className="page-hero">
@@ -28,12 +73,7 @@ export default function Contact() {
                 We're Here For You
               </h2>
 
-              {[
-                { Icon: MapPin,  label: 'Visit Us',   val: '42, Rose Garden Lane, Luxury District, Mumbai — 400001', href: 'https://maps.google.com' },
-                { Icon: Phone,   label: 'Call Us',    val: '+91 98765 43210', href: 'tel:+919876543210' },
-                { Icon: Mail,    label: 'Email Us',   val: 'hello@zhahairsaloon.com', href: 'mailto:hello@zhahairsaloon.com' },
-                { Icon: Clock,   label: 'Open Hours', val: 'Mon–Sat: 9 AM – 8 PM  |  Sunday: 10 AM – 6 PM', href: null },
-              ].map(({ Icon, label, val, href }) => (
+              {contactItems.map(({ Icon, label, val, href }) => (
                 <div key={label} className="contact-item">
                   <div className="contact-item__icon-wrap">
                     <Icon size={20} />
@@ -52,12 +92,7 @@ export default function Contact() {
               <div style={{ marginTop: 'var(--space-2xl)' }}>
                 <div className="contact-item__label" style={{ marginBottom: 'var(--space-md)' }}>Follow Us</div>
                 <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
-                  {[
-                    { Icon: Instagram,      href: 'https://instagram.com', label: 'Instagram' },
-                    { Icon: Facebook,       href: 'https://facebook.com',  label: 'Facebook'  },
-                    { Icon: Youtube,        href: 'https://youtube.com',   label: 'YouTube'   },
-                    { Icon: MessageCircle,  href: 'https://wa.me/919876543210', label: 'WhatsApp' },
-                  ].map(({ Icon, href, label }) => (
+                  {socialLinks.map(({ Icon, href, label }) => (
                     <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                       className="footer__social-link"
                       style={{ background: 'var(--color-blush)', borderColor: 'var(--color-border)', color: 'var(--color-rose-gold)' }}

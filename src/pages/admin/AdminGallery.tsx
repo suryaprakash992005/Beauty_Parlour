@@ -1,25 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Trash2, ImagePlus, CloudUpload, CheckCircle } from 'lucide-react';
-
-interface GalleryItem {
-  id: number;
-  title: string;
-  category: string;
-  url: string;
-  beforeUrl?: string;
-}
-
-const INITIAL_GALLERY: GalleryItem[] = [
-  { id: 1, title: 'Classic Bridal Glamour', category: 'Bridal', url: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80' },
-  { id: 2, title: 'Luxury Skincare Ritual', category: 'Skincare', url: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&q=80' },
-  { id: 3, title: 'Balayage Hair Coloring', category: 'Hair', url: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&q=80', beforeUrl: 'https://images.unsplash.com/photo-1595853035070-59a39fe84de3?w=800&q=80' },
-  { id: 4, title: 'Elegant Rose Gold Nails', category: 'Nails', url: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800&q=80' },
-  { id: 5, title: 'Premium Bridal Saree Draping', category: 'Bridal', url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80' },
-  { id: 6, title: 'Classic Bun Hairstyling', category: 'Hair', url: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80' },
-];
+import { getGalleryItems, addGalleryItem, deleteGalleryItem, uploadGalleryImage } from '../../services/gallery';
+import type { GalleryItem } from '../../services/gallery';
 
 export default function AdminGallery() {
-  const [gallery, setGallery] = useState<GalleryItem[]>(INITIAL_GALLERY);
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   
   // Upload States
@@ -28,6 +15,21 @@ export default function AdminGallery() {
   const [url, setUrl] = useState('');
   const [beforeUrl, setBeforeUrl] = useState('');
   const [isBeforeAfter, setIsBeforeAfter] = useState(false);
+
+  useEffect(() => {
+    fetchGallery();
+  }, []);
+
+  const fetchGallery = async () => {
+    try {
+      const data = await getGalleryItems();
+      setGallery(data);
+    } catch (err) {
+      console.error('Failed to fetch gallery:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -51,7 +53,7 @@ export default function AdminGallery() {
     }
   };
 
-  // Drag & drop upload simulator
+  // Drag & drop upload simulator (kept to align with UI structures, but binds to state instantly)
   const [dragActive, setDragActive] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -72,59 +74,81 @@ export default function AdminGallery() {
     setDragActive(false);
     
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      simulateUpload();
+      const file = e.dataTransfer.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUrl(reader.result as string);
+        setUploadSuccess(true);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const simulateUpload = () => {
-    setUploadProgress(0);
-    setUploadSuccess(false);
-    const interval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev === null) return 0;
-        if (prev >= 100) {
-          clearInterval(interval);
-          setUploadSuccess(true);
-          setUrl('https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80');
-          if (isBeforeAfter) {
-            setBeforeUrl('https://images.unsplash.com/photo-1595853035070-59a39fe84de3?w=800&q=80');
-          }
-          return 100;
-        }
-        return prev + 20;
-      });
-    }, 100);
+    // Allows manual mock selection trigger
+    document.getElementById('gallery-primary-file')?.click();
   };
 
-  const handleAdd = (e: React.FormEvent) => {
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !url) return;
-    
-    const newItem: GalleryItem = {
-      id: Date.now(),
-      title,
-      category,
-      url,
-      beforeUrl: isBeforeAfter && beforeUrl ? beforeUrl : undefined
-    };
+    setSaving(true);
 
-    setGallery(prev => [newItem, ...prev]);
-    
-    setTitle('');
-    setCategory('Bridal');
-    setUrl('');
-    setBeforeUrl('');
-    setIsBeforeAfter(false);
-    setUploadProgress(null);
-    setUploadSuccess(false);
-    setShowAdd(false);
-  };
+    try {
+      let finalUrl = url;
+      if (url.startsWith('data:')) {
+        finalUrl = await uploadGalleryImage(url);
+      }
 
-  const deleteItem = (id: number) => {
-    if (window.confirm('Are you sure you want to delete this photo from the gallery?')) {
-      setGallery(prev => prev.filter(item => item.id !== id));
+      let finalBeforeUrl = beforeUrl;
+      if (isBeforeAfter && beforeUrl.startsWith('data:')) {
+        finalBeforeUrl = await uploadGalleryImage(beforeUrl);
+      }
+
+      const newItem = await addGalleryItem({
+        title,
+        category,
+        url: finalUrl,
+        beforeUrl: isBeforeAfter && finalBeforeUrl ? finalBeforeUrl : undefined
+      });
+
+      setGallery(prev => [newItem, ...prev]);
+      
+      setTitle('');
+      setCategory('Bridal');
+      setUrl('');
+      setBeforeUrl('');
+      setIsBeforeAfter(false);
+      setUploadProgress(null);
+      setUploadSuccess(false);
+      setShowAdd(false);
+    } catch (err: any) {
+      console.error('Failed to save gallery item:', err);
+      alert(`Error saving gallery item: ${err.message || err}`);
+    } finally {
+      setSaving(false);
     }
   };
+
+  const deleteItem = async (id: number) => {
+    if (window.confirm('Are you sure you want to delete this photo from the gallery?')) {
+      try {
+        await deleteGalleryItem(id);
+        setGallery(prev => prev.filter(item => item.id !== id));
+      } catch (err) {
+        console.error('Failed to delete gallery item:', err);
+        alert('Failed to delete gallery item.');
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '100px' }}>
+        <div className="book-loader" style={{ width: '32px', height: '32px', borderTopColor: 'var(--admin-accent)' }} />
+      </div>
+    );
+  }
 
   return (
     <div className="admin-page-wrapper">
@@ -226,8 +250,8 @@ export default function AdminGallery() {
               )}
 
               <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: '8px' }}>
-                <button className="btn btn-primary" type="submit" style={{ fontSize: '0.82rem' }}>
-                  <ImagePlus size={14} /> Upload to Gallery
+                <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
+                  <ImagePlus size={14} /> {saving ? 'Uploading...' : 'Upload to Gallery'}
                 </button>
                 <button className="btn btn-outline" type="button" style={{ fontSize: '0.82rem' }} onClick={() => setShowAdd(false)}>
                   Cancel
@@ -345,7 +369,7 @@ export default function AdminGallery() {
                   <span style={{ fontSize: '14px', fontWeight: 600, color: 'white' }}>{item.title}</span>
                   <button 
                     className="admin-action-btn admin-action-btn--danger" 
-                    onClick={() => deleteItem(item.id)}
+                    onClick={() => deleteItem(item.id!)}
                     title="Delete Image"
                   >
                     <Trash2 size={14} />

@@ -4,6 +4,10 @@ import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { Instagram } from '../components/BrandIcons';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
+import { getHomepageBanner } from '../services/homepage';
+import type { HomepageBanner } from '../services/homepage';
+import { getServices } from '../services/services';
+import type { ServiceItem } from '../services/services';
 import bridalBeforeImg from '../assets/bridal_before.png';
 import bridalAfterImg from '../assets/bridal_after.png';
 import '../styles/home.css';
@@ -13,39 +17,6 @@ const HERO_BGS = [
   '/salon_green_theme_1.jpg',
   '/salon_green_theme_2.jpg',
   '/salon_green_theme_3.jpg'
-];
-
-const SERVICES = [
-  {
-    id: 1, name: 'Hair Cut', price: '₹499', tag: null,
-    desc: 'Professional precision haircut and styling tailored to your face shape.',
-    img: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=80&auto=format&fit=crop',
-  },
-  {
-    id: 2, name: 'Hair Coloring', price: '₹2,499', tag: 'Trending',
-    desc: 'Premium global coloring and highlights using ammonia-free pigments.',
-    img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80&auto=format&fit=crop',
-  },
-  {
-    id: 3, name: 'Hair Spa', price: '₹1,499', tag: null,
-    desc: 'Nourishing hair spa treatment to restore scalp health, shine, and hair strength.',
-    img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80&auto=format&fit=crop',
-  },
-  {
-    id: 4, name: 'Keratin Treatment', price: '₹4,499', tag: 'Most Popular',
-    desc: 'Professional protein smoothing treatment for frizz-free, silky, and manageable hair.',
-    img: 'https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?w=600&q=80&auto=format&fit=crop',
-  },
-  {
-    id: 5, name: 'Facial', price: '₹1,999', tag: null,
-    desc: 'Deep cleansing luxury facial using premium organic serums for a radiant glow.',
-    img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80&auto=format&fit=crop',
-  },
-  {
-    id: 6, name: 'Bridal Makeup', price: '₹9,999', tag: 'Most Popular',
-    desc: 'Exquisite HD bridal makeup and hair styling for your special day.',
-    img: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80&auto=format&fit=crop',
-  },
 ];
 
 const TESTIMONIALS = [
@@ -138,8 +109,27 @@ function BeforeAfterSlider() {
 export default function Home() {
   useScrollReveal();
   const [bgIndex, setBgIndex] = useState(0);
+  const [banner, setBanner] = useState<HomepageBanner | null>(null);
+  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Load Homepage Banner config
+    getHomepageBanner()
+      .then(data => setBanner(data))
+      .catch(err => console.error('Failed to load banner:', err));
+
+    // Load Featured Services
+    getServices()
+      .then(data => {
+        setServices(data.filter(s => s.active !== false).slice(0, 6));
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load featured services:', err);
+        setLoading(false);
+      });
+
     const timer = setInterval(() => {
       setBgIndex(prev => (prev + 1) % HERO_BGS.length);
     }, 5000);
@@ -163,18 +153,30 @@ export default function Home() {
       {/* ── HERO ── */}
       <section className="hero" aria-label="Hero">
         <div className="hero__bg" />
-        {HERO_BGS.map((bg, idx) => (
-          <div
-            key={idx}
-            className="hero__image-overlay"
-            style={{
-              backgroundImage: `url('${bg}')`,
-              opacity: idx === bgIndex ? 0.5 : 0,
-              transition: 'opacity 1.5s ease-in-out'
-            }}
-            aria-hidden="true"
+        
+        {banner?.videoUrl ? (
+          <video 
+            src={banner.videoUrl} 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4, zIndex: 0 }} 
           />
-        ))}
+        ) : (
+          HERO_BGS.map((bg, idx) => (
+            <div
+              key={idx}
+              className="hero__image-overlay"
+              style={{
+                backgroundImage: `url('${idx === 0 && banner?.imageUrl ? banner.imageUrl : bg}')`,
+                opacity: idx === bgIndex ? 0.5 : 0,
+                transition: 'opacity 1.5s ease-in-out'
+              }}
+              aria-hidden="true"
+            />
+          ))
+        )}
 
         {/* Floating particles */}
         <div className="hero__particles" aria-hidden="true">
@@ -195,20 +197,20 @@ export default function Home() {
         <div className="container hero__content">
           <div className="hero__eyebrow">
             <Sparkles size={12} />
-            ZHA Hair Saloon
+            {banner?.smallHeading || 'ZHA Hair Saloon'}
           </div>
           <h1 className="hero__title">
-            Transform Your Style With <em>Professional</em> Beauty Experts
+            {banner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
           </h1>
           <p className="hero__subtitle">
-            Where premium style meets expert care. Experience the ultimate hair design, bridal cosmetics, nail artistry, and soothing spa therapies at ZHA Hair Saloon.
+            {banner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
           </p>
           <div className="hero__actions">
             <InteractiveHoverButton to="/book-appointment">
-              Book Appointment
+              {banner?.primaryBtn || 'Book Appointment'}
             </InteractiveHoverButton>
             <Link to="/services" className="btn btn-outline-white">
-              Explore Services
+              {banner?.secondaryBtn || 'Explore Services'}
             </Link>
           </div>
         </div>
@@ -242,32 +244,39 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="services-grid">
-            {SERVICES.map((s, i) => (
-              <article
-                key={s.id}
-                className={`service-card reveal delay-${(i % 4) + 1}`}
-                aria-label={s.name}
-              >
-                <div className="service-card__img-wrap">
-                  <img className="service-card__img" src={s.img} alt={s.name} loading="lazy" />
-                  {s.tag && <span className="gold-badge service-card__badge">{s.tag}</span>}
-                </div>
-                <div className="service-card__body">
-                  <h3 className="service-card__name">{s.name}</h3>
-                  <p className="service-card__desc">{s.desc}</p>
-                  <div className="service-card__footer">
-                    <div className="service-card__price">
-                      {s.price} <small>onwards</small>
-                    </div>
-                    <InteractiveHoverButton to="/book-appointment" className="interactive-hover-btn--sm">
-                      Book Now
-                    </InteractiveHoverButton>
+          {loading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
+              <div className="book-loader" style={{ width: '28px', height: '28px', borderTopColor: 'var(--color-champagne)' }} />
+            </div>
+          ) : services.length === 0 ? (
+            <p style={{ textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '14px' }}>No services available.</p>
+          ) : (
+            <div className="services-grid">
+              {services.map((s, i) => (
+                <article
+                  key={s.id || i}
+                  className={`service-card reveal delay-${(i % 4) + 1}`}
+                  aria-label={s.name}
+                >
+                  <div className="service-card__img-wrap">
+                    <img className="service-card__img" src={s.imageUrl} alt={s.name} loading="lazy" />
                   </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                  <div className="service-card__body">
+                    <h3 className="service-card__name">{s.name}</h3>
+                    <p className="service-card__desc">{s.description}</p>
+                    <div className="service-card__footer">
+                      <div className="service-card__price">
+                        {s.price.startsWith('₹') ? s.price : `₹${s.price}`} <small>onwards</small>
+                      </div>
+                      <InteractiveHoverButton to="/book-appointment" className="interactive-hover-btn--sm">
+                        Book Now
+                      </InteractiveHoverButton>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
 
           <div className="text-center mt-3xl">
             <Link to="/services" className="btn btn-primary">

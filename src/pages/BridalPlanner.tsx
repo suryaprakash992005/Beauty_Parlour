@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Calendar,
@@ -54,6 +54,17 @@ export default function BridalPlanner() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [savedId, setSavedId] = useState<string | null>(null);
+  const [whatsapp, setWhatsapp] = useState('8270904659');
+
+  useEffect(() => {
+    import('../services/settings').then(({ getSalonSettings }) => {
+      getSalonSettings().then(data => {
+        if (data.whatsapp) {
+          setWhatsapp(data.whatsapp.replace(/[^0-9]/g, ''));
+        }
+      }).catch(err => console.error(err));
+    });
+  }, []);
 
   // Form State
   const [brideName, setBrideName] = useState('');
@@ -250,7 +261,7 @@ Thank you for planning with us! Please share payment details (UPI/Online) for ve
 We look forward to serving you!`;
 
       setSuccess(true);
-      const whatsappUrl = `https://wa.me/918270904659?text=${encodeURIComponent(whatsappMessage)}`;
+      const whatsappUrl = `https://wa.me/91${whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
       window.open(whatsappUrl, '_blank');
 
     } catch (err: any) {

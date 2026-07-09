@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Check } from 'lucide-react';
+import { getSalonSettings, updateSalonSettings, uploadLogo } from '../../services/settings';
+import type { SalonSettings } from '../../services/settings';
 
 export default function AdminSettings() {
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<SalonSettings>({
     studioName: 'ZHA Hair Saloon',
-    logoUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=80&q=80',
+    logoUrl: '',
     phone: '+91 98765 43210',
     whatsapp: '8270904659',
     email: 'appointments@zhahairsaloon.com',
@@ -15,7 +17,21 @@ export default function AdminSettings() {
     facebook: 'https://facebook.com/zhahairsaloon',
     youtube: 'https://youtube.com/zhahairsaloon'
   });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    getSalonSettings()
+      .then(data => {
+        setSettings(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load settings:', err);
+        setLoading(false);
+      });
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -28,12 +44,38 @@ export default function AdminSettings() {
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaved(true);
-    localStorage.setItem('zha_website_settings', JSON.stringify(settings));
-    setTimeout(() => setSaved(false), 3000);
+    setSaving(true);
+    try {
+      let finalLogoUrl = settings.logoUrl;
+      if (settings.logoUrl && settings.logoUrl.startsWith('data:')) {
+        finalLogoUrl = await uploadLogo(settings.logoUrl);
+      }
+
+      const updated = await updateSalonSettings({
+        ...settings,
+        logoUrl: finalLogoUrl
+      });
+
+      setSettings(updated);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (err: any) {
+      console.error('Error saving settings:', err);
+      alert(`Error saving settings: ${err.message || err}`);
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '100px' }}>
+        <div className="book-loader" style={{ width: '32px', height: '32px', borderTopColor: 'var(--admin-accent)' }} />
+      </div>
+    );
+  }
 
   return (
     <div className="admin-page-wrapper" style={{ maxWidth: '850px' }}>
@@ -200,8 +242,8 @@ export default function AdminSettings() {
 
         {/* Submit Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '8px', borderTop: '1px solid var(--admin-border)', paddingTop: '16px' }}>
-          <button className="btn btn-primary" type="submit" style={{ fontSize: '0.82rem' }}>
-            <Save size={14} /> Save Configuration
+          <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
+            <Save size={14} /> {saving ? 'Saving...' : 'Save Configuration'}
           </button>
           {saved && (
             <div style={{ color: '#22c55e', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem' }}>

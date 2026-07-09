@@ -1,92 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, X, Sparkles, Clock, Tag } from 'lucide-react';
-
-interface Service {
-  id: number;
-  name: string;
-  category: string;
-  description: string;
-  price: string;
-  duration: string;
-  imageUrl: string;
-  active: boolean;
-}
-
-const INITIAL_SERVICES: Service[] = [
-  { 
-    id: 1, 
-    name: 'Hair Cut & Styling', 
-    category: 'Hair Care', 
-    description: 'Precision cut, wash, conditioning treatment, and premium blow-dry finish.',
-    price: '499', 
-    duration: '45 min', 
-    imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80',
-    active: true 
-  },
-  { 
-    id: 2, 
-    name: 'Balayage Hair Coloring', 
-    category: 'Hair Care', 
-    description: 'Expert hand-painted custom coloring for natural, sun-kissed luxury tones.',
-    price: '2499', 
-    duration: '2 hrs', 
-    imageUrl: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=80',
-    active: true 
-  },
-  { 
-    id: 3, 
-    name: 'Revitalizing Hair Spa', 
-    category: 'Hair Care', 
-    description: 'Deep nourishing steam mask, essential oil head massage, and hair repair serum.',
-    price: '1499', 
-    duration: '60 min', 
-    imageUrl: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80',
-    active: true 
-  },
-  { 
-    id: 4, 
-    name: 'Premium Keratin Infusion', 
-    category: 'Hair Care', 
-    description: 'Smooth frizz-free protein treatment that restores shine and straightens structure.',
-    price: '4499', 
-    duration: '2.5 hrs', 
-    imageUrl: 'https://images.unsplash.com/photo-1595853035070-59a39fe84de3?w=600&q=80',
-    active: true 
-  },
-  { 
-    id: 5, 
-    name: 'Luxury Skincare Facial', 
-    category: 'Skin Care', 
-    description: 'Organic gold-dust peel off mask, pore vacuum extraction, and hydrating collagen serum.',
-    price: '1999', 
-    duration: '60 min', 
-    imageUrl: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80',
-    active: true 
-  },
-  { 
-    id: 6, 
-    name: 'Classic Bridal Glamour', 
-    category: 'Bridal', 
-    description: 'Flawless airbrush HD makeup, luxury false lashes, hair setup, and saree/lehenga draping.',
-    price: '9999', 
-    duration: '4 hrs', 
-    imageUrl: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80',
-    active: true 
-  },
-  { 
-    id: 7, 
-    name: 'Premium Gel Nail Art', 
-    category: 'Nails', 
-    description: 'Nail shaping, cuticle trimming, premium gel polish application, and custom creative nail art.',
-    price: '799', 
-    duration: '45 min', 
-    imageUrl: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',
-    active: true 
-  },
-];
+import { getServices, addService, updateService, deleteService, uploadServiceImage } from '../../services/services';
+import type { ServiceItem } from '../../services/services';
 
 export default function AdminServices() {
-  const [services, setServices] = useState<Service[]>(INITIAL_SERVICES);
+  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [currentId, setCurrentId] = useState<number | null>(null);
@@ -98,6 +18,21 @@ export default function AdminServices() {
   const [formPrice, setFormPrice] = useState('');
   const [formDuration, setFormDuration] = useState('');
   const [formImageUrl, setFormImageUrl] = useState('');
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = async () => {
+    try {
+      const data = await getServices();
+      setServices(data);
+    } catch (err) {
+      console.error('Failed to fetch services:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -121,9 +56,9 @@ export default function AdminServices() {
     setShowModal(true);
   };
 
-  const handleOpenEdit = (svc: Service) => {
+  const handleOpenEdit = (svc: ServiceItem) => {
     setModalMode('edit');
-    setCurrentId(svc.id);
+    setCurrentId(svc.id || null);
     setFormName(svc.name);
     setFormCategory(svc.category);
     setFormDescription(svc.description);
@@ -133,43 +68,78 @@ export default function AdminServices() {
     setShowModal(true);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this service?')) {
-      setServices(prev => prev.filter(x => x.id !== id));
+      try {
+        await deleteService(id);
+        setServices(prev => prev.filter(x => x.id !== id));
+      } catch (err) {
+        console.error('Failed to delete service:', err);
+        alert('Failed to delete service.');
+      }
     }
   };
 
-  const handleToggleActive = (id: number) => {
-    setServices(prev => prev.map(x => x.id === id ? { ...x, active: !x.active } : x));
+  const handleToggleActive = async (id: number) => {
+    const service = services.find(x => x.id === id);
+    if (!service) return;
+
+    try {
+      const newActive = !service.active;
+      await updateService(id, { active: newActive });
+      setServices(prev => prev.map(x => x.id === id ? { ...x, active: newActive } : x));
+    } catch (err) {
+      console.error('Failed to toggle active status:', err);
+    }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (modalMode === 'add') {
-      const newService: Service = {
-        id: Date.now(),
-        name: formName,
-        category: formCategory,
-        description: formDescription,
-        price: formPrice,
-        duration: formDuration,
-        imageUrl: formImageUrl || 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80',
-        active: true
-      };
-      setServices(prev => [...prev, newService]);
-    } else if (modalMode === 'edit' && currentId !== null) {
-      setServices(prev => prev.map(x => x.id === currentId ? {
-        ...x,
-        name: formName,
-        category: formCategory,
-        description: formDescription,
-        price: formPrice,
-        duration: formDuration,
-        imageUrl: formImageUrl
-      } : x));
+    setSaving(true);
+    try {
+      let finalImageUrl = formImageUrl;
+      if (formImageUrl.startsWith('data:')) {
+        finalImageUrl = await uploadServiceImage(formImageUrl);
+      }
+
+      if (modalMode === 'add') {
+        const newService = await addService({
+          name: formName,
+          category: formCategory,
+          description: formDescription,
+          price: formPrice,
+          duration: formDuration,
+          imageUrl: finalImageUrl || 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80',
+          active: true
+        });
+        setServices(prev => [...prev, newService]);
+      } else if (modalMode === 'edit' && currentId !== null) {
+        const updatedService = await updateService(currentId, {
+          name: formName,
+          category: formCategory,
+          description: formDescription,
+          price: formPrice,
+          duration: formDuration,
+          imageUrl: finalImageUrl
+        });
+        setServices(prev => prev.map(x => x.id === currentId ? updatedService : x));
+      }
+      setShowModal(false);
+    } catch (err: any) {
+      console.error('Error saving service:', err);
+      alert(`Error saving service: ${err.message || err}`);
+    } finally {
+      setSaving(false);
     }
-    setShowModal(false);
   };
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '100px' }}>
+        <div className="book-loader" style={{ width: '32px', height: '32px', borderTopColor: 'var(--admin-accent)' }} />
+      </div>
+    );
+  }
 
   return (
     <div className="admin-page-wrapper">
@@ -252,7 +222,7 @@ export default function AdminServices() {
               {/* Footer Actions */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
                 <button 
-                  onClick={() => handleToggleActive(svc.id)}
+                  onClick={() => handleToggleActive(svc.id!)}
                   style={{
                     fontSize: '0.75rem',
                     fontWeight: 600,
@@ -278,7 +248,7 @@ export default function AdminServices() {
                   <button 
                     className="admin-action-btn admin-action-btn--danger" 
                     title="Delete Service"
-                    onClick={() => handleDelete(svc.id)}
+                    onClick={() => handleDelete(svc.id!)}
                   >
                     <Trash2 size={13} />
                   </button>
@@ -414,8 +384,8 @@ export default function AdminServices() {
               <button className="btn btn-outline" type="button" onClick={() => setShowModal(false)} style={{ fontSize: '0.82rem' }}>
                 Cancel
               </button>
-              <button className="btn btn-primary" type="submit" style={{ fontSize: '0.82rem' }}>
-                Save Configurations
+              <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
+                {saving ? 'Saving...' : 'Save Configurations'}
               </button>
             </div>
           </form>

@@ -1,38 +1,50 @@
-import { useState } from 'react';
-import { X, ZoomIn } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { X, ZoomIn, Sparkles } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
 import { SparklesText } from '../components/SparklesText';
+import { getGalleryItems } from '../services/gallery';
+import type { GalleryItem } from '../services/gallery';
 import '../styles/gallery.css';
 
 type GalleryCategory = 'All' | 'Bridal' | 'Hair' | 'Makeup' | 'Nails' | 'Spa';
 
-const GALLERY = [
-  { id: 1,  cat: 'Bridal', alt: 'Bridal Makeup',       img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',  tall: true  },
-  { id: 2,  cat: 'Hair',   alt: 'Hair Styling',        img: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=80',  tall: false },
-  { id: 3,  cat: 'Makeup', alt: 'Party Makeup',        img: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600&q=80',  tall: false },
-  { id: 4,  cat: 'Nails',  alt: 'Nail Art',            img: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',  tall: true  },
-  { id: 5,  cat: 'Spa',    alt: 'Spa Treatment',       img: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80',  tall: false },
-  { id: 6,  cat: 'Hair',   alt: 'Hair Coloring',       img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80',  tall: true  },
-  { id: 7,  cat: 'Bridal', alt: 'Saree Draping',       img: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80',  tall: false },
-  { id: 8,  cat: 'Hair',   alt: 'Hair Spa',            img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80',  tall: false },
-  { id: 9,  cat: 'Makeup', alt: 'Eye Makeup',          img: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=80',  tall: true  },
-  { id: 10, cat: 'Spa',    alt: 'Luxury Facial',       img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80',  tall: false },
-  { id: 11, cat: 'Bridal', alt: 'Bridal Hair',         img: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80',  tall: false },
-  { id: 12, cat: 'Hair',   alt: 'Keratin Treatment',   img: 'https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?w=600&q=80',  tall: true  },
-  { id: 13, cat: 'Makeup', alt: 'Glam Makeup',         img: 'https://images.unsplash.com/photo-1503236823255-94609f598e71?w=600&q=80',  tall: false },
-  { id: 14, cat: 'Nails',  alt: 'Gel Nails',           img: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80&fit=crop&crop=bottom',  tall: false },
-  { id: 15, cat: 'Spa',    alt: 'Body Massage',        img: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=600&q=80',  tall: true  },
-  { id: 16, cat: 'Bridal', alt: 'Reception Look',      img: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80',  tall: false },
-];
-
 const CATS: GalleryCategory[] = ['All', 'Bridal', 'Hair', 'Makeup', 'Nails', 'Spa'];
 
 export default function Gallery() {
-  const [active, setActive]   = useState<GalleryCategory>('All');
-  const [lightbox, setLightbox] = useState<typeof GALLERY[0] | null>(null);
+  const [active, setActive] = useState<GalleryCategory>('All');
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
+  
   useScrollReveal();
 
-  const filtered = active === 'All' ? GALLERY : GALLERY.filter(g => g.cat === active);
+  useEffect(() => {
+    getGalleryItems()
+      .then(data => {
+        setGallery(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load gallery:', err);
+        setError('Unable to load gallery photos at this time.');
+        setLoading(false);
+      });
+  }, []);
+
+  const normalizeCat = (dbCat: string): GalleryCategory => {
+    const c = dbCat.toLowerCase().trim();
+    if (c.includes('hair')) return 'Hair';
+    if (c.includes('bridal')) return 'Bridal';
+    if (c.includes('makeup')) return 'Makeup';
+    if (c.includes('nails')) return 'Nails';
+    if (c.includes('spa') || c.includes('skin')) return 'Spa';
+    return 'All';
+  };
+
+  const filtered = active === 'All' 
+    ? gallery 
+    : gallery.filter(g => normalizeCat(g.category) === active);
 
   return (
     <main className="gallery-page">
@@ -70,39 +82,55 @@ export default function Gallery() {
       {/* Masonry */}
       <section className="section" style={{ paddingTop: 'var(--space-4xl)' }}>
         <div className="container">
-          <div className="gallery-masonry">
-            {filtered.map((img, i) => (
-              <div
-                key={img.id}
-                className={`gallery-item reveal delay-${(i % 4) + 1}${img.tall ? ' gallery-item--tall' : ''}`}
-                onClick={() => setLightbox(img)}
-                data-hover
-                role="button"
-                tabIndex={0}
-                aria-label={`View ${img.alt}`}
-                onKeyDown={e => e.key === 'Enter' && setLightbox(img)}
-              >
-                <img src={img.img} alt={img.alt} loading="lazy" className="gallery-item__img" />
-                <div className="gallery-item__overlay">
-                  <ZoomIn size={24} />
-                  <span>{img.alt}</span>
+          {loading ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', gap: '16px' }}>
+              <div className="book-loader" style={{ width: '32px', height: '32px', borderTopColor: 'var(--color-champagne)' }} />
+              <span style={{ fontSize: '14px', color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Loading portfolio transformations...</span>
+            </div>
+          ) : error ? (
+            <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--color-text-muted)' }}>
+              <p>{error}</p>
+            </div>
+          ) : filtered.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '80px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+              <Sparkles size={24} style={{ color: 'var(--color-champagne)', opacity: 0.5 }} />
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '15px' }}>No photos listed under {active} category.</p>
+            </div>
+          ) : (
+            <div className="gallery-masonry">
+              {filtered.map((img, i) => (
+                <div
+                  key={img.id || i}
+                  className={`gallery-item reveal delay-${(i % 4) + 1}`}
+                  onClick={() => setLightbox(img)}
+                  data-hover
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View ${img.title}`}
+                  onKeyDown={e => e.key === 'Enter' && setLightbox(img)}
+                >
+                  <img src={img.url} alt={img.title} loading="lazy" className="gallery-item__img" />
+                  <div className="gallery-item__overlay">
+                    <ZoomIn size={24} />
+                    <span>{img.title}</span>
+                  </div>
+                  <span className="gallery-item__cat">{normalizeCat(img.category)}</span>
                 </div>
-                <span className="gallery-item__cat">{img.cat}</span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* Lightbox */}
       {lightbox && (
-        <div className="lightbox" onClick={() => setLightbox(null)} role="dialog" aria-modal="true" aria-label={lightbox.alt}>
+        <div className="lightbox" onClick={() => setLightbox(null)} role="dialog" aria-modal="true" aria-label={lightbox.title}>
           <button className="lightbox__close" onClick={() => setLightbox(null)} aria-label="Close lightbox">
             <X size={24} />
           </button>
           <div className="lightbox__img-wrap" onClick={e => e.stopPropagation()}>
-            <img src={lightbox.img.replace('w=600', 'w=1200')} alt={lightbox.alt} className="lightbox__img" />
-            <p className="lightbox__caption">{lightbox.alt}</p>
+            <img src={lightbox.url} alt={lightbox.title} className="lightbox__img" />
+            <p className="lightbox__caption">{lightbox.title}</p>
           </div>
         </div>
       )}

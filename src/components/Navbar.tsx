@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { getSalonSettings } from '../services/settings';
+import type { SalonSettings } from '../services/settings';
 import '../styles/layout.css';
 import StaggeredMenu from './StaggeredMenu';
 import ThemeToggle from './ThemeToggle';
@@ -24,35 +26,46 @@ const menuItems = [
   { label: 'Book Appointment', ariaLabel: 'Book an appointment', link: '/book-appointment' }
 ];
 
-const socialItems = [
-  { label: 'Instagram', link: 'https://instagram.com/zhahairsaloon' },
-  { label: 'Facebook', link: 'https://facebook.com/zhahairsaloon' },
-  { label: 'YouTube', link: 'https://youtube.com/zhahairsaloon' }
-];
-
-const BrandLogo = () => (
-  <Link to="/" className="navbar__logo">
-    <span className="navbar__logo-name">ZHA</span>
-    <span className="navbar__logo-tagline">Hair Saloon</span>
+const BrandLogo = ({ logoUrl, studioName }: { logoUrl?: string; studioName?: string }) => (
+  <Link to="/" className="navbar__logo" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+    {logoUrl ? (
+      <img src={logoUrl} alt={studioName || 'ZHA'} style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
+    ) : (
+      <>
+        <span className="navbar__logo-name">{studioName || 'ZHA'}</span>
+        <span className="navbar__logo-tagline">Hair Saloon</span>
+      </>
+    )}
   </Link>
 );
 
 export default function Navbar() {
   const [solid, setSolid] = useState(false);
+  const [settings, setSettings] = useState<SalonSettings | null>(null);
 
   useEffect(() => {
+    getSalonSettings()
+      .then(data => setSettings(data))
+      .catch(err => console.error('Failed to load navbar settings:', err));
+
     const onScroll = () => setSolid(window.scrollY > 60);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const socialItems = [
+    { label: 'Instagram', link: settings?.instagram || 'https://instagram.com/zhahairsaloon' },
+    { label: 'Facebook', link: settings?.facebook || 'https://facebook.com/zhahairsaloon' },
+    { label: 'YouTube', link: settings?.youtube || 'https://youtube.com/zhahairsaloon' }
+  ];
+
   return (
     <>
       <header className={`navbar ${solid ? 'navbar--solid' : 'navbar--transparent'}`}>
         <div className="container navbar__inner">
           {/* Logo */}
-          <BrandLogo />
+          <BrandLogo logoUrl={settings?.logoUrl} studioName={settings?.studioName} />
 
           {/* Desktop nav */}
           <nav className="navbar__nav" aria-label="Primary navigation">
@@ -90,7 +103,7 @@ export default function Navbar() {
         openMenuButtonColor="#fff"
         changeMenuColorOnOpen={true}
         colors={['#0b0b0b', '#D4AF37', '#181818']}
-        logoElement={<BrandLogo />}
+        logoElement={<BrandLogo logoUrl={settings?.logoUrl} studioName={settings?.studioName} />}
         accentColor="var(--color-rose-gold)"
         isFixed={true}
       />
