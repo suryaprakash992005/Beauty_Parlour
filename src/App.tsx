@@ -18,10 +18,9 @@ import Testimonials from './pages/Testimonials';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminAppointments from './pages/admin/AdminAppointments';
 import AdminServices from './pages/admin/AdminServices';
 import AdminGallery from './pages/admin/AdminGallery';
-import AdminCustomers from './pages/admin/AdminCustomers';
+import AdminBanner from './pages/admin/AdminBanner';
 import AdminSettings from './pages/admin/AdminSettings';
 
 // Public Site Wrapper Layout
@@ -58,10 +57,9 @@ export default function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="appointments" element={<AdminAppointments />} />
           <Route path="services" element={<AdminServices />} />
           <Route path="gallery" element={<AdminGallery />} />
-          <Route path="customers" element={<AdminCustomers />} />
+          <Route path="banner" element={<AdminBanner />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
 

@@ -1,23 +1,22 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate, Outlet } from 'react-router-dom';
+import { Link, NavLink, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard, Calendar, Scissors, Image, Users,
-  Settings, LogOut, Menu, X, Bell,
+  LayoutDashboard, Scissors, Image, Settings, LogOut, Menu, X, Sliders
 } from 'lucide-react';
 import '../../styles/admin.css';
 
 const LINKS = [
-  { to: '/admin/dashboard',    Icon: LayoutDashboard, label: 'Dashboard'    },
-  { to: '/admin/appointments', Icon: Calendar,        label: 'Appointments' },
-  { to: '/admin/services',     Icon: Scissors,        label: 'Services'     },
-  { to: '/admin/gallery',      Icon: Image,           label: 'Gallery'      },
-  { to: '/admin/customers',    Icon: Users,           label: 'Customers'    },
-  { to: '/admin/settings',     Icon: Settings,        label: 'Settings'     },
+  { to: '/admin/dashboard', Icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/admin/services',  Icon: Scissors,        label: 'Services'  },
+  { to: '/admin/gallery',   Icon: Image,           label: 'Gallery'   },
+  { to: '/admin/banner',    Icon: Sliders,         label: 'Home Banner' },
+  { to: '/admin/settings',  Icon: Settings,        label: 'Settings'  },
 ];
 
 export default function AdminLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const isAdmin = localStorage.getItem('zha_admin');
@@ -31,17 +30,32 @@ export default function AdminLayout() {
     navigate('/admin-login');
   };
 
+  // Get current page title dynamically based on route
+  const getPageTitle = () => {
+    const currentLink = LINKS.find(link => location.pathname === link.to);
+    return currentLink ? currentLink.label : 'Admin Panel';
+  };
+
   return (
     <div className="admin-layout">
+      {/* Overlay for mobile drawer */}
+      {mobileMenuOpen && (
+        <div 
+          className="admin-sidebar-overlay" 
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className={`admin-sidebar${sidebarOpen ? '' : ' admin-sidebar--collapsed'}`}>
+      <aside className={`admin-sidebar ${mobileMenuOpen ? 'admin-sidebar--mobile-open' : ''}`}>
         <div className="admin-sidebar__header">
           <div className="admin-sidebar__logo">
-            <span className="admin-sidebar__logo-name">ZHA</span>
-            {sidebarOpen && <span className="admin-sidebar__logo-sub">Admin</span>}
+            <span className="admin-sidebar__logo-name">ZHA Hair Saloon</span>
+            <span className="admin-sidebar__logo-sub">Admin Panel</span>
           </div>
-          <button className="admin-sidebar__toggle" onClick={() => setSidebarOpen(v => !v)} aria-label="Toggle sidebar">
-            {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+          {/* Close button for mobile drawer */}
+          <button className="admin-sidebar__mobile-close" onClick={() => setMobileMenuOpen(false)}>
+            <X size={20} />
           </button>
         </div>
 
@@ -52,38 +66,52 @@ export default function AdminLayout() {
               to={to}
               className={({ isActive }) => `admin-sidebar__link${isActive ? ' active' : ''}`}
               title={label}
+              onClick={() => setMobileMenuOpen(false)}
             >
               <Icon size={18} />
-              {sidebarOpen && <span>{label}</span>}
+              <span>{label}</span>
             </NavLink>
           ))}
         </nav>
 
         <button className="admin-sidebar__logout" onClick={logout} title="Logout">
           <LogOut size={18} />
-          {sidebarOpen && <span>Logout</span>}
+          <span>Logout</span>
         </button>
       </aside>
 
-      {/* Main */}
+      {/* Main Container */}
       <div className="admin-main">
-        {/* Top bar */}
+        {/* Top Navbar */}
         <header className="admin-topbar">
-          <h1 className="admin-topbar__title">ZHA Hair Saloon</h1>
-          <div className="admin-topbar__actions">
-            <button className="admin-topbar__action" aria-label="Notifications">
-              <Bell size={18} />
-              <span className="admin-topbar__badge">3</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+            <button className="admin-hamburger" onClick={() => setMobileMenuOpen(true)}>
+              <Menu size={22} />
             </button>
-            <Link to="/" target="_blank" className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '0.78rem' }}>
-              View Site
+            <h1 className="admin-topbar__title">{getPageTitle()}</h1>
+          </div>
+          <div className="admin-topbar__actions">
+            <Link to="/" target="_blank" className="btn btn-outline admin-view-site-btn">
+              View Website
             </Link>
+            <div className="admin-profile">
+              <img 
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&q=80" 
+                alt="Profile" 
+                className="admin-profile__avatar"
+              />
+              <div className="admin-profile__info">
+                <span className="admin-profile__name">ZHA Admin</span>
+                <span className="admin-profile__role">Owner</span>
+              </div>
+            </div>
           </div>
         </header>
 
-        <div className="admin-content">
+        {/* Content Area */}
+        <main className="admin-content">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   );
