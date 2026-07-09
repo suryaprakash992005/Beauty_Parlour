@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { MessageSquare } from 'lucide-react';
 import { getSalonSettings } from '../services/settings';
 import type { SalonSettings } from '../services/settings';
 import '../styles/layout.css';
@@ -27,15 +28,18 @@ const menuItems = [
 ];
 
 const BrandLogo = ({ logoUrl, studioName }: { logoUrl?: string; studioName?: string }) => (
-  <Link to="/" className="navbar__logo" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-    {logoUrl ? (
-      <img src={logoUrl} alt={studioName || 'ZHA'} style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
-    ) : (
-      <>
-        <span className="navbar__logo-name">{studioName || 'ZHA'}</span>
-        <span className="navbar__logo-tagline">Hair Saloon</span>
-      </>
-    )}
+  <Link to="/" className="navbar__logo-group" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+    <div className="navbar__logo-circle">
+      {logoUrl ? (
+        <img src={logoUrl} alt={studioName || 'ZHA'} className="navbar__logo-circle-img" />
+      ) : (
+        <span className="navbar__logo-initial">{studioName ? studioName.charAt(0) : 'Z'}</span>
+      )}
+    </div>
+    <div className="navbar__logo-text-wrap" style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
+      <span className="navbar__logo-name">{studioName || 'ZHA'}</span>
+      <span className="navbar__logo-tagline">HAIR SALOON</span>
+    </div>
   </Link>
 );
 
@@ -62,35 +66,38 @@ export default function Navbar() {
 
   return (
     <>
-      <header className={`navbar ${solid ? 'navbar--solid' : 'navbar--transparent'}`}>
-        <div className="container navbar__inner">
-          {/* Logo */}
-          <BrandLogo logoUrl={settings?.logoUrl} studioName={settings?.studioName} />
+      <div className="navbar-wrapper">
+        <header className={`navbar ${solid ? 'navbar--solid' : 'navbar--transparent'}`}>
+          <div className="navbar__inner">
+            {/* Logo */}
+            <BrandLogo logoUrl={settings?.logoUrl} studioName={settings?.studioName} />
 
-          {/* Desktop nav */}
-          <nav className="navbar__nav" aria-label="Primary navigation">
-            {NAV_LINKS.map(l => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                end={l.to === '/'}
-                className={({ isActive }) =>
-                  `navbar__link${isActive ? ' navbar__link--active' : ''}`
-                }
-              >
-                {l.label}
-              </NavLink>
-            ))}
-          </nav>
+            {/* Desktop nav */}
+            <nav className="navbar__nav" aria-label="Primary navigation">
+              {NAV_LINKS.map(l => (
+                <NavLink
+                  key={l.to}
+                  to={l.to}
+                  end={l.to === '/'}
+                  className={({ isActive }) =>
+                    `navbar__link${isActive ? ' navbar__link--active' : ''}`
+                  }
+                >
+                  {l.label}
+                </NavLink>
+              ))}
+            </nav>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-            <ThemeToggle />
-            <Link to="/book-appointment" className="btn btn-primary navbar__cta">
-              Book Appointment
-            </Link>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+              <ThemeToggle />
+              <Link to="/book-appointment" className="navbar__whatsapp-btn">
+                <MessageSquare size={15} />
+                <span>Book on WhatsApp</span>
+              </Link>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
       {/* Premium Staggered Mobile Menu (displays on <= 1024px) */}
       <StaggeredMenu

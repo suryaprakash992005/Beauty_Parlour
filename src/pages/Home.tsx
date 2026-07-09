@@ -4,6 +4,7 @@ import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { Instagram } from '../components/BrandIcons';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
+import ShinyText from '../components/ShinyText';
 import { getHomepageBanner } from '../services/homepage';
 import type { HomepageBanner } from '../services/homepage';
 import { getServices } from '../services/services';
@@ -161,7 +162,7 @@ export default function Home() {
             loop 
             muted 
             playsInline 
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4, zIndex: 0 }} 
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.78, zIndex: 0 }} 
           />
         ) : (
           HERO_BGS.map((bg, idx) => (
@@ -170,13 +171,16 @@ export default function Home() {
               className="hero__image-overlay"
               style={{
                 backgroundImage: `url('${idx === 0 && banner?.imageUrl ? banner.imageUrl : bg}')`,
-                opacity: idx === bgIndex ? 0.5 : 0,
+                opacity: idx === bgIndex ? 0.88 : 0,
                 transition: 'opacity 1.5s ease-in-out'
               }}
               aria-hidden="true"
             />
           ))
         )}
+
+        {/* Soft luxury dark overlay to protect text contrast while background is Bright */}
+        <div className="hero__dark-overlay" />
 
         {/* Floating particles */}
         <div className="hero__particles" aria-hidden="true">
@@ -200,7 +204,17 @@ export default function Home() {
             {banner?.smallHeading || 'ZHA Hair Saloon'}
           </div>
           <h1 className="hero__title">
-            {banner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
+            <ShinyText
+              text={banner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
+              disabled={false}
+              speed={3.5}
+              color="rgba(255, 255, 255, 0.95)"
+              shineColor="#D4AF37"
+              spread={120}
+              yoyo={false}
+              pauseOnHover={false}
+              direction="left"
+            />
           </h1>
           <p className="hero__subtitle">
             {banner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
