@@ -51,17 +51,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Services */}
-          <div>
-            <h3 className="footer__col-title">Services</h3>
-            <ul className="footer__links">
-              {['Hair Cut', 'Hair Coloring', 'Hair Spa', 'Keratin Treatment', 'Facial',
-                'Bridal Makeup', 'Nail Art', 'Pedicure'].map(s => (
-                <li key={s}><Link to="/services" className="footer__link">{s}</Link></li>
-              ))}
-            </ul>
-          </div>
-
           {/* Quick Links */}
           <div>
             <h3 className="footer__col-title">Quick Links</h3>
