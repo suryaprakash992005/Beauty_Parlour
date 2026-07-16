@@ -63,7 +63,7 @@ export async function uploadLogo(fileOrBase64: File | string): Promise<string> {
 
 const DEFAULT_SETTINGS: SalonSettings = {
   studioName: 'ZHA',
-  logoUrl: '',
+  logoUrl: '/logo.jpg',
   phone: '+91 98765 43210',
   email: 'hello@zhahairsaloon.com',
   address: '42, Rose Garden Lane, Luxury District, Mumbai — 400001',

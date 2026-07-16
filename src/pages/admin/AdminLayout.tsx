@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate, Outlet, useLocation } from 'react-router-do
 import {
   LayoutDashboard, Scissors, Image, Settings, LogOut, Menu, X, Sliders
 } from 'lucide-react';
+import { getSalonSettings } from '../../services/settings';
 import '../../styles/admin.css';
 
 const LINKS = [
@@ -17,12 +18,18 @@ export default function AdminLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [logoUrl, setLogoUrl] = useState('/logo.jpg');
 
   useEffect(() => {
     const isAdmin = localStorage.getItem('zha_admin');
     if (!isAdmin) {
       navigate('/admin-login', { replace: true });
     }
+    getSalonSettings()
+      .then(s => {
+        if (s.logoUrl) setLogoUrl(s.logoUrl);
+      })
+      .catch(() => {});
   }, [navigate]);
 
   const logout = () => {
@@ -49,9 +56,25 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <aside className={`admin-sidebar ${mobileMenuOpen ? 'admin-sidebar--mobile-open' : ''}`}>
         <div className="admin-sidebar__header">
-          <div className="admin-sidebar__logo">
-            <span className="admin-sidebar__logo-name">ZHA Hair Saloon</span>
-            <span className="admin-sidebar__logo-sub">Admin Panel</span>
+          <div className="admin-sidebar__logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              border: '1px solid var(--color-champagne, #D4AF37)',
+              overflow: 'hidden',
+              flexShrink: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#1e1510'
+            }}>
+              <img src={logoUrl} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
+              <span className="admin-sidebar__logo-name" style={{ margin: 0 }}>ZHA Hair Saloon</span>
+              <span className="admin-sidebar__logo-sub">Admin Panel</span>
+            </div>
           </div>
           {/* Close button for mobile drawer */}
           <button className="admin-sidebar__mobile-close" onClick={() => setMobileMenuOpen(false)}>

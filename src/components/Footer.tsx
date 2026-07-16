@@ -26,14 +26,17 @@ export default function Footer() {
         <div className="footer__grid">
           {/* Brand */}
           <div>
-            <div className="footer__logo-name" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              {settings?.logoUrl ? (
-                <img src={settings.logoUrl} alt={settings.studioName} style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
-              ) : (
-                settings?.studioName || 'ZHA'
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: 'var(--space-md)' }}>
+              {settings?.logoUrl && (
+                <div className="navbar__logo-circle" style={{ width: '40px', height: '40px', flexShrink: 0 }}>
+                  <img src={settings.logoUrl} alt={settings?.studioName || 'ZHA'} className="navbar__logo-circle-img" />
+                </div>
               )}
+              <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
+                <span className="footer__logo-name" style={{ margin: 0 }}>{settings?.studioName || 'ZHA'}</span>
+                <span className="footer__logo-tagline" style={{ marginTop: '2px' }}>Hair Saloon</span>
+              </div>
             </div>
-            {!settings?.logoUrl && <div className="footer__logo-tagline">Hair Saloon</div>}
             <p className="footer__desc">
               A premier luxury salon destination for professional hair styling, 
               bridal makeup, nail art, and skincare experts.
