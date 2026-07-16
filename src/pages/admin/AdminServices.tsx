@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, X, Sparkles, Clock, Tag } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Sparkles, Clock, Tag, CloudUpload, CheckCircle } from 'lucide-react';
 import { getServices, addService, updateService, deleteService, uploadServiceImage } from '../../services/services';
 import type { ServiceItem } from '../../services/services';
 
@@ -18,6 +18,11 @@ export default function AdminServices() {
   const [formPrice, setFormPrice] = useState('');
   const [formDuration, setFormDuration] = useState('');
   const [formImageUrl, setFormImageUrl] = useState('');
+
+  // Drag and drop states
+  const [dragActive, setDragActive] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   useEffect(() => {
     fetchServices();
@@ -38,11 +43,52 @@ export default function AdminServices() {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
+      setUploadProgress(30);
+      const timer1 = setTimeout(() => setUploadProgress(70), 150);
+      const timer2 = setTimeout(() => setUploadProgress(100), 300);
       reader.onloadend = () => {
         setFormImageUrl(reader.result as string);
+        setUploadSuccess(true);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      const reader = new FileReader();
+      setUploadProgress(20);
+      const timer1 = setTimeout(() => setUploadProgress(60), 200);
+      const timer2 = setTimeout(() => setUploadProgress(100), 400);
+      reader.onloadend = () => {
+        setFormImageUrl(reader.result as string);
+        setUploadSuccess(true);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const simulateUpload = () => {
+    document.getElementById('service-primary-file')?.click();
   };
 
   const handleOpenAdd = () => {
@@ -53,6 +99,8 @@ export default function AdminServices() {
     setFormPrice('');
     setFormDuration('');
     setFormImageUrl('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80');
+    setUploadProgress(null);
+    setUploadSuccess(false);
     setShowModal(true);
   };
 
@@ -65,6 +113,8 @@ export default function AdminServices() {
     setFormPrice(svc.price);
     setFormDuration(svc.duration);
     setFormImageUrl(svc.imageUrl);
+    setUploadProgress(null);
+    setUploadSuccess(false);
     setShowModal(true);
   };
 
@@ -271,9 +321,9 @@ export default function AdminServices() {
           justifyContent: 'center',
           zIndex: 1000
         }}>
-          <form onSubmit={handleSave} className="admin-card admin-modal-card" style={{
+          <div className="admin-card admin-modal-card" style={{
             width: '100%',
-            maxWidth: '520px',
+            maxWidth: '840px',
             padding: 'var(--space-2xl)',
             border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-xl)',
@@ -293,102 +343,156 @@ export default function AdminServices() {
               </button>
             </div>
 
-            <div className="form-group">
-              <label className="form-label" htmlFor="modal-name">Service Name *</label>
-              <input 
-                id="modal-name"
-                className="form-input" 
-                value={formName}
-                onChange={e => setFormName(e.target.value)}
-                placeholder="e.g. Balayage Highlights"
-                required
-              />
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
-              <div className="form-group">
-                <label className="form-label" htmlFor="modal-category">Category *</label>
-                <select 
-                  id="modal-category"
-                  className="form-input" 
-                  value={formCategory}
-                  onChange={e => setFormCategory(e.target.value)}
-                >
-                  <option value="Hair Care">Hair Care</option>
-                  <option value="Skin Care">Skin Care</option>
-                  <option value="Bridal">Bridal</option>
-                  <option value="Nails">Nails</option>
-                  <option value="Makeup">Makeup</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Upload Image *</label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  {formImageUrl && (
-                    <img 
-                      src={formImageUrl} 
-                      alt="Preview" 
-                      style={{ width: '42px', height: '42px', borderRadius: '4px', objectFit: 'cover', border: '1px solid var(--admin-border)' }} 
-                    />
-                  )}
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 'var(--space-xl)', alignItems: 'start' }}>
+              {/* Left Column: Form Fields */}
+              <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="modal-name">Service Name *</label>
                   <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleFileChange}
-                    style={{ fontSize: '0.78rem', color: 'var(--admin-text-muted)', width: '100%' }}
+                    id="modal-name"
+                    className="form-input" 
+                    value={formName}
+                    onChange={e => setFormName(e.target.value)}
+                    placeholder="e.g. Balayage Highlights"
+                    required
                   />
                 </div>
-              </div>
-            </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
-              <div className="form-group">
-                <label className="form-label" htmlFor="modal-price">Price (₹) *</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 'var(--space-md)' }}>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="modal-category">Category *</label>
+                    <select 
+                      id="modal-category"
+                      className="form-input" 
+                      value={formCategory}
+                      onChange={e => setFormCategory(e.target.value)}
+                    >
+                      <option value="Hair Care">Hair Care</option>
+                      <option value="Skin Care">Skin Care</option>
+                      <option value="Bridal">Bridal</option>
+                      <option value="Nails">Nails</option>
+                      <option value="Makeup">Makeup</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="modal-price">Price (₹) *</label>
+                    <input 
+                      id="modal-price"
+                      className="form-input" 
+                      value={formPrice}
+                      onChange={e => setFormPrice(e.target.value)}
+                      placeholder="e.g. 1500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label" htmlFor="modal-duration">Duration *</label>
+                  <input 
+                    id="modal-duration"
+                    className="form-input" 
+                    value={formDuration}
+                    onChange={e => setFormDuration(e.target.value)}
+                    placeholder="e.g. 60 min"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label" htmlFor="modal-desc">Description *</label>
+                  <textarea 
+                    id="modal-desc"
+                    className="form-input" 
+                    rows={3}
+                    value={formDescription}
+                    onChange={e => setFormDescription(e.target.value)}
+                    placeholder="Brief summary of service benefits..."
+                    style={{ fontFamily: 'inherit', resize: 'vertical' }}
+                    required
+                  />
+                </div>
+
+                <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: '8px', borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
+                  <button className="btn btn-outline" type="button" onClick={() => setShowModal(false)} style={{ fontSize: '0.82rem' }}>
+                    Cancel
+                  </button>
+                  <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
+                    {saving ? 'Saving...' : 'Save Configurations'}
+                  </button>
+                </div>
+              </form>
+
+              {/* Right Column: Drag and Drop Upload Zone */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                <label className="form-label">Service Cover Image *</label>
+                
                 <input 
-                  id="modal-price"
-                  className="form-input" 
-                  value={formPrice}
-                  onChange={e => setFormPrice(e.target.value)}
-                  placeholder="e.g. 1500"
-                  required
+                  type="file" 
+                  id="service-primary-file"
+                  accept="image/*" 
+                  onChange={handleFileChange}
+                  style={{ display: 'none' }}
                 />
-              </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="modal-duration">Duration *</label>
-                <input 
-                  id="modal-duration"
-                  className="form-input" 
-                  value={formDuration}
-                  onChange={e => setFormDuration(e.target.value)}
-                  placeholder="e.g. 60 min"
-                  required
-                />
-              </div>
-            </div>
 
-            <div className="form-group">
-              <label className="form-label" htmlFor="modal-desc">Description *</label>
-              <textarea 
-                id="modal-desc"
-                className="form-input" 
-                rows={3}
-                value={formDescription}
-                onChange={e => setFormDescription(e.target.value)}
-                placeholder="Brief summary of service benefits..."
-                style={{ fontFamily: 'inherit', resize: 'vertical' }}
-                required
-              />
-            </div>
+                <div 
+                  className={`admin-drag-drop-zone ${dragActive ? 'active' : ''}`}
+                  onDragEnter={handleDrag}
+                  onDragOver={handleDrag}
+                  onDragLeave={handleDrag}
+                  onDrop={handleDrop}
+                  onClick={simulateUpload}
+                  style={{
+                    border: '2px dashed var(--color-border)',
+                    borderRadius: 'var(--radius-xl)',
+                    background: 'rgba(255, 255, 255, 0.01)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 'var(--space-2xl)',
+                    minHeight: '220px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s'
+                  }}
+                >
+                  {uploadProgress === null ? (
+                    <>
+                      <CloudUpload size={40} style={{ color: 'var(--color-champagne)', marginBottom: '12px' }} />
+                      <strong style={{ display: 'block', fontSize: '0.875rem', color: 'white', marginBottom: '4px' }}>Drag & Drop Image Here</strong>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--color-text-light)' }}>or click to simulate local upload</span>
+                    </>
+                  ) : !uploadSuccess ? (
+                    <div style={{ width: '100%' }}>
+                      <div className="book-loader" style={{ width: '28px', height: '28px', borderTopColor: 'var(--color-champagne)', marginBottom: '12px' }}></div>
+                      <strong style={{ display: 'block', fontSize: '0.875rem', color: 'white', marginBottom: '8px' }}>Uploading...</strong>
+                      <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '100px', overflow: 'hidden' }}>
+                        <div style={{ height: '100%', background: 'var(--color-champagne)', width: `${uploadProgress}%`, transition: 'width 0.15s ease' }}></div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ animation: 'zoomIn 0.3s ease' }}>
+                      <CheckCircle size={40} style={{ color: '#22c55e', marginBottom: '12px' }} />
+                      <strong style={{ display: 'block', fontSize: '0.875rem', color: 'white', marginBottom: '4px' }}>Upload Completed!</strong>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--color-text-light)' }}>Cover preview loaded successfully</span>
+                    </div>
+                  )}
+                </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-md)', marginTop: '8px', borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
-              <button className="btn btn-outline" type="button" onClick={() => setShowModal(false)} style={{ fontSize: '0.82rem' }}>
-                Cancel
-              </button>
-              <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
-                {saving ? 'Saving...' : 'Save Configurations'}
-              </button>
+                {formImageUrl && (
+                  <div style={{ marginTop: '8px', animation: 'fadeIn 0.3s ease' }}>
+                    <span className="form-label" style={{ display: 'block', marginBottom: '6px', fontSize: '0.78rem' }}>Image Preview:</span>
+                    <img 
+                      src={formImageUrl} 
+                      alt="Service Preview" 
+                      style={{ width: '100%', height: '150px', borderRadius: 'var(--radius-lg)', objectFit: 'cover', border: '1px solid var(--color-border)' }} 
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          </form>
+          </div>
         </div>
       )}
     </div>
