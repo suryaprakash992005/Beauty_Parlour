@@ -100,7 +100,7 @@ export default function AdminBanner() {
       const updated = await updateHomepageBanner({
         smallHeading: banner.smallHeading,
         mainHeading: banner.mainHeading,
-        subtitle: banner.subtitle,
+        subtitle: banner.description,
         description: banner.description,
         primaryBtn: banner.primaryBtn,
         secondaryBtn: banner.secondaryBtn,
@@ -140,75 +140,59 @@ export default function AdminBanner() {
         <form onSubmit={handleSave} className="admin-card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
           <h3 className="admin-card__title">Banner Configuration</h3>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
-            {/* Image Upload Zone */}
-            <div className="form-group">
-              <label className="form-label">Hero Background Image</label>
-              <input 
-                type="file" 
-                id="banner-image-file"
-                accept="image/*" 
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-              />
-              <div 
-                className={`admin-drag-drop-zone ${dragActive ? 'active' : ''}`}
-                onDragEnter={handleDrag}
-                onDragOver={handleDrag}
-                onDragLeave={handleDrag}
-                onDrop={handleDrop}
-                onClick={simulateUpload}
-                style={{
-                  border: '2px dashed var(--color-border)',
-                  borderRadius: 'var(--radius-xl)',
-                  background: 'rgba(255, 255, 255, 0.01)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 'var(--space-xl)',
-                  minHeight: '160px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s'
-                }}
-              >
-                {uploadProgress === null ? (
-                  <>
-                    <CloudUpload size={32} style={{ color: 'var(--color-champagne)', marginBottom: '8px' }} />
-                    <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '2px' }}>Drag & Drop Image</strong>
-                    <span style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>or click to upload image</span>
-                  </>
-                ) : !uploadSuccess ? (
-                  <div style={{ width: '100%' }}>
-                    <div className="book-loader" style={{ width: '22px', height: '22px', borderTopColor: 'var(--color-champagne)', marginBottom: '8px' }}></div>
-                    <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '4px' }}>Uploading...</strong>
-                    <div style={{ width: '100%', height: '3px', background: 'rgba(255,255,255,0.05)', borderRadius: '100px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', background: 'var(--color-champagne)', width: `${uploadProgress}%`, transition: 'width 0.15s ease' }}></div>
-                    </div>
+          {/* Image Upload Zone */}
+          <div className="form-group">
+            <label className="form-label">Hero Background Image</label>
+            <input 
+              type="file" 
+              id="banner-image-file"
+              accept="image/*" 
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+            />
+            <div 
+              className={`admin-drag-drop-zone ${dragActive ? 'active' : ''}`}
+              onDragEnter={handleDrag}
+              onDragOver={handleDrag}
+              onDragLeave={handleDrag}
+              onDrop={handleDrop}
+              onClick={simulateUpload}
+              style={{
+                border: '2px dashed var(--color-border)',
+                borderRadius: 'var(--radius-xl)',
+                background: 'rgba(255, 255, 255, 0.01)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 'var(--space-xl)',
+                minHeight: '160px',
+                textAlign: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.3s'
+              }}
+            >
+              {uploadProgress === null ? (
+                <>
+                  <CloudUpload size={32} style={{ color: 'var(--color-champagne)', marginBottom: '8px' }} />
+                  <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '2px' }}>Drag & Drop Image</strong>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>or click to upload image</span>
+                </>
+              ) : !uploadSuccess ? (
+                <div style={{ width: '100%' }}>
+                  <div className="book-loader" style={{ width: '22px', height: '22px', borderTopColor: 'var(--color-champagne)', marginBottom: '8px' }}></div>
+                  <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '4px' }}>Uploading...</strong>
+                  <div style={{ width: '100%', height: '3px', background: 'rgba(255,255,255,0.05)', borderRadius: '100px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', background: 'var(--color-champagne)', width: `${uploadProgress}%`, transition: 'width 0.15s ease' }}></div>
                   </div>
-                ) : (
-                  <div style={{ animation: 'zoomIn 0.3s ease' }}>
-                    <CheckCircle size={32} style={{ color: '#22c55e', marginBottom: '8px' }} />
-                    <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '2px' }}>Image Loaded!</strong>
-                    <span style={{ fontSize: '0.68rem', color: '#22c55e', fontWeight: 600 }}>Ready to save</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Subtitle / Promotion Label Input */}
-            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <label className="form-label" htmlFor="banner-subtitle">Subtitle / Promotion Label</label>
-              <textarea 
-                id="banner-subtitle"
-                className="form-input" 
-                value={banner.subtitle}
-                onChange={e => setBanner(prev => ({ ...prev, subtitle: e.target.value }))}
-                placeholder="e.g. Luxury Beauty Experience"
-                required
-                style={{ flex: 1, minHeight: '160px', resize: 'none', fontFamily: 'inherit' }}
-              />
+                </div>
+              ) : (
+                <div style={{ animation: 'zoomIn 0.3s ease' }}>
+                  <CheckCircle size={32} style={{ color: '#22c55e', marginBottom: '8px' }} />
+                  <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '2px' }}>Image Loaded!</strong>
+                  <span style={{ fontSize: '0.68rem', color: '#22c55e', fontWeight: 600 }}>Ready to save</span>
+                </div>
+              )}
             </div>
           </div>
 
