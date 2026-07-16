@@ -6,6 +6,7 @@ import { SparklesText } from '../components/SparklesText';
 import { getServices } from '../services/services';
 import type { ServiceItem } from '../services/services';
 import '../styles/services.css';
+import GooeyNav from '../components/GooeyNav';
 
 type Category = 'All' | 'Hair Care' | 'Skin Care' | 'Makeup' | 'Bridal' | 'Spa' | 'Nails';
 
@@ -22,13 +23,11 @@ export default function Services() {
   useEffect(() => {
     getServices()
       .then(data => {
-        // Filter active services only for customer-facing list
         setServices(data.filter(s => s.active !== false));
         setLoading(false);
       })
       .catch(err => {
-        console.error('Failed to load services:', err);
-        setError('Unable to load services at this time.');
+        setError(err.message);
         setLoading(false);
       });
   }, []);
@@ -41,12 +40,12 @@ export default function Services() {
     <main className="services-page">
       {/* Hero */}
       <section className="page-hero">
-        <div className="page-hero__bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1400&q=80')" }} />
+        <div className="page-hero__bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1400&q=80')" }} />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
-          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Offerings</div>
+          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Treatments</div>
           <h1 className="page-hero__title">
-            <SparklesText>Luxury Services</SparklesText>
+            <SparklesText>Our Services</SparklesText>
           </h1>
           <p className="page-hero__subtitle">
             Premium hair and beauty services crafted to perfection by ZHA Hair Saloon.
@@ -57,18 +56,13 @@ export default function Services() {
       {/* Filter */}
       <div className="services-filter">
         <div className="container">
-          <div className="services-filter__inner">
-            <Filter size={14} style={{ color: 'var(--color-rose-gold)' }} />
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                id={`filter-${cat.replace(' ', '-')}`}
-                className={`services-filter__btn${active === cat ? ' active' : ''}`}
-                onClick={() => setActive(cat)}
-              >
-                {cat}
-              </button>
-            ))}
+          <div className="services-filter__inner" style={{ display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'center' }}>
+            <Filter size={14} style={{ color: 'var(--color-rose-gold)', flexShrink: 0 }} />
+            <GooeyNav
+              items={CATEGORIES.map(cat => ({ label: cat, href: '#' }))}
+              activeIndex={CATEGORIES.indexOf(active)}
+              onChange={(index) => setActive(CATEGORIES[index])}
+            />
           </div>
         </div>
       </div>

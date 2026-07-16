@@ -6,6 +6,8 @@ import { getGalleryItems } from '../services/gallery';
 import type { GalleryItem } from '../services/gallery';
 import '../styles/gallery.css';
 
+import GooeyNav from '../components/GooeyNav';
+
 type GalleryCategory = 'All' | 'Bridal' | 'Hair' | 'Makeup' | 'Nails' | 'Spa';
 
 const CATS: GalleryCategory[] = ['All', 'Bridal', 'Hair', 'Makeup', 'Nails', 'Spa'];
@@ -26,19 +28,18 @@ export default function Gallery() {
         setLoading(false);
       })
       .catch(err => {
-        console.error('Failed to load gallery:', err);
-        setError('Unable to load gallery photos at this time.');
+        setError(err.message);
         setLoading(false);
       });
   }, []);
 
-  const normalizeCat = (dbCat: string): GalleryCategory => {
-    const c = dbCat.toLowerCase().trim();
-    if (c.includes('hair')) return 'Hair';
+  const normalizeCat = (cat: string): GalleryCategory => {
+    const c = cat.toLowerCase();
     if (c.includes('bridal')) return 'Bridal';
+    if (c.includes('hair')) return 'Hair';
     if (c.includes('makeup')) return 'Makeup';
-    if (c.includes('nails')) return 'Nails';
-    if (c.includes('spa') || c.includes('skin')) return 'Spa';
+    if (c.includes('nail')) return 'Nails';
+    if (c.includes('spa')) return 'Spa';
     return 'All';
   };
 
@@ -64,17 +65,12 @@ export default function Gallery() {
       {/* Filters */}
       <div className="services-filter">
         <div className="container">
-          <div className="services-filter__inner">
-            {CATS.map(cat => (
-              <button
-                key={cat}
-                id={`gallery-filter-${cat}`}
-                className={`services-filter__btn${active === cat ? ' active' : ''}`}
-                onClick={() => setActive(cat)}
-              >
-                {cat}
-              </button>
-            ))}
+          <div className="services-filter__inner" style={{ display: 'flex', justifyContent: 'center' }}>
+            <GooeyNav
+              items={CATS.map(cat => ({ label: cat, href: '#' }))}
+              activeIndex={CATS.indexOf(active)}
+              onChange={(index) => setActive(CATS[index])}
+            />
           </div>
         </div>
       </div>

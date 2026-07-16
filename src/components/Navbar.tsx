@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { MessageSquare } from 'lucide-react';
 import { getSalonSettings } from '../services/settings';
 import type { SalonSettings } from '../services/settings';
 import '../styles/layout.css';
 import StaggeredMenu from './StaggeredMenu';
 import ThemeToggle from './ThemeToggle';
+import GooeyNav from './GooeyNav';
 
 const NAV_LINKS = [
   { label: 'Home',            to: '/' },
@@ -46,6 +47,7 @@ const BrandLogo = ({ logoUrl, studioName }: { logoUrl?: string; studioName?: str
 export default function Navbar() {
   const [solid, setSolid] = useState(false);
   const [settings, setSettings] = useState<SalonSettings | null>(null);
+  const location = useLocation();
 
   useEffect(() => {
     getSalonSettings()
@@ -64,6 +66,11 @@ export default function Navbar() {
     { label: 'YouTube', link: settings?.youtube || 'https://youtube.com/zhahairsaloon' }
   ];
 
+  const activeNavIndex = NAV_LINKS.findIndex(l => 
+    l.to === '/' ? location.pathname === '/' : location.pathname.startsWith(l.to)
+  );
+  const safeActiveIndex = activeNavIndex >= 0 ? activeNavIndex : 0;
+
   return (
     <>
       <div className="navbar-wrapper">
@@ -74,18 +81,10 @@ export default function Navbar() {
 
             {/* Desktop nav */}
             <nav className="navbar__nav" aria-label="Primary navigation">
-              {NAV_LINKS.map(l => (
-                <NavLink
-                  key={l.to}
-                  to={l.to}
-                  end={l.to === '/'}
-                  className={({ isActive }) =>
-                    `navbar__link${isActive ? ' navbar__link--active' : ''}`
-                  }
-                >
-                  {l.label}
-                </NavLink>
-              ))}
+              <GooeyNav
+                items={NAV_LINKS}
+                activeIndex={safeActiveIndex}
+              />
             </nav>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
