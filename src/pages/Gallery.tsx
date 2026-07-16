@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { X, ZoomIn, Sparkles } from 'lucide-react';
-import { useScrollReveal } from '../components/shared';
 import { SparklesText } from '../components/SparklesText';
 import { getGalleryItems } from '../services/gallery';
 import type { GalleryItem } from '../services/gallery';
+import Masonry from '../components/Masonry';
 import '../styles/gallery.css';
-
-import GooeyNav from '../components/GooeyNav';
 
 type GalleryCategory = 'All' | 'Bridal' | 'Hair' | 'Makeup' | 'Nails' | 'Spa';
 
@@ -18,8 +16,6 @@ export default function Gallery() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
-  
-  useScrollReveal([gallery, active]);
 
   useEffect(() => {
     getGalleryItems()
@@ -28,24 +24,38 @@ export default function Gallery() {
         setLoading(false);
       })
       .catch(err => {
-        setError(err.message);
+        console.error('Failed to load gallery:', err);
+        setError('Unable to load gallery photos at this time.');
         setLoading(false);
       });
   }, []);
 
-  const normalizeCat = (cat: string): GalleryCategory => {
-    const c = cat.toLowerCase();
-    if (c.includes('bridal')) return 'Bridal';
+  const normalizeCat = (dbCat: string): GalleryCategory => {
+    const c = dbCat.toLowerCase().trim();
     if (c.includes('hair')) return 'Hair';
+    if (c.includes('bridal')) return 'Bridal';
     if (c.includes('makeup')) return 'Makeup';
-    if (c.includes('nail')) return 'Nails';
-    if (c.includes('spa')) return 'Spa';
+    if (c.includes('nails')) return 'Nails';
+    if (c.includes('spa') || c.includes('skin')) return 'Spa';
     return 'All';
   };
 
   const filtered = active === 'All' 
     ? gallery 
     : gallery.filter(g => normalizeCat(g.category) === active);
+
+  // Map the Supabase items to standard Masonry items with custom staggered heights
+  const masonryItems = filtered.map((img, i) => {
+    const heights = [580, 680, 780, 630];
+    const height = heights[i % heights.length];
+    return {
+      id: String(img.id || i),
+      img: img.url,
+      url: '#',
+      height: height,
+      rawItem: img
+    };
+  });
 
   return (
     <main className="gallery-page">
@@ -65,12 +75,17 @@ export default function Gallery() {
       {/* Filters */}
       <div className="services-filter">
         <div className="container">
-          <div className="services-filter__inner" style={{ display: 'flex', justifyContent: 'center' }}>
-            <GooeyNav
-              items={CATS.map(cat => ({ label: cat, href: '#' }))}
-              activeIndex={CATS.indexOf(active)}
-              onChange={(index) => setActive(CATS[index])}
-            />
+          <div className="services-filter__inner">
+            {CATS.map(cat => (
+              <button
+                key={cat}
+                id={`gallery-filter-${cat}`}
+                className={`services-filter__btn${active === cat ? ' active' : ''}`}
+                onClick={() => setActive(cat)}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -93,27 +108,26 @@ export default function Gallery() {
               <p style={{ color: 'var(--color-text-muted)', fontSize: '15px' }}>No photos listed under {active} category.</p>
             </div>
           ) : (
-            <div className="gallery-masonry">
-              {filtered.map((img, i) => (
-                <div
-                  key={img.id || i}
-                  className={`gallery-item reveal delay-${(i % 4) + 1}`}
-                  onClick={() => setLightbox(img)}
-                  data-hover
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`View ${img.title}`}
-                  onKeyDown={e => e.key === 'Enter' && setLightbox(img)}
-                >
-                  <img src={img.url} alt={img.title} loading="lazy" className="gallery-item__img" />
-                  <div className="gallery-item__overlay">
+            <Masonry
+              items={masonryItems}
+              ease="power3.out"
+              duration={0.6}
+              stagger={0.05}
+              animateFrom="bottom"
+              scaleOnHover={true}
+              hoverScale={0.97}
+              blurToFocus={true}
+              onItemClick={(item) => setLightbox(item.rawItem)}
+              renderItem={(item) => (
+                <>
+                  <div className="gallery-item__overlay" style={{ opacity: 1, background: 'rgba(62, 39, 35, 0.45)' }}>
                     <ZoomIn size={24} />
-                    <span>{img.title}</span>
+                    <span>{item.rawItem.title}</span>
                   </div>
-                  <span className="gallery-item__cat">{normalizeCat(img.category)}</span>
-                </div>
-              ))}
-            </div>
+                  <span className="gallery-item__cat">{normalizeCat(item.rawItem.category)}</span>
+                </>
+              )}
+            />
           )}
         </div>
       </section>

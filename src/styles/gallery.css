@@ -39,7 +39,10 @@
   font-weight: 600;
   letter-spacing: 0.08em;
 }
-.gallery-item:hover .gallery-item__overlay { opacity: 1; }
+.gallery-item:hover .gallery-item__overlay,
+.item-wrapper:hover .gallery-item__overlay {
+  opacity: 1;
+}
 
 .gallery-item__cat {
   position: absolute;
