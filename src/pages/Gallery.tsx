@@ -17,7 +17,7 @@ export default function Gallery() {
   const [error, setError] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
   
-  useScrollReveal();
+  useScrollReveal([loading]);
 
   useEffect(() => {
     getGalleryItems()

@@ -102,7 +102,7 @@ export function ScrollToTop() {
 }
 
 /* ── useScrollReveal hook ── */
-export function useScrollReveal() {
+export function useScrollReveal(deps: any[] = []) {
   useEffect(() => {
     const els = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
     const observer = new IntersectionObserver(
@@ -116,7 +116,7 @@ export function useScrollReveal() {
     );
     els.forEach(el => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, deps);
 }
 
 /* ── useCounterAnimation hook ── */

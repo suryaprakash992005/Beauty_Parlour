@@ -108,11 +108,12 @@ function BeforeAfterSlider() {
 
 /* ─── Home Page ─── */
 export default function Home() {
-  useScrollReveal();
   const [bgIndex, setBgIndex] = useState(0);
   const [banner, setBanner] = useState<HomepageBanner | null>(null);
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useScrollReveal([loading]);
 
   useEffect(() => {
     // Load Homepage Banner config
