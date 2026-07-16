@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { 
-  Star, Search, Filter, ArrowUpDown, Trash2, CheckCircle2, EyeOff, Plus, X, AlertTriangle, Sparkles, Calendar 
+  Star, Search, Filter, ArrowUpDown, Trash2, CheckCircle2, EyeOff, Plus, X, AlertTriangle, Sparkles, Calendar, Loader2
 } from 'lucide-react';
-import { getReviews, updateReviewStatus, deleteReview, addReview } from '../../services/reviews';
+import { getReviews, updateReviewStatus, deleteReview, addReview, importGoogleReviews } from '../../services/reviews';
 import type { ReviewItem } from '../../services/reviews';
 
 interface Toast {
@@ -28,6 +28,15 @@ export default function AdminReviews() {
   const [newReviewText, setNewReviewText] = useState('');
   const [newReviewDate, setNewReviewDate] = useState(new Date().toISOString().split('T')[0]);
   const [saving, setSaving] = useState(false);
+
+  // Import Google Reviews States
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [googleProfileId, setGoogleProfileId] = useState('');
+  const [googleApiKey, setGoogleApiKey] = useState('');
+  const [syncMode, setSyncMode] = useState<'all' | 'new'>('all');
+  const [autoApprove, setAutoApprove] = useState(true);
+  const [importing, setImporting] = useState(false);
+  const [importStep, setImportStep] = useState<'idle' | 'connecting' | 'fetching' | 'saving' | 'complete'>('idle');
 
   // Delete Confirmation States
   const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
@@ -90,6 +99,48 @@ export default function AdminReviews() {
       showToast(err.message || 'Failed to delete review.', 'error');
     } finally {
       setDeleteConfirmId(null);
+    }
+  };
+
+  const handleGoogleImport = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setImporting(true);
+    setImportStep('connecting');
+
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+    try {
+      await delay(800);
+      setImportStep('fetching');
+      await delay(1000);
+      setImportStep('saving');
+      await delay(700);
+
+      const result = await importGoogleReviews(googleProfileId, googleApiKey, syncMode, autoApprove);
+
+      setImportStep('complete');
+      await delay(1000);
+
+      // Reload reviews
+      await fetchReviewsList();
+
+      if (result.noNewFound) {
+        showToast('Duplicate reviews skipped. No new reviews found.', 'error');
+      } else {
+        showToast(`Import Complete! Successfully imported ${result.importedCount} reviews from Google Business Profile.`);
+      }
+
+      setShowImportModal(false);
+      setImportStep('idle');
+      // Reset forms
+      setGoogleProfileId('');
+      setGoogleApiKey('');
+    } catch (err: any) {
+      console.error(err);
+      showToast(err.message || 'Import Google Reviews failed.', 'error');
+      setImportStep('idle');
+    } finally {
+      setImporting(false);
     }
   };
 
@@ -157,9 +208,41 @@ export default function AdminReviews() {
           <h2 className="admin-page-title">Reviews Management</h2>
           <p className="admin-page-desc">Moderate client testimonials imported from Google or added manually to showcase on the site.</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
-          <Plus size={16} /> Add Review
-        </button>
+        <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
+          <button 
+            type="button"
+            className="btn btn-outline" 
+            onClick={() => setShowImportModal(true)}
+            style={{ 
+              borderColor: 'var(--color-emerald-accent, #10b981)', 
+              color: 'var(--color-emerald-accent, #10b981)',
+              background: 'rgba(16, 185, 129, 0.03)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.03)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            <span>Import Google Reviews</span>
+          </button>
+          <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
+            <Plus size={16} /> Add Review
+          </button>
+        </div>
       </div>
 
       {/* Filters Bar */}
@@ -214,7 +297,14 @@ export default function AdminReviews() {
       {/* Reviews Cards Grid */}
       {filteredAndSortedReviews.length === 0 ? (
         <div className="admin-card" style={{ textAlign: 'center', padding: 'var(--space-3xl)', color: 'var(--color-text-muted)' }}>
-          No reviews matched your filters.
+          {reviews.length === 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <h3 style={{ fontFamily: 'var(--font-serif)', color: 'white', margin: 0, fontSize: '1.2rem' }}>No reviews imported yet</h3>
+              <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', margin: 0 }}>Connect Google Business Profile to start importing customer reviews.</p>
+            </div>
+          ) : (
+            "No reviews matched your filters."
+          )}
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--space-lg)' }}>
@@ -268,7 +358,7 @@ export default function AdminReviews() {
                 <Calendar size={12} />
                 <span>{new Date(review.review_date).toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
                 {review.google_review_id && (
-                  <span style={{ marginLeft: 'auto', background: 'rgba(255,255,255,0.05)', padding: '2px 6px', borderRadius: '4px', fontSize: '0.65rem' }}>Google Import</span>
+                  <span style={{ marginLeft: 'auto', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '2px 6px', borderRadius: '4px', fontSize: '0.65rem', fontWeight: 600 }}>Imported from Google</span>
                 )}
               </div>
 
@@ -418,6 +508,120 @@ export default function AdminReviews() {
                 {saving ? 'Creating...' : 'Create Review'}
               </button>
             </div>
+          </form>
+        </div>
+      )}
+
+      {/* Import Google Business Reviews Modal */}
+      {showImportModal && (
+        <div className="admin-modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)' }}>
+          <form onSubmit={handleGoogleImport} className="admin-card admin-modal-card" style={{ width: '100%', maxWidth: '480px', padding: 'var(--space-2xl)', border: '1px solid var(--color-border)', animation: 'zoomIn 0.25s ease', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '12px' }}>
+              <h3 style={{ margin: 0, fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style={{ marginRight: '4px' }}>
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Import Google Business Reviews
+              </h3>
+              <button type="button" onClick={() => !importing && setShowImportModal(false)} style={{ color: 'var(--color-text-muted)', border: 'none', background: 'none', cursor: 'pointer' }} disabled={importing}>
+                <X size={20} />
+              </button>
+            </div>
+
+            {importStep === 'idle' ? (
+              <>
+                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 4px 0', lineHeight: '1.5' }}>
+                  Connect your Google Business Profile to import customer reviews into your salon website.
+                </p>
+
+                <div className="form-group">
+                  <label className="form-label" htmlFor="gmb-profile-id">Google Business Profile ID *</label>
+                  <input 
+                    id="gmb-profile-id"
+                    type="text" 
+                    className="form-input" 
+                    placeholder="e.g. accounts/12345/locations/67890" 
+                    value={googleProfileId} 
+                    onChange={e => setGoogleProfileId(e.target.value)} 
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label" htmlFor="gmb-api-key">Google API Key *</label>
+                  <input 
+                    id="gmb-api-key"
+                    type="password" 
+                    className="form-input" 
+                    placeholder="Enter your Google Cloud GMB API Key" 
+                    value={googleApiKey} 
+                    onChange={e => setGoogleApiKey(e.target.value)} 
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label" htmlFor="gmb-sync-mode">Sync Mode *</label>
+                  <select 
+                    id="gmb-sync-mode"
+                    className="form-input" 
+                    value={syncMode} 
+                    onChange={e => setSyncMode(e.target.value as any)}
+                  >
+                    <option value="all">Import All Reviews</option>
+                    <option value="new">Import Only New Reviews</option>
+                  </select>
+                </div>
+
+                <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
+                  <input 
+                    id="gmb-auto-approve"
+                    type="checkbox" 
+                    checked={autoApprove} 
+                    onChange={e => setAutoApprove(e.target.checked)} 
+                    style={{ width: '16px', height: '16px', accentColor: 'var(--color-champagne)' }}
+                  />
+                  <label htmlFor="gmb-auto-approve" style={{ fontSize: '0.82rem', color: 'white', cursor: 'pointer' }}>
+                    Automatically approve imported reviews
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', borderTop: '1px solid var(--color-border)', paddingTop: '16px', marginTop: '8px' }}>
+                  <button className="btn btn-outline" type="button" onClick={() => setShowImportModal(false)}>Cancel</button>
+                  <button className="btn btn-primary" type="submit" style={{ background: '#10b981', borderColor: '#10b981' }}>
+                    Import Reviews
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0', gap: '20px', minHeight: '260px' }}>
+                {importStep !== 'complete' ? (
+                  <Loader2 size={44} className="animate-spin" style={{ color: '#10b981' }} />
+                ) : (
+                  <div style={{ animation: 'zoomIn 0.3s ease' }}>
+                    <CheckCircle2 size={48} style={{ color: '#10b981' }} />
+                  </div>
+                )}
+
+                <div style={{ textAlign: 'center' }}>
+                  <h4 style={{ margin: '0 0 6px 0', color: 'white', fontFamily: 'var(--font-serif)', fontSize: '1.15rem' }}>
+                    {importStep === 'connecting' && 'Connecting to Google...'}
+                    {importStep === 'fetching' && 'Fetching Reviews...'}
+                    {importStep === 'saving' && 'Saving Reviews...'}
+                    {importStep === 'complete' && 'Import Complete'}
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                    {importStep === 'connecting' && 'Verifying location identity and GMB API Key authorization...'}
+                    {importStep === 'fetching' && 'Retrieving customer star ratings and review text details...'}
+                    {importStep === 'saving' && 'Filtering duplicates and writing to Supabase instance...'}
+                    {importStep === 'complete' && 'Showcasing imported reviews in reviews management dashboard.'}
+                  </p>
+                </div>
+              </div>
+            )}
           </form>
         </div>
       )}

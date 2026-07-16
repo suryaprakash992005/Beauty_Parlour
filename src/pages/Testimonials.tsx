@@ -21,6 +21,31 @@ const FALLBACK_TESTIMONIALS: TestimonialData[] = [
   { id: 'f-6', reviewer_name: 'Riya Verma', rating: 5, review_text: 'My party makeup turned heads all night. The makeup artist understood exactly my vibe — flawless and glamorous! I get so many compliments every time I visit ZHA Hair Saloon.', review_date: '2026-07-08' }
 ];
 
+export function getRelativeDateString(dateStr: string): string {
+  try {
+    const rDate = new Date(dateStr);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - rDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays <= 1) return 'Today';
+    if (diffDays <= 2) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) {
+      const weeks = Math.floor(diffDays / 7);
+      return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+    }
+    const months = Math.floor(diffDays / 30);
+    if (months < 12) {
+      return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+    }
+    const years = Math.floor(months / 12);
+    return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+  } catch {
+    return dateStr;
+  }
+}
+
 export default function Testimonials() {
   const [reviews, setReviews] = useState<TestimonialData[]>([]);
   useScrollReveal();
@@ -78,7 +103,7 @@ export default function Testimonials() {
                 <div className="testimonial-full-card__author" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '4px', paddingTop: 'var(--space-lg)', borderTop: '1px solid var(--color-border)' }}>
                   <div className="testimonial-full-card__name">{t.reviewer_name}</div>
                   <div className="testimonial-full-card__role" style={{ fontSize: '0.72rem', color: 'var(--color-text-light)' }}>
-                    {new Date(t.review_date).toLocaleDateString(undefined, { dateStyle: 'medium' })}
+                    {getRelativeDateString(t.review_date)}
                   </div>
                 </div>
               </div>

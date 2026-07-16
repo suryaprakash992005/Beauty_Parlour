@@ -10,6 +10,7 @@ import type { HomepageBanner } from '../services/homepage';
 import { getServices } from '../services/services';
 import type { ServiceItem } from '../services/services';
 import { getPublishedReviews } from '../services/reviews';
+import { getRelativeDateString } from './Testimonials';
 import bridalBeforeImg from '../assets/bridal_before.png';
 import bridalAfterImg from '../assets/bridal_after.png';
 import '../styles/home.css';
@@ -381,7 +382,7 @@ export default function Home() {
               <div className="testimonial-card__author" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
                 <div className="testimonial-card__name">{t.reviewer_name}</div>
                 <div className="testimonial-card__role" style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>
-                  {new Date(t.review_date).toLocaleDateString(undefined, { dateStyle: 'medium' })}
+                  {getRelativeDateString(t.review_date)}
                 </div>
               </div>
             </div>
