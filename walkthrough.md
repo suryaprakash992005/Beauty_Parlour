@@ -134,8 +134,7 @@ To align the frontend client with the exact production schema of the `homepage_b
   `small_heading`, `main_heading`, `primary_btn_text`, `secondary_btn_text`, `hero_image_url`, and `hero_video_url`.
 - **Correct Columns Integrated**: Replaced them with the valid columns:
   `top_label`, `title`, `description`, `subtitle`, `primary_button`, `secondary_button`, and `image_url`.
-- **Video Support Deprecated**: Removed the unused video uploader, video DOM components, and `videoUrl` property from the codebase.
-- **Subtitle Text Area Added**: Exposed the `subtitle` column as a dedicated textarea uploader matching the visual height of the image drag-and-drop zone.
+- **Subtitle/Description Consolidation**: Consolidated the redundant duplicate inputs in the Admin panel into a single `HERO SUBTITLE/DESCRIPTION` uploader. Writing to this input field saves the value to both the `subtitle` and `description` columns in Supabase, keeping them in sync and ensuring it loads perfectly on the main website.
 - **Upsert Execution Constraint**: Programmed the update handler to enforce single-row constraints (updating the first matched ID if one exists, or inserting a single record if empty), preventing duplicate landing banner copies from generating.
 
 
