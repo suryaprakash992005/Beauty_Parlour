@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Save, Eye, Check, CloudUpload, CheckCircle, Video } from 'lucide-react';
+import { Save, Eye, Check, CloudUpload, CheckCircle } from 'lucide-react';
 import { getHomepageBanner, updateHomepageBanner, uploadHeroAsset } from '../../services/homepage';
 import type { HomepageBanner } from '../../services/homepage';
 
@@ -7,11 +7,11 @@ export default function AdminBanner() {
   const [banner, setBanner] = useState<HomepageBanner>({
     smallHeading: 'Bespoke Hair Artistry',
     mainHeading: 'Transform Your Style, Reveal Your Confidence',
+    subtitle: 'Luxury Beauty Experience',
     description: 'Experience premium luxury hair styling, organic skincare therapies, and celebrity-grade bridal makeovers at ZHA Hair Saloon.',
     primaryBtn: 'Book Appointment',
     secondaryBtn: 'Explore Services',
-    imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80',
-    videoUrl: ''
+    imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80'
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -22,10 +22,6 @@ export default function AdminBanner() {
   const [dragActive, setDragActive] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-
-  const [videoDragActive, setVideoDragActive] = useState(false);
-  const [videoUploadProgress, setVideoUploadProgress] = useState<number | null>(null);
-  const [videoUploadSuccess, setVideoUploadSuccess] = useState(false);
 
   useEffect(() => {
     getHomepageBanner()
@@ -49,23 +45,6 @@ export default function AdminBanner() {
       reader.onloadend = () => {
         setBanner(prev => ({ ...prev, imageUrl: reader.result as string }));
         setUploadSuccess(true);
-        clearTimeout(t1);
-        clearTimeout(t2);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      setVideoUploadProgress(30);
-      const t1 = setTimeout(() => setVideoUploadProgress(75), 200);
-      const t2 = setTimeout(() => setVideoUploadProgress(100), 400);
-      reader.onloadend = () => {
-        setBanner(prev => ({ ...prev, videoUrl: reader.result as string }));
-        setVideoUploadSuccess(true);
         clearTimeout(t1);
         clearTimeout(t2);
       };
@@ -108,41 +87,6 @@ export default function AdminBanner() {
     document.getElementById('banner-image-file')?.click();
   };
 
-  const handleVideoDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setVideoDragActive(true);
-    } else if (e.type === "dragleave") {
-      setVideoDragActive(false);
-    }
-  };
-
-  const handleVideoDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setVideoDragActive(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      const reader = new FileReader();
-      setVideoUploadProgress(20);
-      const t1 = setTimeout(() => setVideoUploadProgress(60), 250);
-      const t2 = setTimeout(() => setVideoUploadProgress(100), 500);
-      reader.onloadend = () => {
-        setBanner(prev => ({ ...prev, videoUrl: reader.result as string }));
-        setVideoUploadSuccess(true);
-        clearTimeout(t1);
-        clearTimeout(t2);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const simulateVideoUpload = () => {
-    document.getElementById('banner-video-file')?.click();
-  };
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -150,22 +94,17 @@ export default function AdminBanner() {
     try {
       let finalImageUrl = banner.imageUrl;
       if (banner.imageUrl && banner.imageUrl.startsWith('data:')) {
-        finalImageUrl = await uploadHeroAsset(banner.imageUrl, false);
-      }
-
-      let finalVideoUrl = banner.videoUrl;
-      if (banner.videoUrl && banner.videoUrl.startsWith('data:')) {
-        finalVideoUrl = await uploadHeroAsset(banner.videoUrl, true);
+        finalImageUrl = await uploadHeroAsset(banner.imageUrl);
       }
 
       const updated = await updateHomepageBanner({
         smallHeading: banner.smallHeading,
         mainHeading: banner.mainHeading,
+        subtitle: banner.subtitle,
         description: banner.description,
         primaryBtn: banner.primaryBtn,
         secondaryBtn: banner.secondaryBtn,
-        imageUrl: finalImageUrl,
-        videoUrl: finalVideoUrl
+        imageUrl: finalImageUrl
       });
 
       setBanner(updated);
@@ -258,60 +197,18 @@ export default function AdminBanner() {
               </div>
             </div>
 
-            {/* Video Upload Zone */}
-            <div className="form-group">
-              <label className="form-label">Hero Video Cover (Optional)</label>
-              <input 
-                type="file" 
-                id="banner-video-file"
-                accept="video/*" 
-                onChange={handleVideoFileChange}
-                style={{ display: 'none' }}
+            {/* Subtitle / Promotion Label Input */}
+            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <label className="form-label" htmlFor="banner-subtitle">Subtitle / Promotion Label</label>
+              <textarea 
+                id="banner-subtitle"
+                className="form-input" 
+                value={banner.subtitle}
+                onChange={e => setBanner(prev => ({ ...prev, subtitle: e.target.value }))}
+                placeholder="e.g. Luxury Beauty Experience"
+                required
+                style={{ flex: 1, minHeight: '160px', resize: 'none', fontFamily: 'inherit' }}
               />
-              <div 
-                className={`admin-drag-drop-zone ${videoDragActive ? 'active' : ''}`}
-                onDragEnter={handleVideoDrag}
-                onDragOver={handleVideoDrag}
-                onDragLeave={handleVideoDrag}
-                onDrop={handleVideoDrop}
-                onClick={simulateVideoUpload}
-                style={{
-                  border: '2px dashed var(--color-border)',
-                  borderRadius: 'var(--radius-xl)',
-                  background: 'rgba(255, 255, 255, 0.01)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 'var(--space-xl)',
-                  minHeight: '160px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s'
-                }}
-              >
-                {videoUploadProgress === null ? (
-                  <>
-                    <Video size={32} style={{ color: 'var(--color-champagne)', marginBottom: '8px' }} />
-                    <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '2px' }}>Drag & Drop Video</strong>
-                    <span style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>or click to upload video</span>
-                  </>
-                ) : !videoUploadSuccess ? (
-                  <div style={{ width: '100%' }}>
-                    <div className="book-loader" style={{ width: '22px', height: '22px', borderTopColor: 'var(--color-champagne)', marginBottom: '8px' }}></div>
-                    <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '4px' }}>Uploading...</strong>
-                    <div style={{ width: '100%', height: '3px', background: 'rgba(255,255,255,0.05)', borderRadius: '100px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', background: 'var(--color-champagne)', width: `${videoUploadProgress}%`, transition: 'width 0.15s ease' }}></div>
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{ animation: 'zoomIn 0.3s ease' }}>
-                    <CheckCircle size={32} style={{ color: '#22c55e', marginBottom: '8px' }} />
-                    <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '2px' }}>Video Loaded!</strong>
-                    <span style={{ fontSize: '0.68rem', color: '#22c55e', fontWeight: 600 }}>Ready to save</span>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
 

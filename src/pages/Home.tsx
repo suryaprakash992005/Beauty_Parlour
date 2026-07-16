@@ -156,29 +156,18 @@ export default function Home() {
       <section className="hero" aria-label="Hero">
         <div className="hero__bg" />
         
-        {banner?.videoUrl ? (
-          <video 
-            src={banner.videoUrl} 
-            autoPlay 
-            loop 
-            muted 
-            playsInline 
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.95, zIndex: 0 }} 
+        {HERO_BGS.map((bg, idx) => (
+          <div
+            key={idx}
+            className="hero__image-overlay"
+            style={{
+              backgroundImage: `url('${idx === 0 && banner?.imageUrl ? banner.imageUrl : bg}')`,
+              opacity: idx === bgIndex ? 1.0 : 0,
+              transition: 'opacity 1.5s ease-in-out'
+            }}
+            aria-hidden="true"
           />
-        ) : (
-          HERO_BGS.map((bg, idx) => (
-            <div
-              key={idx}
-              className="hero__image-overlay"
-              style={{
-                backgroundImage: `url('${idx === 0 && banner?.imageUrl ? banner.imageUrl : bg}')`,
-                opacity: idx === bgIndex ? 1.0 : 0,
-                transition: 'opacity 1.5s ease-in-out'
-              }}
-              aria-hidden="true"
-            />
-          ))
-        )}
+        ))}
 
         {/* Soft luxury dark overlay to protect text contrast while background is Bright */}
         <div className="hero__dark-overlay" />
@@ -218,7 +207,7 @@ export default function Home() {
             />
           </h1>
           <p className="hero__subtitle">
-            {banner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
+            {banner?.subtitle || banner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
           </p>
           <div className="hero__actions">
             <InteractiveHoverButton to="/book-appointment">

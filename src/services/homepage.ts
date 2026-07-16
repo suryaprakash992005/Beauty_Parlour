@@ -16,17 +16,16 @@ function base64ToBlob(base64: string): Blob {
 export interface HomepageBanner {
   smallHeading: string;
   mainHeading: string;
+  subtitle: string;
   description: string;
   primaryBtn: string;
   secondaryBtn: string;
   imageUrl: string;
-  videoUrl?: string;
-  subtitle?: string;
 }
 
-export async function uploadHeroAsset(fileOrBase64: File | string, isVideo = false): Promise<string> {
+export async function uploadHeroAsset(fileOrBase64: File | string): Promise<string> {
   let fileBody: File | Blob;
-  let fileExtension = isVideo ? 'mp4' : 'jpg';
+  let fileExtension = 'jpg';
   
   if (typeof fileOrBase64 === 'string') {
     if (fileOrBase64.startsWith('data:')) {
@@ -64,6 +63,7 @@ export async function uploadHeroAsset(fileOrBase64: File | string, isVideo = fal
 const DEFAULT_BANNER: HomepageBanner = {
   smallHeading: 'Bespoke Hair Artistry',
   mainHeading: 'Transform Your Style With Professional Beauty Experts',
+  subtitle: 'Luxury Beauty Experience',
   description: 'Where premium style meets expert care. Experience the ultimate hair design, bridal cosmetics, nail artistry, and soothing spa therapies at ZHA Hair Saloon.',
   primaryBtn: 'Book Appointment',
   secondaryBtn: 'Explore Services',
@@ -93,12 +93,11 @@ export async function getHomepageBanner(): Promise<HomepageBanner> {
     return {
       smallHeading: banner.top_label || DEFAULT_BANNER.smallHeading,
       mainHeading: banner.title || DEFAULT_BANNER.mainHeading,
+      subtitle: banner.subtitle || DEFAULT_BANNER.subtitle,
       description: banner.description || DEFAULT_BANNER.description,
       primaryBtn: banner.primary_button || DEFAULT_BANNER.primaryBtn,
       secondaryBtn: banner.secondary_button || DEFAULT_BANNER.secondaryBtn,
-      imageUrl: banner.image_url || DEFAULT_BANNER.imageUrl,
-      videoUrl: banner.subtitle || undefined,
-      subtitle: banner.subtitle || undefined
+      imageUrl: banner.image_url || DEFAULT_BANNER.imageUrl
     };
   } catch (err: any) {
     console.error('Failed to get homepage banner:', err);
@@ -126,11 +125,11 @@ export async function updateHomepageBanner(banner: Partial<HomepageBanner>): Pro
   const payload = {
     top_label: banner.smallHeading,
     title: banner.mainHeading,
+    subtitle: banner.subtitle,
     description: banner.description,
     primary_button: banner.primaryBtn,
     secondary_button: banner.secondaryBtn,
-    image_url: banner.imageUrl,
-    subtitle: banner.videoUrl || banner.subtitle || ''
+    image_url: banner.imageUrl
   };
 
   let result;
@@ -168,11 +167,10 @@ export async function updateHomepageBanner(banner: Partial<HomepageBanner>): Pro
   return {
     smallHeading: result.top_label,
     mainHeading: result.title,
+    subtitle: result.subtitle || '',
     description: result.description,
     primaryBtn: result.primary_button,
     secondaryBtn: result.secondary_button,
-    imageUrl: result.image_url,
-    videoUrl: result.subtitle || undefined,
-    subtitle: result.subtitle || undefined
+    imageUrl: result.image_url
   };
 }
