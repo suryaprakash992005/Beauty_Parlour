@@ -1,41 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Filter, Sparkles } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
-import { getServices } from '../services/services';
-import type { ServiceItem } from '../services/services';
+import { useServices } from '../hooks/useServices';
 import '../styles/services.css';
 
-type Category = 'All' | 'Hair Care' | 'Skin Care' | 'Makeup' | 'Bridal' | 'Spa' | 'Nails';
-
-const CATEGORIES: Category[] = ['All', 'Hair Care', 'Skin Care', 'Makeup', 'Bridal', 'Spa', 'Nails'];
+const fallbackImage = 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80';
 
 export default function Services() {
-  const [active, setActive] = useState<Category>('All');
-  const [services, setServices] = useState<ServiceItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { services, categories, loading, error } = useServices();
+  const [active, setActive] = useState<string>('All');
 
   useScrollReveal();
 
-  useEffect(() => {
-    getServices()
-      .then(data => {
-        // Filter active services only for customer-facing list
-        setServices(data.filter(s => s.active !== false));
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to load services:', err);
-        setError('Unable to load services at this time.');
-        setLoading(false);
-      });
-  }, []);
+  const filterCategories = ['All', ...categories];
 
   const filtered = active === 'All' 
     ? services 
     : services.filter(s => s.category.toLowerCase().trim() === active.toLowerCase().trim());
+
+  const renderSkeletons = () => (
+    <div className="services-grid-full">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <article key={i} className="service-card-full skeleton-loading">
+          <div className="service-card-full__img-wrap skeleton-element" style={{ height: '240px' }} />
+          <div className="service-card-full__body">
+            <div className="skeleton-element" style={{ height: '24px', width: '65%', borderRadius: '4px' }} />
+            <div className="skeleton-element" style={{ height: '16px', width: '100%', borderRadius: '4px', marginTop: '12px' }} />
+            <div className="skeleton-element" style={{ height: '16px', width: '85%', borderRadius: '4px', marginTop: '6px' }} />
+            <div className="skeleton-element" style={{ height: '32px', width: '100%', borderRadius: '4px', marginTop: '20px' }} />
+          </div>
+        </article>
+      ))}
+    </div>
+  );
 
   return (
     <main className="services-page">
@@ -59,7 +58,7 @@ export default function Services() {
         <div className="container">
           <div className="services-filter__inner">
             <Filter size={14} style={{ color: 'var(--color-rose-gold)' }} />
-            {CATEGORIES.map(cat => (
+            {filterCategories.map(cat => (
               <button
                 key={cat}
                 id={`filter-${cat.replace(' ', '-')}`}
@@ -77,13 +76,18 @@ export default function Services() {
       <section className="section" style={{ paddingTop: 'var(--space-4xl)' }}>
         <div className="container">
           {loading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', gap: '16px' }}>
-              <div className="book-loader" style={{ width: '32px', height: '32px', borderTopColor: 'var(--color-champagne)' }} />
-              <span style={{ fontSize: '14px', color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Loading luxury offerings...</span>
-            </div>
+            renderSkeletons()
           ) : error ? (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--color-text-muted)' }}>
               <p>{error}</p>
+            </div>
+          ) : services.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '80px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+              <Sparkles size={32} style={{ color: 'var(--color-champagne)', opacity: 0.6 }} />
+              <h3 className="font-serif" style={{ fontSize: '24px', color: 'var(--color-text)' }}>No Offerings Listed</h3>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '15px', maxWidth: '400px', marginInline: 'auto' }}>
+                We are currently updating our luxury portfolio. Please check back shortly or contact our front desk.
+              </p>
             </div>
           ) : filtered.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '80px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
@@ -95,7 +99,15 @@ export default function Services() {
               {filtered.map((s, i) => (
                 <article key={s.id || i} className={`service-card-full reveal delay-${(i % 4) + 1}`}>
                   <div className="service-card-full__img-wrap">
-                    <img src={s.imageUrl} alt={s.name} loading="lazy" className="service-card-full__img" />
+                    <img 
+                      src={s.imageUrl || fallbackImage} 
+                      alt={s.name} 
+                      loading="lazy" 
+                      className="service-card-full__img" 
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = fallbackImage;
+                      }}
+                    />
                     <span className="service-card-full__cat">{s.category}</span>
                   </div>
                   <div className="service-card-full__body">
