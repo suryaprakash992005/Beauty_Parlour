@@ -103,7 +103,7 @@ export default function Services() {
                     <p className="service-card-full__desc">{s.description}</p>
                     <div className="service-card-full__meta">
                       <span className="service-card-full__dur">⏱ {s.duration}</span>
-                      <span className="service-card-full__price">{s.price.startsWith('₹') ? s.price : `₹${s.price}`} <small>onwards</small></span>
+                      <span className="service-card-full__price">{s.price && String(s.price).startsWith('₹') ? s.price : `₹${s.price || '0'}`} <small>onwards</small></span>
                     </div>
                     <InteractiveHoverButton to="/book-appointment" className="service-card-full__cta">
                       Book Now

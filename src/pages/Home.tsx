@@ -280,7 +280,7 @@ export default function Home() {
                     <p className="service-card__desc">{s.description}</p>
                     <div className="service-card__footer">
                       <div className="service-card__price">
-                        {s.price.startsWith('₹') ? s.price : `₹${s.price}`} <small>onwards</small>
+                        {s.price && String(s.price).startsWith('₹') ? s.price : `₹${s.price || '0'}`} <small>onwards</small>
                       </div>
                       <InteractiveHoverButton to="/book-appointment" className="interactive-hover-btn--sm">
                         Book Now
