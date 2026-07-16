@@ -163,7 +163,7 @@ export default function Home() {
             loop 
             muted 
             playsInline 
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.78, zIndex: 0 }} 
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.95, zIndex: 0 }} 
           />
         ) : (
           HERO_BGS.map((bg, idx) => (
@@ -172,7 +172,7 @@ export default function Home() {
               className="hero__image-overlay"
               style={{
                 backgroundImage: `url('${idx === 0 && banner?.imageUrl ? banner.imageUrl : bg}')`,
-                opacity: idx === bgIndex ? 0.88 : 0,
+                opacity: idx === bgIndex ? 1.0 : 0,
                 transition: 'opacity 1.5s ease-in-out'
               }}
               aria-hidden="true"
