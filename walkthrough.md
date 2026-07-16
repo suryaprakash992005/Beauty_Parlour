@@ -160,6 +160,19 @@ We created a premium Reviews Management system in the admin panel and connected 
 - **Admin Sidebar Route Integration**: Added a "Reviews" route and sidebar link in [AdminLayout.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/admin/AdminLayout.tsx) and [App.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/App.tsx).
 - **Public Dynamic Testimonials**: Integrated live published reviews fetching on [Testimonials.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Testimonials.tsx) and [Home.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Home.tsx) carousel, formatted without profile photos to match privacy specifications.
 
+---
+
+## 17. Import Google Reviews Feature
+
+We added a premium Google Business Profile reviews importer module:
+- **Import Trigger Button**: Added an emerald-green Google Reviews Import button in the headers of [AdminReviews.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/admin/AdminReviews.tsx#L213) with official Google brand colors.
+- **Import Configuration Dialog**: Renders a premium modal allowing the admin to supply Google Business Profile ID, GMB API Key, select sync mode (All, Only New), and toggle automatic approval.
+- **Progress Stepper & Success Animations**: When submitted, runs a multi-step loader (Connecting, Fetching, Saving, Complete) with custom visual transition timings and a checkmark completion mark.
+- **Database Duplicate Detection ([src/services/reviews.ts](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/services/reviews.ts#L80))**: Checks the `reviews` table for existing `google_review_id` fields, safely skipping duplicate reviews and performing batch inserts of new reviews with proper approval states.
+- **Natural Relative Date Formatter**: Added a custom time diff algorithm `getRelativeDateString()` to format public site testimonial reviews relatively (e.g. "3 days ago", "Yesterday", "2 weeks ago") instead of hardcoded timestamps.
+- **Empty States & Validation Errors**: Handles empty reviews imports gracefully with instructions to connect the GMB profile, and triggers toasts for Invalid API Keys or connection failures.
+
+
 
 
 
