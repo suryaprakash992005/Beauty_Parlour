@@ -4,6 +4,8 @@ import { SparklesText } from '../components/SparklesText';
 import { getGalleryItems } from '../services/gallery';
 import type { GalleryItem } from '../services/gallery';
 import Masonry from '../components/Masonry';
+import PillNav from '../components/PillNav';
+import type { PillNavItem } from '../components/PillNav';
 import '../styles/gallery.css';
 
 type GalleryCategory = 'All' | 'Bridal' | 'Hair' | 'Makeup' | 'Nails' | 'Spa';
@@ -57,6 +59,12 @@ export default function Gallery() {
     };
   });
 
+  // Map categories to PillNav items
+  const pillNavItems = CATS.map(cat => ({
+    label: cat,
+    href: `#${cat}`
+  }));
+
   return (
     <main className="gallery-page">
       {/* Hero */}
@@ -73,21 +81,18 @@ export default function Gallery() {
       </section>
 
       {/* Filters */}
-      <div className="services-filter">
-        <div className="container">
-          <div className="services-filter__inner">
-            {CATS.map(cat => (
-              <button
-                key={cat}
-                id={`gallery-filter-${cat}`}
-                className={`services-filter__btn${active === cat ? ' active' : ''}`}
-                onClick={() => setActive(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="services-filter" style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-md)', padding: '0 12px' }}>
+        <PillNav
+          items={pillNavItems}
+          activeHref={`#${active}`}
+          relative={true}
+          baseColor="#1e1510"
+          pillColor="transparent"
+          hoveredPillTextColor="#1e1510"
+          pillTextColor="var(--color-champagne)"
+          onItemClick={(item: PillNavItem) => setActive(item.label as GalleryCategory)}
+          initialLoadAnimation={false}
+        />
       </div>
 
       {/* Masonry */}

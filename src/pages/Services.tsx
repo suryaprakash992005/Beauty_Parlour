@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Filter, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
 import { getServices } from '../services/services';
 import type { ServiceItem } from '../services/services';
+import PillNav from '../components/PillNav';
 import '../styles/services.css';
 
 type Category = 'All' | 'Hair Care' | 'Skin Care' | 'Makeup' | 'Bridal' | 'Spa' | 'Nails';
@@ -37,6 +38,12 @@ export default function Services() {
     ? services 
     : services.filter(s => s.category.toLowerCase().trim() === active.toLowerCase().trim());
 
+  // Map categories to PillNav items
+  const pillNavItems = CATEGORIES.map(cat => ({
+    label: cat,
+    href: `#${cat}`
+  }));
+
   return (
     <main className="services-page">
       {/* Hero */}
@@ -55,22 +62,18 @@ export default function Services() {
       </section>
 
       {/* Filter */}
-      <div className="services-filter">
-        <div className="container">
-          <div className="services-filter__inner">
-            <Filter size={14} style={{ color: 'var(--color-rose-gold)' }} />
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                id={`filter-${cat.replace(' ', '-')}`}
-                className={`services-filter__btn${active === cat ? ' active' : ''}`}
-                onClick={() => setActive(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="services-filter" style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-md)', padding: '0 12px' }}>
+        <PillNav
+          items={pillNavItems}
+          activeHref={`#${active}`}
+          relative={true}
+          baseColor="#1e1510"
+          pillColor="transparent"
+          hoveredPillTextColor="#1e1510"
+          pillTextColor="var(--color-champagne)"
+          onItemClick={(item) => setActive(item.label as Category)}
+          initialLoadAnimation={false}
+        />
       </div>
 
       {/* Grid */}
