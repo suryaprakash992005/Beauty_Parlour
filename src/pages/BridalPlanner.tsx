@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { SparklesText } from '../components/SparklesText';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import '../styles/bridal-planner.css';
 
 interface FamilyMember {
@@ -174,44 +173,16 @@ export default function BridalPlanner() {
     setStep(prev => prev - 1);
   };
 
-  // Supabase Save
+  // Supabase Save - Bypassed per user request to directly redirect to WhatsApp
   const handleSavePlan = async () => {
     setLoading(true);
     const estimatedPrice = calculateTotal();
 
-    const plannerData = {
-      bride_name: brideName,
-      wedding_date: weddingDate,
-      selected_package: PACKAGES.find(p => p.id === selectedPkg)?.name || selectedPkg,
-      family_members: familyMembers.map(m => ({ name: m.name, relation: m.relation, service: m.service })),
-      trial_date: trialDate || null,
-      trial_time: trialTime || null,
-      additional_notes: notes || null,
-      estimated_price: estimatedPrice
-    };
-
     try {
-      let finalId = '';
-      if (isSupabaseConfigured) {
-        const { data, error } = await supabase
-          .from('bridal_planners')
-          .insert([plannerData])
-          .select();
-
-        if (error) throw error;
-        if (data && data[0]) {
-          finalId = data[0].id;
-          setSavedId(finalId);
-        }
-      } else {
-        // Fallback local simulated save
-        const fallbackId = `local-${Math.random().toString(36).substring(2, 9)}`;
-        const localSavedPlans = JSON.parse(localStorage.getItem('saved_bridal_plans') || '[]');
-        localSavedPlans.push({ id: fallbackId, ...plannerData, created_at: new Date().toISOString() });
-        localStorage.setItem('saved_bridal_plans', JSON.stringify(localSavedPlans));
-        finalId = fallbackId;
-        setSavedId(finalId);
-      }
+      // Local reference ID simulation
+      const fallbackId = `BP-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      setSavedId(fallbackId);
+      const finalId = fallbackId;
 
       // Format dates
       const formattedWeddingDate = new Date(weddingDate).toLocaleDateString(undefined, { dateStyle: 'medium' });
@@ -265,8 +236,8 @@ We look forward to serving you!`;
       window.open(whatsappUrl, '_blank');
 
     } catch (err: any) {
-      console.error('Error saving plan to Supabase:', err);
-      alert(`Database storage error: ${err.message || 'Saving failed. Please try again.'}`);
+      console.error('Error formatting plan redirect:', err);
+      alert(`Error setting up WhatsApp redirect: ${err.message || 'Please try again.'}`);
     } finally {
       setLoading(false);
     }
