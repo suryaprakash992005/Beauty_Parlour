@@ -123,7 +123,7 @@ We integrated the open-source `<PillNav />` component from React Bits as the sub
 
 We upgraded the administrative uploader cards to match the Gallery upload design:
 - **Services CMS Drag & Drop ([src/pages/admin/AdminServices.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/admin/AdminServices.tsx))**: Converted the add/edit service modal into a split columns view, adding the premium dashed drag-and-drop zone and image preview.
-- **Home Banner CMS Drag & Drop ([src/pages/admin/AdminBanner.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/admin/AdminBanner.tsx))**: Integrated side-by-side drag-and-drop uploader zones for both the hero image cover and the hero video cover.
+- **Home Banner CMS Drag & Drop ([src/pages/admin/AdminBanner.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/admin/AdminBanner.tsx))**: Integrated a premium drag-and-drop uploader zone for the hero image cover.
 
 ---
 
@@ -133,6 +133,9 @@ To align the frontend client with the exact production schema of the `homepage_b
 - **Incorrect Schema References Removed**: Removed all references to incorrect column names:
   `small_heading`, `main_heading`, `primary_btn_text`, `secondary_btn_text`, `hero_image_url`, and `hero_video_url`.
 - **Correct Columns Integrated**: Replaced them with the valid columns:
-  `top_label`, `title`, `description`, `subtitle` (stores video URL), `primary_button`, `secondary_button`, and `image_url`.
+  `top_label`, `title`, `description`, `subtitle`, `primary_button`, `secondary_button`, and `image_url`.
+- **Video Support Deprecated**: Removed the unused video uploader, video DOM components, and `videoUrl` property from the codebase.
+- **Subtitle Text Area Added**: Exposed the `subtitle` column as a dedicated textarea uploader matching the visual height of the image drag-and-drop zone.
 - **Upsert Execution Constraint**: Programmed the update handler to enforce single-row constraints (updating the first matched ID if one exists, or inserting a single record if empty), preventing duplicate landing banner copies from generating.
+
 
