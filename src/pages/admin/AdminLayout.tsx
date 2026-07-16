@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard, Scissors, Image, Settings, LogOut, Menu, X, Sliders
+  LayoutDashboard, Scissors, Image, Settings, LogOut, Menu, X, Sliders, Star
 } from 'lucide-react';
 import { getSalonSettings } from '../../services/settings';
 import '../../styles/admin.css';
@@ -11,6 +11,7 @@ const LINKS = [
   { to: '/admin/services',  Icon: Scissors,        label: 'Services'  },
   { to: '/admin/gallery',   Icon: Image,           label: 'Gallery'   },
   { to: '/admin/banner',    Icon: Sliders,         label: 'Home Banner' },
+  { to: '/admin/reviews',   Icon: Star,            label: 'Reviews'    },
   { to: '/admin/settings',  Icon: Settings,        label: 'Settings'  },
 ];
 

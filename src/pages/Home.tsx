@@ -9,6 +9,7 @@ import { getHomepageBanner } from '../services/homepage';
 import type { HomepageBanner } from '../services/homepage';
 import { getServices } from '../services/services';
 import type { ServiceItem } from '../services/services';
+import { getPublishedReviews } from '../services/reviews';
 import bridalBeforeImg from '../assets/bridal_before.png';
 import bridalAfterImg from '../assets/bridal_after.png';
 import '../styles/home.css';
@@ -20,13 +21,21 @@ const HERO_BGS = [
   '/salon_green_theme_3.jpg'
 ];
 
-const TESTIMONIALS = [
-  { id: 1, quote: 'My bridal makeup was absolutely flawless. Every guest was in awe. The team at ZHA Hair Saloon truly understands luxury beauty.', name: 'Priya Sharma', role: 'Bride, Mumbai', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80' },
-  { id: 2, quote: 'The facial treatment left my skin glowing for days. I have tried many salons, but ZHA Hair Saloon is in a completely different league.', name: 'Ananya Mehta', role: 'Regular Client', avatar: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=100&q=80' },
-  { id: 3, quote: 'Hair spa here is an experience I look forward to every month. The products and expertise are truly world-class.', name: 'Kavitha Nair', role: 'Lifestyle Blogger', avatar: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&q=80' },
-  { id: 4, quote: 'From the moment I walked in, I felt like royalty. The ambience, service, and results — simply exceptional.', name: 'Sneha Joshi', role: 'Entrepreneur', avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&q=80' },
-  { id: 5, quote: 'The keratin treatment smoothened my hair beyond imagination. I wake up with perfect hair every single day now!', name: 'Divya Patel', role: 'Working Professional', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&q=80' },
-  { id: 6, quote: 'My party makeup turned heads all night. The makeup artist understood exactly my vibe — flawless and glamorous!', name: 'Riya Verma', role: 'Fashion Enthusiast', avatar: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=100&q=80' },
+interface TestimonialData {
+  id: string | number;
+  reviewer_name: string;
+  rating: number;
+  review_text: string;
+  review_date: string;
+}
+
+const FALLBACK_TESTIMONIALS: TestimonialData[] = [
+  { id: 'f-1', review_text: 'My bridal makeup was absolutely flawless. Every guest was in awe. The team at ZHA Hair Saloon truly understands luxury beauty.', reviewer_name: 'Priya Sharma', rating: 5, review_date: '2026-06-15' },
+  { id: 'f-2', review_text: 'The facial treatment left my skin glowing for days. I have tried many salons, but ZHA Hair Saloon is in a completely different league.', reviewer_name: 'Ananya Mehta', rating: 5, review_date: '2026-06-20' },
+  { id: 'f-3', review_text: 'Hair spa here is an experience I look forward to every month. The products and expertise are truly world-class.', reviewer_name: 'Kavitha Nair', rating: 5, review_date: '2026-06-25' },
+  { id: 'f-4', review_text: 'From the moment I walked in, I felt like royalty. The ambience, service, and results — simply exceptional.', reviewer_name: 'Sneha Joshi', rating: 5, review_date: '2026-07-01' },
+  { id: 'f-5', review_text: 'The keratin treatment smoothened my hair beyond imagination. I wake up with perfect hair every single day now!', reviewer_name: 'Divya Patel', rating: 5, review_date: '2026-07-04' },
+  { id: 'f-6', review_text: 'My party makeup turned heads all night. The makeup artist understood exactly my vibe — flawless and glamorous!', reviewer_name: 'Riya Verma', rating: 5, review_date: '2026-07-08' }
 ];
 
 const INSTAGRAM_IMGS = [
@@ -111,6 +120,7 @@ export default function Home() {
   const [bgIndex, setBgIndex] = useState(0);
   const [banner, setBanner] = useState<HomepageBanner | null>(null);
   const [services, setServices] = useState<ServiceItem[]>([]);
+  const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useScrollReveal([services]);
@@ -130,6 +140,26 @@ export default function Home() {
       .catch(err => {
         console.error('Failed to load featured services:', err);
         setLoading(false);
+      });
+
+    // Load Client Testimonials
+    getPublishedReviews()
+      .then(data => {
+        if (data && data.length > 0) {
+          setHomeReviews(data.map(r => ({
+            id: r.id!,
+            reviewer_name: r.reviewer_name,
+            rating: r.rating,
+            review_text: r.review_text,
+            review_date: r.review_date
+          })));
+        } else {
+          setHomeReviews(FALLBACK_TESTIMONIALS);
+        }
+      })
+      .catch(err => {
+        console.error('Failed to load testimonials:', err);
+        setHomeReviews(FALLBACK_TESTIMONIALS);
       });
 
     const timer = setInterval(() => {
@@ -341,15 +371,17 @@ export default function Home() {
           </div>
         </div>
         <div className="testimonials-track" aria-label="Testimonials carousel">
-          {[...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
+          {[...homeReviews, ...homeReviews].map((t, i) => (
             <div key={i} className="testimonial-card">
-              <div className="testimonial-card__stars">{Array.from({ length: 5 }, (_, j) => <Star key={j} size={14} fill="currentColor" />)}</div>
-              <blockquote className="testimonial-card__quote">"{t.quote}"</blockquote>
-              <div className="testimonial-card__author">
-                <img className="testimonial-card__avatar" src={t.avatar} alt={t.name} loading="lazy" />
-                <div>
-                  <div className="testimonial-card__name">{t.name}</div>
-                  <div className="testimonial-card__role">{t.role}</div>
+              <div className="testimonial-card__stars">
+                {Array.from({ length: t.rating }, (_, j) => <Star key={j} size={14} fill="currentColor" />)}
+                {Array.from({ length: 5 - t.rating }, (_, j) => <Star key={j} size={14} fill="none" stroke="currentColor" />)}
+              </div>
+              <blockquote className="testimonial-card__quote">"{t.review_text}"</blockquote>
+              <div className="testimonial-card__author" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
+                <div className="testimonial-card__name">{t.reviewer_name}</div>
+                <div className="testimonial-card__role" style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>
+                  {new Date(t.review_date).toLocaleDateString(undefined, { dateStyle: 'medium' })}
                 </div>
               </div>
             </div>
