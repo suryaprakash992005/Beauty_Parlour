@@ -146,5 +146,20 @@ To resolve database storage table mismatches on submission:
 - **Instant Local Reference Generation**: Instead of querying database IDs, confirming a personalized bridal plan now generates a local confirmation reference ID (`BP-XXXXXX`), formats the wedding summary details, and opens the WhatsApp booking link immediately.
 - **Zero Schema Dependency**: Eliminates any possibility of schema caches or missing tables crashing the bridal planner form completion.
 
+---
+
+## 16. Reviews Moderation & Management Module
+
+We created a premium Reviews Management system in the admin panel and connected it dynamically to the public website:
+- **Reviews Supabase Service ([src/services/reviews.ts](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/services/reviews.ts))**: Interfaces with the `reviews` table (`id`, `google_review_id`, `reviewer_name`, `rating`, `review_text`, `review_date`, `published`, `created_at`) supporting fetch, manual addition, status moderate, and deletion.
+- **Reviews Moderation CMS ([src/pages/admin/AdminReviews.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/admin/AdminReviews.tsx))**:
+  - Implements card-based reviews with star ratings, reviewer names, text, and dates (no profile pictures, hidden Google IDs).
+  - Features real-time search, filters (All, Approved, Hidden, Pending), and sorting (Newest, Highest Rating).
+  - Integrates Approve (publish = true), Hide (publish = false), and Delete (permanent delete with confirmation modal) actions.
+  - Exposes manual "Add Review" modal and custom toast notification flows.
+- **Admin Sidebar Route Integration**: Added a "Reviews" route and sidebar link in [AdminLayout.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/admin/AdminLayout.tsx) and [App.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/App.tsx).
+- **Public Dynamic Testimonials**: Integrated live published reviews fetching on [Testimonials.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Testimonials.tsx) and [Home.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Home.tsx) carousel, formatted without profile photos to match privacy specifications.
+
+
 
 
