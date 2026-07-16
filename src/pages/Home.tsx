@@ -113,7 +113,7 @@ export default function Home() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useScrollReveal([loading]);
+  useScrollReveal([services]);
 
   useEffect(() => {
     // Load Homepage Banner config

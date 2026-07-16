@@ -17,7 +17,7 @@ export default function Services() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useScrollReveal([loading]);
+  useScrollReveal([services, active]);
 
   useEffect(() => {
     getServices()
