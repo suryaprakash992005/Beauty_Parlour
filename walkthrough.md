@@ -137,4 +137,14 @@ To align the frontend client with the exact production schema of the `homepage_b
 - **Subtitle/Description Consolidation**: Consolidated the redundant duplicate inputs in the Admin panel into a single `HERO SUBTITLE/DESCRIPTION` uploader. Writing to this input field saves the value to both the `subtitle` and `description` columns in Supabase, keeping them in sync and ensuring it loads perfectly on the main website.
 - **Upsert Execution Constraint**: Programmed the update handler to enforce single-row constraints (updating the first matched ID if one exists, or inserting a single record if empty), preventing duplicate landing banner copies from generating.
 
+---
+
+## 15. Bridal Planner WhatsApp Confirmation Direct Bypass
+
+To resolve database storage table mismatches on submission:
+- **Supabase Storage Dependency Removed ([src/pages/BridalPlanner.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/BridalPlanner.tsx#L190))**: Completely bypassed the `bridal_planners` table insertion and schema query cache lookup.
+- **Instant Local Reference Generation**: Instead of querying database IDs, confirming a personalized bridal plan now generates a local confirmation reference ID (`BP-XXXXXX`), formats the wedding summary details, and opens the WhatsApp booking link immediately.
+- **Zero Schema Dependency**: Eliminates any possibility of schema caches or missing tables crashing the bridal planner form completion.
+
+
 
