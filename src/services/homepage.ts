@@ -21,6 +21,7 @@ export interface HomepageBanner {
   secondaryBtn: string;
   imageUrl: string;
   videoUrl?: string;
+  subtitle?: string;
 }
 
 export async function uploadHeroAsset(fileOrBase64: File | string, isVideo = false): Promise<string> {
@@ -47,6 +48,9 @@ export async function uploadHeroAsset(fileOrBase64: File | string, isVideo = fal
     .upload(fileName, fileBody, { cacheControl: '3600', upsert: true });
 
   if (error) {
+    if (error.message.includes('bucket') || error.message.includes('not found') || error.message.includes('does not exist')) {
+      throw new Error("Storage bucket 'hero' was not found. Please create the 'hero' bucket in your Supabase console.");
+    }
     throw new Error(`Failed to upload hero asset: ${error.message}`);
   }
 
@@ -71,41 +75,62 @@ export async function getHomepageBanner(): Promise<HomepageBanner> {
     const { data, error } = await supabase
       .from('homepage_banner')
       .select('*')
+      .order('id', { ascending: true })
       .limit(1);
 
-    if (error || !data || data.length === 0) {
+    if (error) {
+      if (error.message.includes('column') || error.code === '42703') {
+        throw new Error("Database column mismatch: The columns in the 'homepage_banner' table do not match the expected schema.");
+      }
+      throw error;
+    }
+
+    if (!data || data.length === 0) {
       return DEFAULT_BANNER;
     }
 
     const banner = data[0];
     return {
-      smallHeading: banner.small_heading || DEFAULT_BANNER.smallHeading,
-      mainHeading: banner.main_heading || DEFAULT_BANNER.mainHeading,
+      smallHeading: banner.top_label || DEFAULT_BANNER.smallHeading,
+      mainHeading: banner.title || DEFAULT_BANNER.mainHeading,
       description: banner.description || DEFAULT_BANNER.description,
-      primaryBtn: banner.primary_btn_text || DEFAULT_BANNER.primaryBtn,
-      secondaryBtn: banner.secondary_btn_text || DEFAULT_BANNER.secondaryBtn,
-      imageUrl: banner.hero_image_url || DEFAULT_BANNER.imageUrl,
-      videoUrl: banner.hero_video_url || undefined
+      primaryBtn: banner.primary_button || DEFAULT_BANNER.primaryBtn,
+      secondaryBtn: banner.secondary_button || DEFAULT_BANNER.secondaryBtn,
+      imageUrl: banner.image_url || DEFAULT_BANNER.imageUrl,
+      videoUrl: banner.subtitle || undefined,
+      subtitle: banner.subtitle || undefined
     };
-  } catch {
+  } catch (err: any) {
+    console.error('Failed to get homepage banner:', err);
+    if (err.message && (err.message.includes('column') || err.message.includes('relation'))) {
+      throw err;
+    }
     return DEFAULT_BANNER;
   }
 }
 
 export async function updateHomepageBanner(banner: Partial<HomepageBanner>): Promise<HomepageBanner> {
-  const { data: existingData } = await supabase
+  const { data: existingData, error: fetchError } = await supabase
     .from('homepage_banner')
     .select('id')
+    .order('id', { ascending: true })
     .limit(1);
 
+  if (fetchError) {
+    if (fetchError.message.includes('column') || fetchError.code === '42703') {
+      throw new Error("Database column mismatch: The columns in the 'homepage_banner' table do not match the expected schema.");
+    }
+    throw fetchError;
+  }
+
   const payload = {
-    small_heading: banner.smallHeading,
-    main_heading: banner.mainHeading,
+    top_label: banner.smallHeading,
+    title: banner.mainHeading,
     description: banner.description,
-    primary_btn_text: banner.primaryBtn,
-    secondary_btn_text: banner.secondaryBtn,
-    hero_image_url: banner.imageUrl,
-    hero_video_url: banner.videoUrl
+    primary_button: banner.primaryBtn,
+    secondary_button: banner.secondaryBtn,
+    image_url: banner.imageUrl,
+    subtitle: banner.videoUrl || banner.subtitle || ''
   };
 
   let result;
@@ -117,7 +142,12 @@ export async function updateHomepageBanner(banner: Partial<HomepageBanner>): Pro
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      if (error.message.includes('column') || error.code === '42703') {
+        throw new Error("Database column mismatch during update: Please check your 'homepage_banner' table columns.");
+      }
+      throw error;
+    }
     result = data;
   } else {
     const { data, error } = await supabase
@@ -126,17 +156,23 @@ export async function updateHomepageBanner(banner: Partial<HomepageBanner>): Pro
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      if (error.message.includes('column') || error.code === '42703') {
+        throw new Error("Database column mismatch during insert: Please check your 'homepage_banner' table columns.");
+      }
+      throw error;
+    }
     result = data;
   }
 
   return {
-    smallHeading: result.small_heading,
-    mainHeading: result.main_heading,
+    smallHeading: result.top_label,
+    mainHeading: result.title,
     description: result.description,
-    primaryBtn: result.primary_btn_text,
-    secondaryBtn: result.secondary_btn_text,
-    imageUrl: result.hero_image_url,
-    videoUrl: result.hero_video_url
+    primaryBtn: result.primary_button,
+    secondaryBtn: result.secondary_button,
+    imageUrl: result.image_url,
+    videoUrl: result.subtitle || undefined,
+    subtitle: result.subtitle || undefined
   };
 }

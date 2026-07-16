@@ -16,6 +16,7 @@ export default function AdminBanner() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Uploader drag and progress states
   const [dragActive, setDragActive] = useState(false);
@@ -145,6 +146,7 @@ export default function AdminBanner() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setErrorMsg(null);
     try {
       let finalImageUrl = banner.imageUrl;
       if (banner.imageUrl && banner.imageUrl.startsWith('data:')) {
@@ -171,7 +173,7 @@ export default function AdminBanner() {
       setTimeout(() => setSaved(false), 3000);
     } catch (err: any) {
       console.error('Error saving banner settings:', err);
-      alert(`Error saving banner: ${err.message || err}`);
+      setErrorMsg(err.message || String(err));
     } finally {
       setSaving(false);
     }
@@ -374,13 +376,20 @@ export default function AdminBanner() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', marginTop: 'var(--space-lg)' }}>
-            <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
-              <Save size={14} /> {saving ? 'Saving...' : 'Update Banner'}
-            </button>
-            {saved && (
-              <div style={{ color: '#22c55e', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem' }}>
-                <Check size={16} /> Banner updated successfully!
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: 'var(--space-lg)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
+              <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
+                <Save size={14} /> {saving ? 'Saving...' : 'Update Banner'}
+              </button>
+              {saved && (
+                <div style={{ color: '#22c55e', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem' }}>
+                  <Check size={16} /> Banner updated successfully!
+                </div>
+              )}
+            </div>
+            {errorMsg && (
+              <div style={{ color: '#ef4444', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem', marginTop: '4px' }}>
+                ✕ {errorMsg}
               </div>
             )}
           </div>
