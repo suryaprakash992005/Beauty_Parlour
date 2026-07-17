@@ -87,7 +87,7 @@ export default function Offers() {
           position: absolute;
           bottom: var(--space-md);
           left: var(--space-md);
-          background: rgba(11,11,11,0.75);
+          background: rgba(18, 14, 14, 0.75);
           color: var(--color-champagne);
           font-size: var(--text-xs);
           font-weight: 600;
