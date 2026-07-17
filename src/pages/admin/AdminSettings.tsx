@@ -15,7 +15,8 @@ export default function AdminSettings() {
     openHoursWeekends: '10:00 AM - 09:00 PM',
     instagram: 'https://instagram.com/zhahairsaloon',
     facebook: 'https://facebook.com/zhahairsaloon',
-    youtube: 'https://youtube.com/zhahairsaloon'
+    youtube: 'https://youtube.com/zhahairsaloon',
+    googleMaps: ''
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -170,6 +171,19 @@ export default function AdminSettings() {
               value={settings.address}
               onChange={e => setSettings(prev => ({ ...prev, address: e.target.value }))}
               style={{ fontFamily: 'inherit', resize: 'vertical' }}
+              required
+            />
+          </div>
+          <div className="form-group" style={{ marginTop: '12px' }}>
+            <label className="form-label" htmlFor="settings-googleMaps">Google Maps Embed URL</label>
+            <textarea 
+              id="settings-googleMaps"
+              className="form-input" 
+              rows={2} 
+              value={settings.googleMaps}
+              onChange={e => setSettings(prev => ({ ...prev, googleMaps: e.target.value }))}
+              style={{ fontFamily: 'inherit', resize: 'vertical' }}
+              placeholder="e.g. https://www.google.com/maps/embed?pb=..."
               required
             />
           </div>

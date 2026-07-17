@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { X, ZoomIn, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { SparklesText } from '../components/SparklesText';
 import { getGalleryItems } from '../services/gallery';
 import type { GalleryItem } from '../services/gallery';
@@ -139,36 +138,17 @@ export default function Gallery() {
       </section>
 
       {/* Lightbox */}
-      <AnimatePresence>
-        {lightbox && (
-          <motion.div 
-            className="lightbox" 
-            onClick={() => setLightbox(null)} 
-            role="dialog" 
-            aria-modal="true" 
-            aria-label={lightbox.title}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-          >
-            <button className="lightbox__close" onClick={() => setLightbox(null)} aria-label="Close lightbox">
-              <X size={24} />
-            </button>
-            <motion.div 
-              className="lightbox__img-wrap" 
-              onClick={e => e.stopPropagation()}
-              initial={{ scale: 0.95, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-            >
-              <img src={lightbox.url} alt={lightbox.title} className="lightbox__img" />
-              <p className="lightbox__caption">{lightbox.title}</p>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {lightbox && (
+        <div className="lightbox" onClick={() => setLightbox(null)} role="dialog" aria-modal="true" aria-label={lightbox.title}>
+          <button className="lightbox__close" onClick={() => setLightbox(null)} aria-label="Close lightbox">
+            <X size={24} />
+          </button>
+          <div className="lightbox__img-wrap" onClick={e => e.stopPropagation()}>
+            <img src={lightbox.url} alt={lightbox.title} className="lightbox__img" />
+            <p className="lightbox__caption">{lightbox.title}</p>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

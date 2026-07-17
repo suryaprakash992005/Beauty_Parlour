@@ -1,5 +1,4 @@
 import { Award, Heart, Leaf, Users } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
@@ -43,20 +42,12 @@ export default function About() {
         <div className="container">
           <div className="about-story">
             <div className="about-story__img-col reveal-left">
-              <motion.div 
-                className="about-story__img-main"
-                whileHover={{ y: -8, scale: 1.02 }}
-                transition={{ type: 'spring' as const, stiffness: 300, damping: 25 }}
-              >
+              <div className="about-story__img-main">
                 <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=700&q=80" alt="ZHA Hair Saloon" />
-              </motion.div>
-              <motion.div 
-                className="about-story__img-accent"
-                whileHover={{ y: 8, scale: 1.03 }}
-                transition={{ type: 'spring' as const, stiffness: 300, damping: 25 }}
-              >
+              </div>
+              <div className="about-story__img-accent">
                 <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80" alt="Luxury Service" />
-              </motion.div>
+              </div>
             </div>
             <div className="about-story__text reveal-right">
               <div className="section-label">Est. 2012</div>
@@ -113,12 +104,7 @@ export default function About() {
           </div>
           <div className="team-grid">
             {TEAM.map((member, i) => (
-              <motion.div 
-                key={member.name} 
-                className={`team-card reveal delay-${i + 1}`}
-                whileHover={{ y: -10 }}
-                transition={{ type: 'spring' as const, stiffness: 400, damping: 30 }}
-              >
+              <div key={member.name} className={`team-card reveal delay-${i + 1}`}>
                 <div className="team-card__img-wrap">
                   <img src={member.img} alt={member.name} className="team-card__img" loading="lazy" />
                 </div>
@@ -127,7 +113,7 @@ export default function About() {
                   <p className="team-card__role">{member.role}</p>
                   <span className="gold-badge" style={{ marginTop: '0.5rem' }}>{member.exp} Exp.</span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

@@ -1,9 +1,8 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Star, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { Instagram } from '../components/BrandIcons';
-import { useScrollReveal, useCounterAnimation, Magnetic } from '../components/shared';
+import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import ShinyText from '../components/ShinyText';
 import { getHomepageBanner } from '../services/homepage';
@@ -117,51 +116,6 @@ function BeforeAfterSlider() {
   );
 }
 
-/* ─── Testimonial Stars Animation ─── */
-function TestimonialStars({ rating }: { rating: number }) {
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08
-      }
-    }
-  };
-
-  const starItem = {
-    hidden: { opacity: 0, scale: 0.3, rotate: -15 },
-    visible: { 
-      opacity: 1, 
-      scale: 1, 
-      rotate: 0, 
-      transition: { type: 'spring' as const, stiffness: 350, damping: 15 } 
-    }
-  };
-
-  return (
-    <motion.div 
-      className="testimonial-card__stars"
-      variants={container}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-20px" }}
-      style={{ display: 'flex', gap: '3px', color: 'var(--color-champagne)' }}
-    >
-      {Array.from({ length: rating }, (_, j) => (
-        <motion.span key={j} variants={starItem} style={{ display: 'inline-block' }}>
-          <Star size={14} fill="currentColor" />
-        </motion.span>
-      ))}
-      {Array.from({ length: 5 - rating }, (_, j) => (
-        <motion.span key={j} variants={starItem} style={{ display: 'inline-block' }}>
-          <Star size={14} fill="none" stroke="currentColor" />
-        </motion.span>
-      ))}
-    </motion.div>
-  );
-}
-
 /* ─── Home Page ─── */
 export default function Home() {
   const [bgIndex, setBgIndex] = useState(0);
@@ -169,40 +123,6 @@ export default function Home() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-    const x = (e.clientX - window.innerWidth / 2) / 45;
-    const y = (e.clientY - window.innerHeight / 2) / 45;
-    setMousePos({ x, y });
-  };
-
-  const handleMouseLeave = () => {
-    setMousePos({ x: 0, y: 0 });
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.25
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 24, filter: 'blur(8px)' },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] as const }
-    }
-  };
 
   useScrollReveal([services]);
 
@@ -263,26 +183,18 @@ export default function Home() {
 
   return (
     <main>
-      <section 
-        className="hero" 
-        aria-label="Hero"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-      >
+      {/* ── HERO ── */}
+      <section className="hero" aria-label="Hero">
         <div className="hero__bg" />
         
         {HERO_BGS.map((bg, idx) => (
-          <motion.div
+          <div
             key={idx}
             className="hero__image-overlay"
-            initial={{ scale: 1.0 }}
-            animate={{ scale: idx === bgIndex ? 1.06 : 1.0 }}
-            transition={{ duration: 6.0, ease: 'easeOut' }}
             style={{
               backgroundImage: `url('${idx === 0 && banner?.imageUrl ? banner.imageUrl : bg}')`,
               opacity: idx === bgIndex ? 1.0 : 0,
-              transition: 'opacity 1.8s ease-in-out',
-              transformOrigin: 'center center'
+              transition: 'opacity 1.5s ease-in-out'
             }}
             aria-hidden="true"
           />
@@ -307,21 +219,12 @@ export default function Home() {
           ))}
         </div>
 
-        <motion.div 
-          className="container hero__content"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          style={{
-            transform: `translate3d(${mousePos.x}px, ${mousePos.y}px, 0)`,
-            transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-          }}
-        >
-          <motion.div className="hero__eyebrow" variants={itemVariants}>
+        <div className="container hero__content">
+          <div className="hero__eyebrow">
             <Sparkles size={12} />
             {banner?.smallHeading || 'ZHA Hair Saloon'}
-          </motion.div>
-          <motion.h1 className="hero__title" variants={itemVariants}>
+          </div>
+          <h1 className="hero__title">
             <ShinyText
               text={banner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
               disabled={false}
@@ -333,23 +236,19 @@ export default function Home() {
               pauseOnHover={false}
               direction="left"
             />
-          </motion.h1>
-          <motion.p className="hero__subtitle" variants={itemVariants}>
+          </h1>
+          <p className="hero__subtitle">
             {banner?.subtitle || banner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
-          </motion.p>
-          <motion.div className="hero__actions" variants={itemVariants} style={{ display: 'flex', gap: 'var(--space-md)', alignItems: 'center' }}>
-            <Magnetic>
-              <InteractiveHoverButton to="/book-appointment">
-                {banner?.primaryBtn || 'Book Appointment'}
-              </InteractiveHoverButton>
-            </Magnetic>
-            <Magnetic>
-              <Link to="/services" className="btn btn-outline-white" style={{ transition: 'all 0.3s ease' }}>
-                {banner?.secondaryBtn || 'Explore Services'}
-              </Link>
-            </Magnetic>
-          </motion.div>
-        </motion.div>
+          </p>
+          <div className="hero__actions">
+            <InteractiveHoverButton to="/book-appointment">
+              {banner?.primaryBtn || 'Book Appointment'}
+            </InteractiveHoverButton>
+            <Link to="/services" className="btn btn-outline-white">
+              {banner?.secondaryBtn || 'Explore Services'}
+            </Link>
+          </div>
+        </div>
 
         <div className="hero__scroll-indicator" aria-hidden="true">
           <div className="hero__scroll-line" />
@@ -475,7 +374,10 @@ export default function Home() {
         <div className="testimonials-track" aria-label="Testimonials carousel">
           {[...homeReviews, ...homeReviews].map((t, i) => (
             <div key={i} className="testimonial-card">
-              <TestimonialStars rating={t.rating} />
+              <div className="testimonial-card__stars">
+                {Array.from({ length: t.rating }, (_, j) => <Star key={j} size={14} fill="currentColor" />)}
+                {Array.from({ length: 5 - t.rating }, (_, j) => <Star key={j} size={14} fill="none" stroke="currentColor" />)}
+              </div>
               <blockquote className="testimonial-card__quote">"{t.review_text}"</blockquote>
               <div className="testimonial-card__author" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
                 <div className="testimonial-card__name">{t.reviewer_name}</div>
