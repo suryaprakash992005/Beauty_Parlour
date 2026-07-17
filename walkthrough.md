@@ -174,6 +174,20 @@ We replaced the manual Google Business ID inputs with a secure OAuth connection 
   - **Offers Page ([Offers.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Offers.tsx))**: Upgraded titles and descriptions inside the dark cards to white and champagne.
   - **Light Theme Forms ([book.css](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/styles/book.css))**: Made input fields white, input borders darker/clearer, placeholder text highly visible dark sage, and labels rich Forest Green.
 
+---
+
+## 18. Settings Module Supabase Database Schema Synchronization
+
+We synchronized the settings fields and queries with the actual `settings` table schema in Supabase:
+- **Database Column Mapping**:
+  - `studio_name` -> replaced with `salon_name`.
+  - `open_hours_weekdays` & `open_hours_weekends` -> combined into `working_hours` before saving, and split/parsed back on load.
+  - Added support for mapping the `google_maps` column to the frontend `googleMaps` state.
+- **Dynamic Google Maps**: Updated the public [Contact.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Contact.tsx) page map section iframe to render the custom embedded Google Maps location URL retrieved from the database.
+- **Settings Admin Form ([AdminSettings.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/admin/AdminSettings.tsx))**: Integrated the new Google Maps URL input field inside the configuration form, binding it cleanly with the state.
+- **Logo Storage Bucket Verification**: Conducted automated tests on the Supabase storage buckets, confirming that `logo` is the active storage bucket.
+- **Cleaned Up Invalid References**: Checked all files in the codebase, verifying there are no leftover references to `studio_name`, `open_hours_weekdays`, or `open_hours_weekends`.
+
 
 
 
