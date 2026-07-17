@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useScrollReveal } from '../components/shared';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useScrollReveal, Magnetic } from '../components/shared';
 import { getSalonSettings } from '../services/settings';
 import '../styles/book.css';
 
@@ -38,6 +39,7 @@ export default function Book() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [shake, setShake] = useState(false);
   const [whatsapp, setWhatsapp] = useState('8270904659');
 
   useEffect(() => {
@@ -55,6 +57,8 @@ export default function Book() {
     e.preventDefault();
     
     if (!form.name.trim() || !form.phone.trim() || !form.service || !form.date || !form.time) {
+      setShake(true);
+      setTimeout(() => setShake(false), 600);
       alert('Please fill out all required fields marked with *');
       return;
     }
@@ -135,89 +139,108 @@ Thank you for booking with us! We look forward to serving you!`;
 
             {/* Form */}
             <div className="book-form-wrap reveal-right">
-              {submitted ? (
-                <div className="book-success">
-                  <div className="book-success__icon">✨</div>
-                  <h2 className="book-success__title">Appointment Requested!</h2>
-                  <p className="book-success__desc">
-                    Thank you, <strong>{form.name}</strong>! We've received your booking request.
-                    Our team will confirm your appointment within 2 hours via WhatsApp & Email.
-                  </p>
-                  <Link to="/" className="btn btn-primary mt-xl">Back to Home</Link>
-                </div>
-              ) : (
-                <form className="book-form" onSubmit={handleSubmit} noValidate>
-                  <div className="book-form__title">Your Details</div>
+              <AnimatePresence mode="wait">
+                {submitted ? (
+                  <motion.div 
+                    key="success"
+                    className="book-success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                  >
+                    <div className="book-success__icon">✨</div>
+                    <h2 className="book-success__title">Appointment Requested!</h2>
+                    <p className="book-success__desc">
+                      Thank you, <strong>{form.name}</strong>! We've received your booking request.
+                      Our team will confirm your appointment within 2 hours via WhatsApp & Email.
+                    </p>
+                    <Link to="/" className="btn btn-primary mt-xl">Back to Home</Link>
+                  </motion.div>
+                ) : (
+                  <motion.form 
+                    key="form"
+                    className="book-form" 
+                    onSubmit={handleSubmit} 
+                    noValidate
+                    animate={shake ? { x: [-8, 8, -6, 6, -3, 3, 0] } : {}}
+                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  >
+                    <div className="book-form__title">Your Details</div>
 
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label className="form-label" htmlFor="name">Full Name *</label>
-                      <input id="name" className="form-input" type="text" required placeholder="Your beautiful name"
-                        value={form.name} onChange={set('name')} />
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="name">Full Name *</label>
+                        <input id="name" className="form-input" type="text" required placeholder="Your beautiful name"
+                          value={form.name} onChange={set('name')} />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="phone">Phone Number *</label>
+                        <input id="phone" className="form-input" type="tel" required placeholder="+91 XXXXX XXXXX"
+                          value={form.phone} onChange={set('phone')} />
+                      </div>
                     </div>
+
                     <div className="form-group">
-                      <label className="form-label" htmlFor="phone">Phone Number *</label>
-                      <input id="phone" className="form-input" type="tel" required placeholder="+91 XXXXX XXXXX"
-                        value={form.phone} onChange={set('phone')} />
+                      <label className="form-label" htmlFor="email">Email Address</label>
+                      <input id="email" className="form-input" type="email" placeholder="your@email.com"
+                        value={form.email} onChange={set('email')} />
                     </div>
-                  </div>
 
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="email">Email Address</label>
-                    <input id="email" className="form-input" type="email" placeholder="your@email.com"
-                      value={form.email} onChange={set('email')} />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="service">Service *</label>
-                    <select id="service" className="form-input form-select" required
-                      value={form.service} onChange={set('service')}>
-                      <option value="">Select a service...</option>
-                      {SERVICES_LIST.map(s => <option key={s} value={s}>{s}</option>)}
-                    </select>
-                  </div>
-
-                  <div className="form-row">
                     <div className="form-group">
-                      <label className="form-label" htmlFor="date">Preferred Date *</label>
-                      <input id="date" className="form-input" type="date" required min={minDate}
-                        value={form.date} onChange={set('date')} />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label" htmlFor="time">Preferred Time *</label>
-                      <select id="time" className="form-input form-select" required
-                        value={form.time} onChange={set('time')}>
-                        <option value="">Select time...</option>
-                        {TIME_SLOTS.map(t => <option key={t} value={t}>{t}</option>)}
+                      <label className="form-label" htmlFor="service">Service *</label>
+                      <select id="service" className="form-input form-select" required
+                        value={form.service} onChange={set('service')}>
+                        <option value="">Select a service...</option>
+                        {SERVICES_LIST.map(s => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </div>
-                  </div>
 
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="request">Special Request</label>
-                    <textarea id="request" className="form-input form-textarea" rows={3}
-                      placeholder="Any specific requests, allergies, or preferences we should know..."
-                      value={form.request} onChange={set('request')} />
-                  </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="date">Preferred Date *</label>
+                        <input id="date" className="form-input" type="date" required min={minDate}
+                          value={form.date} onChange={set('date')} />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label" htmlFor="time">Preferred Time *</label>
+                        <select id="time" className="form-input form-select" required
+                          value={form.time} onChange={set('time')}>
+                          <option value="">Select time...</option>
+                          {TIME_SLOTS.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                      </div>
+                    </div>
 
-                  <button
-                    type="submit"
-                    id="submit-booking"
-                    className="btn btn-primary book-form__submit"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <><span className="book-loader" /> Booking...</>
-                    ) : (
-                      <>✨ Confirm Appointment</>
-                    )}
-                  </button>
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="request">Special Request</label>
+                      <textarea id="request" className="form-input form-textarea" rows={3}
+                        placeholder="Any specific requests, allergies, or preferences we should know..."
+                        value={form.request} onChange={set('request')} style={{ resize: 'vertical' }} />
+                    </div>
 
-                  <p className="book-form__note">
-                    By booking, you agree to our cancellation policy. Free cancellation up to 24 hours before your appointment.
-                  </p>
-                </form>
-              )}
+                    <Magnetic>
+                      <button
+                        type="submit"
+                        id="submit-booking"
+                        className="btn btn-primary book-form__submit"
+                        disabled={loading}
+                        style={{ display: 'inline-flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}
+                      >
+                        {loading ? (
+                          <><span className="book-loader" /> Booking...</>
+                        ) : (
+                          <>✨ Confirm Appointment</>
+                        )}
+                      </button>
+                    </Magnetic>
+
+                    <p className="book-form__note">
+                      By booking, you agree to our cancellation policy. Free cancellation up to 24 hours before your appointment.
+                    </p>
+                  </motion.form>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>

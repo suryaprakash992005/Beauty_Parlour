@@ -1,5 +1,6 @@
 import { Tag } from 'lucide-react';
-import { useScrollReveal } from '../components/shared';
+import { motion } from 'framer-motion';
+import { useScrollReveal, Magnetic } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
 
@@ -38,7 +39,13 @@ export default function Offers() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 'var(--space-xl)', marginTop: 'var(--space-4xl)' }}>
             {OFFERS.map((o, i) => (
-              <article key={o.id} className={`offer-full-card reveal delay-${(i % 3) + 1}`} style={{ '--accent': o.color } as React.CSSProperties}>
+              <motion.article 
+                key={o.id} 
+                className={`offer-full-card reveal delay-${(i % 3) + 1}`} 
+                style={{ '--accent': o.color } as React.CSSProperties}
+                whileHover={{ y: -8 }}
+                transition={{ type: 'spring' as const, stiffness: 400, damping: 30 }}
+              >
                 <div className="offer-full-card__img-wrap">
                   <img src={o.img} alt={o.title} className="offer-full-card__img" loading="lazy" />
                   <div className="offer-full-card__discount">{o.discount}</div>
@@ -48,11 +55,13 @@ export default function Offers() {
                   <h3 className="offer-full-card__title">{o.title}</h3>
                   <p className="offer-full-card__desc">{o.desc}</p>
                   <div className="offer-full-card__validity">🗓 {o.validity}</div>
-                  <InteractiveHoverButton to="/book-appointment" className="offer-full-card__cta">
-                    Claim Offer
-                  </InteractiveHoverButton>
+                  <Magnetic>
+                    <InteractiveHoverButton to="/book-appointment" className="offer-full-card__cta">
+                      Claim Offer
+                    </InteractiveHoverButton>
+                  </Magnetic>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>

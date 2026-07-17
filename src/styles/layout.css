@@ -141,9 +141,11 @@
   transition: all 0.3s ease;
   transform: translateX(-50%);
 }
-.navbar__link:hover::after,
-.navbar__link--active::after {
+.navbar__link:hover::after {
   width: 70%;
+}
+.navbar__link--active::after {
+  display: none !important;
 }
 .navbar__link--active {
   color: var(--color-rose-gold) !important;
