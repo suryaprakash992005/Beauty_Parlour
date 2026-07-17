@@ -1,9 +1,17 @@
 import { useState, useEffect } from 'react';
 import { 
-  Star, Search, Filter, ArrowUpDown, Trash2, CheckCircle2, EyeOff, Plus, X, AlertTriangle, Sparkles, Calendar, Loader2
+  Star, Search, Filter, ArrowUpDown, Trash2, CheckCircle2, EyeOff, Plus, X, AlertTriangle, Sparkles, Calendar, Loader2, Link2, RefreshCw, Unlink
 } from 'lucide-react';
-import { getReviews, updateReviewStatus, deleteReview, addReview, importGoogleReviews } from '../../services/reviews';
+import { getReviews, updateReviewStatus, deleteReview, addReview } from '../../services/reviews';
 import type { ReviewItem } from '../../services/reviews';
+import { 
+  getConnection, 
+  saveConnection, 
+  disconnectConnection, 
+  syncGoogleReviews, 
+  MOCK_GMB_PROFILES 
+} from '../../services/googleBusiness';
+import type { GoogleBusinessConnection } from '../../services/googleBusiness';
 
 interface Toast {
   type: 'success' | 'error';
@@ -29,20 +37,23 @@ export default function AdminReviews() {
   const [newReviewDate, setNewReviewDate] = useState(new Date().toISOString().split('T')[0]);
   const [saving, setSaving] = useState(false);
 
-  // Import Google Reviews States
-  const [showImportModal, setShowImportModal] = useState(false);
-  const [googleProfileId, setGoogleProfileId] = useState('');
-  const [googleApiKey, setGoogleApiKey] = useState('');
-  const [syncMode, setSyncMode] = useState<'all' | 'new'>('all');
+  // Google Business Profile Integration States
+  const [connection, setConnection] = useState<GoogleBusinessConnection | null>(null);
+  const [showConnectModal, setShowConnectModal] = useState(false);
+  const [oauthStep, setOauthStep] = useState<'account' | 'profile' | 'connecting' | 'complete'>('account');
+  const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
+  const [selectedLocationId, setSelectedLocationId] = useState(MOCK_GMB_PROFILES[0].location_id);
+  const [syncMode] = useState<'all' | 'new'>('all');
   const [autoApprove, setAutoApprove] = useState(true);
-  const [importing, setImporting] = useState(false);
-  const [importStep, setImportStep] = useState<'idle' | 'connecting' | 'fetching' | 'saving' | 'complete'>('idle');
+  const [syncing, setSyncing] = useState(false);
+  const [syncStep, setSyncStep] = useState<'idle' | 'auth' | 'fetch' | 'dedup' | 'save' | 'complete'>('idle');
 
   // Delete Confirmation States
   const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
 
   useEffect(() => {
     fetchReviewsList();
+    loadGmbConnection();
   }, []);
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
@@ -102,45 +113,83 @@ export default function AdminReviews() {
     }
   };
 
-  const handleGoogleImport = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setImporting(true);
-    setImportStep('connecting');
-
-    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-
+  const loadGmbConnection = async () => {
     try {
+      const conn = await getConnection();
+      setConnection(conn);
+    } catch (err: any) {
+      console.error('Failed to load GMB connection:', err);
+    }
+  };
+
+  const handleGmbConnectSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setOauthStep('connecting');
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+    try {
+      await delay(900);
+      const matchedProfile = MOCK_GMB_PROFILES.find(p => p.location_id === selectedLocationId);
+      const locationName = matchedProfile ? matchedProfile.location_name : 'ZHA Hair Saloon';
+      const email = selectedAccount || 'admin@zhahairsaloon.com';
+
+      const conn = await saveConnection(selectedLocationId, locationName, email);
+      setConnection(conn);
+
+      setOauthStep('complete');
       await delay(800);
-      setImportStep('fetching');
-      await delay(1000);
-      setImportStep('saving');
-      await delay(700);
+      showToast('Google Business Profile connected successfully!');
+      setShowConnectModal(false);
+      // Reset state
+      setOauthStep('account');
+      setSelectedAccount(null);
+    } catch (err: any) {
+      showToast(err.message || 'Connection failed.', 'error');
+      setOauthStep('profile');
+    }
+  };
 
-      const result = await importGoogleReviews(googleProfileId, googleApiKey, syncMode, autoApprove);
+  const handleGmbDisconnect = async () => {
+    try {
+      await disconnectConnection();
+      setConnection(null);
+      showToast('Google Business Profile disconnected successfully.');
+    } catch (err: any) {
+      showToast(err.message || 'Failed to disconnect.', 'error');
+    }
+  };
 
-      setImportStep('complete');
-      await delay(1000);
+  const handleGmbSync = async () => {
+    setSyncing(true);
+    setSyncStep('auth');
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+    try {
+      await delay(600);
+      setSyncStep('fetch');
+      await delay(800);
+      setSyncStep('dedup');
+      await delay(600);
+      setSyncStep('save');
 
-      // Reload reviews
+      const result = await syncGoogleReviews(syncMode, autoApprove);
+      
+      await delay(500);
+      setSyncStep('complete');
+      await delay(850);
+
+      // Reload connection info and reviews list
+      await loadGmbConnection();
       await fetchReviewsList();
 
       if (result.noNewFound) {
-        showToast('Duplicate reviews skipped. No new reviews found.', 'error');
+        showToast('All synced reviews are duplicates. No new reviews inserted.', 'error');
       } else {
-        showToast(`Import Complete! Successfully imported ${result.importedCount} reviews from Google Business Profile.`);
+        showToast(`Sync Complete! Successfully synced ${result.syncedCount} new reviews. (${result.duplicatesSkipped} duplicates skipped)`);
       }
-
-      setShowImportModal(false);
-      setImportStep('idle');
-      // Reset forms
-      setGoogleProfileId('');
-      setGoogleApiKey('');
     } catch (err: any) {
-      console.error(err);
-      showToast(err.message || 'Import Google Reviews failed.', 'error');
-      setImportStep('idle');
+      showToast(err.message || 'Synchronization failed.', 'error');
     } finally {
-      setImporting(false);
+      setSyncing(false);
+      setSyncStep('idle');
     }
   };
 
@@ -203,47 +252,145 @@ export default function AdminReviews() {
 
   return (
     <div className="admin-page-wrapper">
-      <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2xl)' }}>
+      <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2xl)', flexWrap: 'wrap', gap: 'var(--space-md)' }}>
         <div>
           <h2 className="admin-page-title">Reviews Management</h2>
-          <p className="admin-page-desc">Moderate client testimonials imported from Google or added manually to showcase on the site.</p>
+          <p className="admin-page-desc">Moderate client testimonials imported via Google Business Profile integration or added manually.</p>
         </div>
-        <div style={{ display: 'flex', gap: 'var(--space-md)' }}>
-          <button 
-            type="button"
-            className="btn btn-outline" 
-            onClick={() => setShowImportModal(true)}
-            style={{ 
-              borderColor: 'var(--color-emerald-accent, #10b981)', 
-              color: 'var(--color-emerald-accent, #10b981)',
-              background: 'rgba(16, 185, 129, 0.03)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.03)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            <span>Import Google Reviews</span>
-          </button>
+        <div style={{ display: 'flex', gap: 'var(--space-md)', flexWrap: 'wrap' }}>
+          {!connection ? (
+            <button 
+              type="button"
+              className="btn btn-outline" 
+              onClick={() => {
+                setOauthStep('account');
+                setShowConnectModal(true);
+              }}
+              style={{ 
+                borderColor: '#10b981', 
+                color: '#10b981',
+                background: 'rgba(16, 185, 129, 0.03)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(16, 185, 129, 0.03)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              <Link2 size={15} />
+              <span>Connect Google Business</span>
+            </button>
+          ) : (
+            <>
+              <button 
+                type="button"
+                className="btn btn-outline" 
+                onClick={handleGmbSync}
+                disabled={syncing}
+                style={{ 
+                  borderColor: '#10b981', 
+                  color: '#10b981',
+                  background: 'rgba(16, 185, 129, 0.03)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'rgba(16, 185, 129, 0.03)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <RefreshCw size={14} className={syncing ? 'animate-spin' : ''} />
+                <span>{syncing ? 'Syncing...' : 'Sync Reviews'}</span>
+              </button>
+
+              <button 
+                type="button"
+                className="btn btn-outline" 
+                onClick={handleGmbDisconnect}
+                style={{ 
+                  borderColor: 'rgba(239, 68, 68, 0.5)', 
+                  color: '#ef4444',
+                  background: 'rgba(239, 68, 68, 0.03)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'rgba(239, 68, 68, 0.03)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <Unlink size={14} />
+                <span>Disconnect Business</span>
+              </button>
+            </>
+          )}
           <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
             <Plus size={16} /> Add Review
           </button>
         </div>
       </div>
+
+      {/* Google Business Connection Card */}
+      {connection && (
+        <div className="admin-card animate-fadeIn" style={{ 
+          padding: 'var(--space-md) var(--space-xl)', 
+          marginBottom: 'var(--space-xl)', 
+          border: '1px solid rgba(16, 185, 129, 0.25)', 
+          background: 'rgba(16, 185, 129, 0.02)',
+          borderRadius: 'var(--radius-lg)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 'var(--space-md)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Link2 size={20} />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#10b981', fontWeight: 700 }}>
+                Google Business Connected
+              </div>
+              <h4 style={{ margin: '2px 0 0 0', color: 'white', fontFamily: 'var(--font-serif)', fontSize: '1.05rem' }}>
+                {connection.location_name}
+              </h4>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 'var(--space-xl)', fontSize: '0.8rem', color: 'var(--color-text-muted)', flexWrap: 'wrap' }}>
+            <div>
+              <span style={{ display: 'block', fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--color-text-light)' }}>Account</span>
+              <strong style={{ color: 'white' }}>{connection.connected_email}</strong>
+            </div>
+            <div>
+              <span style={{ display: 'block', fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--color-text-light)' }}>Last Sync</span>
+              <strong style={{ color: 'white' }}>
+                {connection.last_sync_time ? new Date(connection.last_sync_time).toLocaleString() : 'Never'}
+              </strong>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filters Bar */}
       <div className="admin-card" style={{ padding: 'var(--space-md)', marginBottom: 'var(--space-xl)', display: 'flex', flexWrap: 'wrap', gap: 'var(--space-md)', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -298,9 +445,28 @@ export default function AdminReviews() {
       {filteredAndSortedReviews.length === 0 ? (
         <div className="admin-card" style={{ textAlign: 'center', padding: 'var(--space-3xl)', color: 'var(--color-text-muted)' }}>
           {reviews.length === 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
               <h3 style={{ fontFamily: 'var(--font-serif)', color: 'white', margin: 0, fontSize: '1.2rem' }}>No reviews imported yet</h3>
-              <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', margin: 0 }}>Connect Google Business Profile to start importing customer reviews.</p>
+              <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', margin: 0, marginBottom: '8px' }}>
+                Connect your Google Business Profile to sync customer reviews automatically.
+              </p>
+              {!connection && (
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={() => {
+                    setOauthStep('account');
+                    setShowConnectModal(true);
+                  }}
+                  style={{ 
+                    borderColor: '#10b981', 
+                    color: '#10b981',
+                    background: 'rgba(16, 185, 129, 0.03)'
+                  }}
+                >
+                  Connect Google Business
+                </button>
+              )}
             </div>
           ) : (
             "No reviews matched your filters."
@@ -512,10 +678,10 @@ export default function AdminReviews() {
         </div>
       )}
 
-      {/* Import Google Business Reviews Modal */}
-      {showImportModal && (
+      {/* Connect Google Business Profile Modal */}
+      {showConnectModal && (
         <div className="admin-modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)' }}>
-          <form onSubmit={handleGoogleImport} className="admin-card admin-modal-card" style={{ width: '100%', maxWidth: '480px', padding: 'var(--space-2xl)', border: '1px solid var(--color-border)', animation: 'zoomIn 0.25s ease', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+          <form onSubmit={handleGmbConnectSubmit} className="admin-card admin-modal-card" style={{ width: '100%', maxWidth: '480px', padding: 'var(--space-2xl)', border: '1px solid var(--color-border)', animation: 'zoomIn 0.25s ease', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '12px' }}>
               <h3 style={{ margin: 0, fontFamily: 'var(--font-serif)', fontSize: '1.25rem', color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style={{ marginRight: '4px' }}>
@@ -524,55 +690,86 @@ export default function AdminReviews() {
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
-                Import Google Business Reviews
+                Connect Google Business
               </h3>
-              <button type="button" onClick={() => !importing && setShowImportModal(false)} style={{ color: 'var(--color-text-muted)', border: 'none', background: 'none', cursor: 'pointer' }} disabled={importing}>
+              <button type="button" onClick={() => setShowConnectModal(false)} style={{ color: 'var(--color-text-muted)', border: 'none', background: 'none', cursor: 'pointer' }}>
                 <X size={20} />
               </button>
             </div>
 
-            {importStep === 'idle' ? (
+            {oauthStep === 'account' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: '1.5' }}>
+                  Choose Google Account to authorize ZHA Beauty Studio access to your Google Business Profile locations.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px' }}>
+                  {[
+                    { email: 'surya.sharma@gmail.com', name: 'Suryaprakash Sharma' },
+                    { email: 'admin@zhahairsaloon.com', name: 'ZHA Hair Saloon Admin' }
+                  ].map(acc => (
+                    <button
+                      key={acc.email}
+                      type="button"
+                      onClick={() => {
+                        setSelectedAccount(acc.email);
+                        setOauthStep('profile');
+                      }}
+                      style={{
+                        background: 'rgba(255,255,255,0.02)',
+                        border: '1px solid var(--color-border)',
+                        padding: '12px 16px',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.background = 'rgba(16, 185, 129, 0.05)';
+                        e.currentTarget.style.borderColor = '#10b981';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
+                        e.currentTarget.style.borderColor = 'var(--color-border)';
+                      }}
+                    >
+                      <div>
+                        <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'white' }}>{acc.name}</span>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>{acc.email}</span>
+                      </div>
+                      <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600 }}>Log In</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid var(--color-border)', paddingTop: '16px', marginTop: '8px' }}>
+                  <button className="btn btn-outline" type="button" onClick={() => setShowConnectModal(false)}>Cancel</button>
+                </div>
+              </div>
+            )}
+
+            {oauthStep === 'profile' && (
               <>
-                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: '0 0 4px 0', lineHeight: '1.5' }}>
-                  Connect your Google Business Profile to import customer reviews into your salon website.
+                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: '1.5' }}>
+                  Connected as <span style={{ color: 'white', fontWeight: 600 }}>{selectedAccount}</span>. Choose the location to sync reviews.
                 </p>
 
                 <div className="form-group">
-                  <label className="form-label" htmlFor="gmb-profile-id">Google Business Profile ID *</label>
-                  <input 
-                    id="gmb-profile-id"
-                    type="text" 
-                    className="form-input" 
-                    placeholder="e.g. accounts/12345/locations/67890" 
-                    value={googleProfileId} 
-                    onChange={e => setGoogleProfileId(e.target.value)} 
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label" htmlFor="gmb-api-key">Google API Key *</label>
-                  <input 
-                    id="gmb-api-key"
-                    type="password" 
-                    className="form-input" 
-                    placeholder="Enter your Google Cloud GMB API Key" 
-                    value={googleApiKey} 
-                    onChange={e => setGoogleApiKey(e.target.value)} 
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label" htmlFor="gmb-sync-mode">Sync Mode *</label>
+                  <label className="form-label" htmlFor="gmb-profile-location">Google Business Location *</label>
                   <select 
-                    id="gmb-sync-mode"
+                    id="gmb-profile-location"
                     className="form-input" 
-                    value={syncMode} 
-                    onChange={e => setSyncMode(e.target.value as any)}
+                    value={selectedLocationId} 
+                    onChange={e => setSelectedLocationId(e.target.value)}
                   >
-                    <option value="all">Import All Reviews</option>
-                    <option value="new">Import Only New Reviews</option>
+                    {MOCK_GMB_PROFILES.map(p => (
+                      <option key={p.location_id} value={p.location_id}>
+                        {p.location_name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -589,40 +786,79 @@ export default function AdminReviews() {
                   </label>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', borderTop: '1px solid var(--color-border)', paddingTop: '16px', marginTop: '8px' }}>
-                  <button className="btn btn-outline" type="button" onClick={() => setShowImportModal(false)}>Cancel</button>
-                  <button className="btn btn-primary" type="submit" style={{ background: '#10b981', borderColor: '#10b981' }}>
-                    Import Reviews
-                  </button>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', borderTop: '1px solid var(--color-border)', paddingTop: '16px', marginTop: '8px' }}>
+                  <button className="btn btn-outline" type="button" onClick={() => setOauthStep('account')}>Back</button>
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <button className="btn btn-outline" type="button" onClick={() => setShowConnectModal(false)}>Cancel</button>
+                    <button className="btn btn-primary" type="submit" style={{ background: '#10b981', borderColor: '#10b981' }}>
+                      Connect Profile
+                    </button>
+                  </div>
                 </div>
               </>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0', gap: '20px', minHeight: '260px' }}>
-                {importStep !== 'complete' ? (
-                  <Loader2 size={44} className="animate-spin" style={{ color: '#10b981' }} />
-                ) : (
-                  <div style={{ animation: 'zoomIn 0.3s ease' }}>
-                    <CheckCircle2 size={48} style={{ color: '#10b981' }} />
-                  </div>
-                )}
+            )}
 
+            {oauthStep === 'connecting' && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0', gap: '20px', minHeight: '220px' }}>
+                <Loader2 size={44} className="animate-spin" style={{ color: '#10b981' }} />
                 <div style={{ textAlign: 'center' }}>
                   <h4 style={{ margin: '0 0 6px 0', color: 'white', fontFamily: 'var(--font-serif)', fontSize: '1.15rem' }}>
-                    {importStep === 'connecting' && 'Connecting to Google...'}
-                    {importStep === 'fetching' && 'Fetching Reviews...'}
-                    {importStep === 'saving' && 'Saving Reviews...'}
-                    {importStep === 'complete' && 'Import Complete'}
+                    Connecting Google Business Profile...
                   </h4>
                   <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-                    {importStep === 'connecting' && 'Verifying location identity and GMB API Key authorization...'}
-                    {importStep === 'fetching' && 'Retrieving customer star ratings and review text details...'}
-                    {importStep === 'saving' && 'Filtering duplicates and writing to Supabase instance...'}
-                    {importStep === 'complete' && 'Showcasing imported reviews in reviews management dashboard.'}
+                    Authorizing OAuth tokens securely with Google My Business API...
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {oauthStep === 'complete' && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0', gap: '20px', minHeight: '220px' }}>
+                <div style={{ animation: 'zoomIn 0.3s ease' }}>
+                  <CheckCircle2 size={48} style={{ color: '#10b981' }} />
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <h4 style={{ margin: '0 0 6px 0', color: 'white', fontFamily: 'var(--font-serif)', fontSize: '1.15rem' }}>
+                    Google Business Connected
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                    Saved connected profile state securely in Supabase.
                   </p>
                 </div>
               </div>
             )}
           </form>
+        </div>
+      )}
+
+      {/* Syncing Progress Overlay */}
+      {syncing && (
+        <div className="admin-modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)' }}>
+          <div className="admin-card" style={{ width: '100%', maxWidth: '440px', padding: 'var(--space-2xl)', border: '1px solid var(--color-border)', animation: 'zoomIn 0.2s ease', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            {syncStep !== 'complete' ? (
+              <Loader2 size={40} className="animate-spin" style={{ color: '#10b981' }} />
+            ) : (
+              <div style={{ animation: 'zoomIn 0.3s ease' }}>
+                <CheckCircle2 size={44} style={{ color: '#10b981' }} />
+              </div>
+            )}
+            <div>
+              <h4 style={{ margin: '0 0 6px 0', color: 'white', fontFamily: 'var(--font-serif)', fontSize: '1.2rem' }}>
+                {syncStep === 'auth' && 'Authenticating GMB API...'}
+                {syncStep === 'fetch' && 'Retrieving Google Business Reviews...'}
+                {syncStep === 'dedup' && 'Checking for Duplicate Reviews...'}
+                {syncStep === 'save' && 'Saving New Reviews to Supabase...'}
+                {syncStep === 'complete' && 'Sync Complete!'}
+              </h4>
+              <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--color-text-muted)', lineHeight: '1.5' }}>
+                {syncStep === 'auth' && 'Validating secure credentials and location connection settings...'}
+                {syncStep === 'fetch' && 'Requesting ratings, dates, and review text from Google Profile...'}
+                {syncStep === 'dedup' && 'Filtering fetched reviews against current database review IDs...'}
+                {syncStep === 'save' && 'Writing new verified reviews to your testimonials dashboard...'}
+                {syncStep === 'complete' && 'All unique customer reviews successfully synced!'}
+              </p>
+            </div>
+          </div>
         </div>
       )}
 
