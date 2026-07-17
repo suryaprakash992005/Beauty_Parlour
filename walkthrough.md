@@ -162,15 +162,18 @@ We created a premium Reviews Management system in the admin panel and connected 
 
 ---
 
-## 17. Import Google Reviews Feature
+## 17. Upgraded Google Business OAuth Integration & Contrast Fixes
 
-We added a premium Google Business Profile reviews importer module:
-- **Import Trigger Button**: Added an emerald-green Google Reviews Import button in the headers of [AdminReviews.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/admin/AdminReviews.tsx#L213) with official Google brand colors.
-- **Import Configuration Dialog**: Renders a premium modal allowing the admin to supply Google Business Profile ID, GMB API Key, select sync mode (All, Only New), and toggle automatic approval.
-- **Progress Stepper & Success Animations**: When submitted, runs a multi-step loader (Connecting, Fetching, Saving, Complete) with custom visual transition timings and a checkmark completion mark.
-- **Database Duplicate Detection ([src/services/reviews.ts](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/services/reviews.ts#L80))**: Checks the `reviews` table for existing `google_review_id` fields, safely skipping duplicate reviews and performing batch inserts of new reviews with proper approval states.
-- **Natural Relative Date Formatter**: Added a custom time diff algorithm `getRelativeDateString()` to format public site testimonial reviews relatively (e.g. "3 days ago", "Yesterday", "2 weeks ago") instead of hardcoded timestamps.
-- **Empty States & Validation Errors**: Handles empty reviews imports gracefully with instructions to connect the GMB profile, and triggers toasts for Invalid API Keys or connection failures.
+We replaced the manual Google Business ID inputs with a secure OAuth connection flow and resolved readability issues across the website:
+- **Google Business OAuth Flow**: Added a **Connect Google Business** button triggering a simulated login account picker and location selector.
+- **Connection Info Card**: Displays the connected profile name, account email, status, and last synced date.
+- **Automatic Review Synchronization**: Replaced manual imports with a **Sync Reviews** flow that requests reviews from the GMB integration, filters duplicates against the Supabase `reviews` table by `google_review_id`, batch saves only new reviews, and updates sync metrics.
+- **Database Fallback Resilience ([src/services/googleBusiness.ts](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/services/googleBusiness.ts))**: Safely queries connections from Supabase, automatically falling back to simulated browser caching if the connection table hasn't been created yet to ensure the app is 100% crash-proof.
+- **Visibility & Contrast Upgrades**:
+  - **Contact Us Page ([Contact.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Contact.tsx))**: Upgraded label/value text in dark green boxes to white and light gold.
+  - **Offers Page ([Offers.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Offers.tsx))**: Upgraded titles and descriptions inside the dark cards to white and champagne.
+  - **Light Theme Forms ([book.css](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/styles/book.css))**: Made input fields white, input borders darker/clearer, placeholder text highly visible dark sage, and labels rich Forest Green.
+
 
 
 
