@@ -101,9 +101,9 @@ export default function Offers() {
           backdrop-filter: blur(6px);
         }
         .offer-full-card__body { padding: var(--space-xl); display: flex; flex-direction: column; gap: var(--space-sm); }
-        .offer-full-card__title { font-family: var(--font-serif); font-size: var(--text-xl); color: var(--color-text); }
-        .offer-full-card__desc { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.7; }
-        .offer-full-card__validity { font-size: var(--text-xs); color: var(--color-rose-gold); font-weight: 600; letter-spacing: 0.04em; }
+        .offer-full-card__title { font-family: var(--font-serif); font-size: var(--text-xl); color: #ffffff; }
+        .offer-full-card__desc { font-size: var(--text-sm); color: rgba(255, 255, 255, 0.75); line-height: 1.7; }
+        .offer-full-card__validity { font-size: var(--text-xs); color: var(--color-champagne); font-weight: 600; letter-spacing: 0.04em; }
         .offer-full-card__cta { width: 100%; justify-content: center; margin-top: var(--space-md); }
       `}</style>
     </main>

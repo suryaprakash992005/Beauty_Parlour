@@ -156,16 +156,16 @@ export default function Contact() {
           font-weight: 700;
           letter-spacing: 0.15em;
           text-transform: uppercase;
-          color: var(--color-text-muted);
+          color: var(--color-champagne-light, #e8c98a);
         }
         .contact-item__val {
           font-size: var(--text-base);
-          color: var(--color-text);
+          color: #ffffff;
           margin-top: 2px;
           line-height: 1.6;
           font-weight: 500;
         }
-        a.contact-item__val:hover { color: var(--color-rose-gold); }
+        a.contact-item__val:hover { color: var(--color-champagne); }
         .contact-map { border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg); }
         @media (max-width: 900px) {
           .contact-layout { grid-template-columns: 1fr; }

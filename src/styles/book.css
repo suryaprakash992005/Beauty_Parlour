@@ -100,13 +100,16 @@
 }
 
 /* Light Mode Specific Overrides */
+[data-theme="light"] .form-label {
+  color: #1b4d3e !important; /* Rich Forest Green */
+}
 [data-theme="light"] .form-input {
-  background: #f7f6f4 !important;
-  border-color: rgba(27, 77, 62, 0.15) !important;
+  background: #ffffff !important;
+  border-color: rgba(27, 77, 62, 0.32) !important;
   color: #0f2620 !important;
 }
 [data-theme="light"] .form-input::placeholder {
-  color: #6d8c83 !important;
+  color: #4a675f !important;
 }
 [data-theme="light"] .form-input option {
   background: #ffffff !important;
@@ -115,7 +118,7 @@
 [data-theme="light"] .form-input:focus {
   background: #ffffff !important;
   border-color: var(--color-rose-gold) !important;
-  box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.08) !important;
+  box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.12) !important;
 }
 
 .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23D4AF37' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
