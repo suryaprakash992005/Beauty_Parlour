@@ -71,9 +71,9 @@ const DEFAULT_SETTINGS: SalonSettings = {
   openHoursWeekdays: 'Mon–Fri: 9 AM – 9 PM',
   openHoursWeekends: 'Sat-Sun: 7 AM – 9 PM',
   whatsapp: '8270904659',
-  instagram: 'https://instagram.com/zhaaestheticsalon',
-  facebook: 'https://facebook.com/zhaaestheticsalon',
-  youtube: 'https://youtube.com/zhaaestheticsalon',
+  instagram: 'https://instagram.com/zhahairsaloon',
+  facebook: 'https://facebook.com/zhahairsaloon',
+  youtube: 'https://youtube.com/zhahairsaloon',
   googleMaps: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.4842525791776!2d78.1382138!3d11.0643187!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baa3363e69a4fb1%3A0x2d0eca41c4df20aa!2sZha%20Aesthetic%20Salon%20-%20UNISEX!5e0!3m2!1sen!2sin!4v1721307180000'
 };
 

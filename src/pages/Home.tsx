@@ -395,8 +395,8 @@ export default function Home() {
         <div className="container">
           <div className="section__header section__header--center reveal">
             <div className="section-label">Follow Us</div>
-            <h2 className="section-title">@zhaaestheticsalon</h2>
-            <p className="section-subtitle mx-auto">Follow our journey of premium beauty styling on Instagram and get inspired daily.</p>
+            <h2 className="section-title">@zhahairsaloon</h2>
+            <p className="section-subtitle mx-auto">Follow our journey of premium hair styling on Instagram and get inspired daily.</p>
           </div>
           <div className="instagram-grid">
             {INSTAGRAM_IMGS.map((src, i) => (

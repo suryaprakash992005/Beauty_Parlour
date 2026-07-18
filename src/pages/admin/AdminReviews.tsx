@@ -168,7 +168,7 @@ export default function AdminReviews() {
       await delay(900);
       const matchedProfile = MOCK_GMB_PROFILES.find(p => p.location_id === selectedLocationId);
       const locationName = matchedProfile ? matchedProfile.location_name : 'Zha Aesthetic Salon';
-      const email = googleEmail || 'admin@zhaaestheticsalon.com';
+      const email = googleEmail || 'admin@zhahairsaloon.com';
 
       const conn = await saveConnection(selectedLocationId, locationName, email);
       setConnection(conn);

@@ -59,9 +59,9 @@ export default function Navbar() {
   }, []);
 
   const socialItems = [
-    { label: 'Instagram', link: settings?.instagram || 'https://instagram.com/zhaaestheticsalon' },
-    { label: 'Facebook', link: settings?.facebook || 'https://facebook.com/zhaaestheticsalon' },
-    { label: 'YouTube', link: settings?.youtube || 'https://youtube.com/zhaaestheticsalon' }
+    { label: 'Instagram', link: settings?.instagram || 'https://instagram.com/zhahairsaloon' },
+    { label: 'Facebook', link: settings?.facebook || 'https://facebook.com/zhahairsaloon' },
+    { label: 'YouTube', link: settings?.youtube || 'https://youtube.com/zhahairsaloon' }
   ];
 
   return (

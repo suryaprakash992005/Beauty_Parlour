@@ -16,9 +16,9 @@ export default function Footer() {
       .catch(err => console.error('Failed to load footer settings:', err));
   }, []);
 
-  const instagramLink = settings?.instagram || 'https://instagram.com/zhaaestheticsalon';
-  const facebookLink = settings?.facebook || 'https://facebook.com/zhaaestheticsalon';
-  const youtubeLink = settings?.youtube || 'https://youtube.com/zhaaestheticsalon';
+  const instagramLink = settings?.instagram || 'https://instagram.com/zhahairsaloon';
+  const facebookLink = settings?.facebook || 'https://facebook.com/zhahairsaloon';
+  const youtubeLink = settings?.youtube || 'https://youtube.com/zhahairsaloon';
 
   return (
     <footer className="footer">
@@ -73,38 +73,36 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact Info */}
           <div>
             <h3 className="footer__col-title">Contact Us</h3>
-            <div>
-              <div className="footer__contact-item">
-                <MapPin size={15} className="footer__contact-icon" />
-                <span>{settings?.address || '42, Rose Garden Lane, Luxury District, Mumbai — 400001'}</span>
-              </div>
-              <div className="footer__contact-item">
-                <Phone size={15} className="footer__contact-icon" />
-                <span>{settings?.phone || '+91 98765 43210'}</span>
-              </div>
-              <div className="footer__contact-item">
-                <Mail size={15} className="footer__contact-icon" />
-                <span>{settings?.email || 'hello@zhaaestheticsalon.com'}</span>
-              </div>
-              <div className="footer__contact-item">
-                <Clock size={15} className="footer__contact-icon" />
-                <span>
-                  {settings?.openHoursWeekdays || 'Mon–Sat: 9 AM – 8 PM'}
-                  <br />
-                  {settings?.openHoursWeekends || 'Sunday: 10 AM – 6 PM'}
-                </span>
-              </div>
+            <div className="footer__contact-item">
+              <Phone size={16} className="footer__contact-icon" />
+              <span>{settings?.phone || '+91 9688999188'}</span>
+            </div>
+            <div className="footer__contact-item">
+              <Mail size={16} className="footer__contact-icon" />
+              <span>{settings?.email || 'suryasuryaprakash2005@gmail.com'}</span>
+            </div>
+            <div className="footer__contact-item">
+              <MapPin size={16} className="footer__contact-icon" />
+              <span>{settings?.address || '1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015'}</span>
+            </div>
+            <div className="footer__contact-item">
+              <Clock size={16} className="footer__contact-icon" />
+              <span>
+                {settings?.openHoursWeekdays || 'Mon–Fri: 9 AM – 9 PM'}
+                <br />
+                {settings?.openHoursWeekends || 'Sat-Sun: 7 AM – 9 PM'}
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="footer__bottom">
-          <p className="footer__copyright">
-            © {year} {settings?.studioName || 'ZHA'} Hair Saloon. All rights reserved. Crafted with luxury.
-          </p>
+        <div className="container footer__bottom">
+          <div className="footer__copyright">
+            © {year} {settings?.studioName || 'ZHA'} Aesthetic Salon. All rights reserved. Crafted with luxury.
+          </div>
           <div style={{ display: 'flex', gap: '1.5rem' }}>
             {['Privacy Policy', 'Terms of Service'].map(t => (
               <a key={t} href="#" style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.3)', transition: 'color 0.3s' }}
