@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { Instagram } from '../components/BrandIcons';
@@ -11,8 +11,7 @@ import { getServices } from '../services/services';
 import type { ServiceItem } from '../services/services';
 import { getPublishedReviews } from '../services/reviews';
 import { getRelativeDateString } from './Testimonials';
-import bridalBeforeImg from '../assets/bridal_before.png';
-import bridalAfterImg from '../assets/bridal_after.png';
+import VirtualTryOn from '../components/VirtualTryOn';
 import '../styles/home.css';
 
 /* ─── Data ─── */
@@ -62,59 +61,7 @@ function Stat({ value, suffix, label }: { value: number; suffix: string; label: 
   );
 }
 
-/* ─── Before / After Slider ─── */
-function BeforeAfterSlider() {
-  const wrapRef   = useRef<HTMLDivElement>(null);
-  const afterRef  = useRef<HTMLImageElement>(null);
-  const handleRef = useRef<HTMLDivElement>(null);
-  const dragging  = useRef(false);
-
-  const setPos = useCallback((clientX: number) => {
-    if (!wrapRef.current) return;
-    const rect = wrapRef.current.getBoundingClientRect();
-    const pct  = Math.max(5, Math.min(95, ((clientX - rect.left) / rect.width) * 100));
-    if (afterRef.current)  afterRef.current.style.clipPath = `inset(0 0 0 ${pct}%)`;
-    if (handleRef.current) handleRef.current.style.left   = `${pct}%`;
-  }, []);
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent | TouchEvent) => {
-      if (!dragging.current) return;
-      const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      setPos(x);
-    };
-    const stop = () => { dragging.current = false; };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove);
-    window.addEventListener('mouseup',  stop);
-    window.addEventListener('touchend', stop);
-    return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('touchmove', onMove);
-      window.removeEventListener('mouseup',  stop);
-      window.removeEventListener('touchend', stop);
-    };
-  }, [setPos]);
-
-  return (
-    <div
-      className="slider-wrap"
-      ref={wrapRef}
-      onMouseDown={() => { dragging.current = true; }}
-      onTouchStart={() => { dragging.current = true; }}
-      onMouseMove={e => { if (dragging.current) setPos(e.clientX); }}
-      onTouchMove={e => { if (dragging.current) setPos(e.touches[0].clientX); }}
-    >
-      <img className="slider-img" src={bridalBeforeImg} alt="Before" />
-      <img className="slider-img slider-after" ref={afterRef} src={bridalAfterImg} alt="After" />
-      <div className="slider-handle" ref={handleRef} />
-      <div className="slider-labels">
-        <span className="slider-label">Before</span>
-        <span className="slider-label">After</span>
-      </div>
-    </div>
-  );
-}
+/* ─── Virtual Try-On replaced Before/After Slider ─── */
 
 /* ─── Home Page ─── */
 export default function Home() {
@@ -321,19 +268,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── BEFORE / AFTER ── */}
-      <section className="before-after" aria-label="Transformation Gallery">
-        <div className="container">
-          <div className="section__header section__header--center reveal" style={{ color: 'white' }}>
-            <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Transformations</div>
-            <h2 className="section-title" style={{ color: 'var(--color-white)' }}>See The Difference We Make</h2>
-            <p className="section-subtitle mx-auto" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              Drag the slider to witness the professional styling transformations at ZHA Hair Saloon.
-            </p>
-          </div>
-          <BeforeAfterSlider />
-        </div>
-      </section>
+      {/* ── VIRTUAL TRY-ON ── */}
+      <VirtualTryOn />
 
       {/* ── OFFERS ── */}
       <section className="offers-banner" aria-label="Current Offers">
