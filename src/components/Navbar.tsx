@@ -27,21 +27,26 @@ const menuItems = [
   { label: 'Book Appointment', ariaLabel: 'Book an appointment', link: '/book-appointment' }
 ];
 
-const BrandLogo = ({ logoUrl, studioName }: { logoUrl?: string; studioName?: string }) => (
-  <Link to="/" className="navbar__logo-group" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-    <div className="navbar__logo-circle">
-      {logoUrl ? (
-        <img src={logoUrl} alt={studioName || 'ZHA'} className="navbar__logo-circle-img" />
-      ) : (
-        <span className="navbar__logo-initial">{studioName ? studioName.charAt(0) : 'Z'}</span>
-      )}
-    </div>
-    <div className="navbar__logo-text-wrap" style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
-      <span className="navbar__logo-name">{studioName || 'ZHA'}</span>
-      <span className="navbar__logo-tagline">AESTHETIC SALON</span>
-    </div>
-  </Link>
-);
+const BrandLogo = ({ logoUrl, studioName }: { logoUrl?: string; studioName?: string }) => {
+  const name = studioName && studioName.trim().toUpperCase() === 'ZHA' 
+    ? 'ZHa' 
+    : (studioName ? studioName.trim() : 'ZHa');
+  return (
+    <Link to="/" className="navbar__logo-group" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+      <div className="navbar__logo-circle">
+        {logoUrl ? (
+          <img src={logoUrl} alt={name} className="navbar__logo-circle-img" />
+        ) : (
+          <span className="navbar__logo-initial">{name.charAt(0)}</span>
+        )}
+      </div>
+      <div className="navbar__logo-text-wrap" style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
+        <span className="navbar__logo-name">{name}</span>
+        <span className="navbar__logo-tagline">AESTHETIC SALON</span>
+      </div>
+    </Link>
+  );
+};
 
 export default function Navbar() {
   const [solid, setSolid] = useState(false);

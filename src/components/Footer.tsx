@@ -33,7 +33,9 @@ export default function Footer() {
                 </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
-                <span className="footer__logo-name" style={{ margin: 0 }}>{settings?.studioName || 'ZHA'}</span>
+                <span className="footer__logo-name" style={{ margin: 0 }}>
+                  {settings?.studioName && settings.studioName.trim().toUpperCase() === 'ZHA' ? 'ZHa' : (settings?.studioName ? settings.studioName.trim() : 'ZHa')}
+                </span>
                 <span className="footer__logo-tagline" style={{ marginTop: '2px' }}>Aesthetic Salon</span>
               </div>
             </div>
