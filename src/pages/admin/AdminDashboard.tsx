@@ -10,7 +10,7 @@ export default function AdminDashboard() {
       icon: Scissors, 
       desc: 'Active cataloged treatments', 
       to: '/admin/services',
-      color: '#22C55E' 
+      color: '#D4AF37' 
     },
     { 
       label: 'Gallery Images', 
@@ -18,7 +18,7 @@ export default function AdminDashboard() {
       icon: Image, 
       desc: 'Portfolio transformations', 
       to: '/admin/gallery',
-      color: '#3B82F6' 
+      color: '#E5C158' 
     },
     { 
       label: 'Homepage Banner', 
@@ -26,7 +26,7 @@ export default function AdminDashboard() {
       icon: Sliders, 
       desc: 'Hero slide configurations', 
       to: '/admin/banner',
-      color: '#10B981' 
+      color: '#C5A028' 
     },
     { 
       label: 'Last Updated', 
@@ -34,7 +34,7 @@ export default function AdminDashboard() {
       icon: Clock, 
       desc: 'System sync status', 
       to: '/admin/settings',
-      color: '#F59E0B' 
+      color: '#D4AF37' 
     },
   ];
 
@@ -74,7 +74,7 @@ export default function AdminDashboard() {
       {/* Welcome Hero Banner */}
       <div 
         style={{
-          background: 'linear-gradient(135deg, #131A35 0%, #0D2619 50%, #0F1210 100%)',
+          background: 'linear-gradient(135deg, #1c150c 0%, #0d0a06 100%)',
           border: '1px solid var(--admin-border)',
           borderRadius: '16px',
           padding: '32px',
@@ -100,14 +100,14 @@ export default function AdminDashboard() {
             color: 'rgba(255, 255, 255, 0.9)',
             fontWeight: 500
           }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22C55E', boxShadow: '0 0 8px #22C55E' }} />
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
             <span>All systems operational</span>
           </div>
           <h2 style={{ fontSize: '28px', fontWeight: 600, color: 'white', marginTop: '16px', marginBottom: '8px', letterSpacing: '-0.5px' }}>
-            Welcome back, Admin ��
+            Welcome back, Admin 👋
           </h2>
           <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.65)', margin: 0, lineHeight: '1.5' }}>
-            Here's what's happening with your saloon today. Real-time insights, instant actions.
+            Here\'s what\'s happening with your saloon today. Real-time insights, instant actions.
           </p>
         </div>
         

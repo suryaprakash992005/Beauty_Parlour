@@ -15,9 +15,9 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 30% 50%, rgba(183,110,121,0.18) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(212,175,116,0.12) 0%, transparent 60%),
-    linear-gradient(135deg, #3e2723 0%, #5d3a3a 40%, #3e2723 100%);
+    radial-gradient(ellipse 80% 60% at 30% 50%, rgba(27, 77, 62, 0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(212, 175, 116, 0.08) 0%, transparent 60%),
+    linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-dark) 100%);
   animation: heroBgShift 12s ease-in-out infinite alternate;
 }
 @keyframes heroBgShift {

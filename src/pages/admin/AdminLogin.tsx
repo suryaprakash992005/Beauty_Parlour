@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, ShieldCheck, ArrowRight } from 'lucide-react';
 import '../../styles/admin.css';
@@ -34,10 +34,12 @@ export default function AdminLogin() {
     <div className="admin-login">
       {/* Left Panel: Luxury Salon Branding & Illustration */}
       <div className="admin-login__left">
-        <div className="admin-login__left-header">
-          <div className="admin-login__logo-icon">Z</div>
-          <span className="admin-login__logo-text">Zha Aesthetic Salon</span>
-          <span className="admin-login__logo-badge">ADMIN CONSOLE</span>
+        <div className="admin-login__left-header" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div className="admin-login__logo-icon" style={{ fontFamily: 'var(--font-sans)' }}>Z</div>
+          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '0.8' }}>
+            <span className="admin-login__logo-text" style={{ fontFamily: 'var(--font-script)', fontSize: '2.3rem', color: 'var(--admin-accent)', fontWeight: 400 }}>ZHa</span>
+            <span className="admin-login__logo-badge" style={{ fontSize: '8px', letterSpacing: '0.12em', color: 'var(--admin-text-secondary)', textTransform: 'uppercase', marginTop: '2px', background: 'rgba(212,175,55,0.06)', padding: '2px 6px', border: '1px solid rgba(212,175,55,0.1)', borderRadius: '4px' }}>ADMIN CONSOLE</span>
+          </div>
         </div>
 
         <div className="admin-login__hero">

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Scissors, Image, Settings, LogOut, Menu, X, Sliders, Star
@@ -72,9 +72,9 @@ export default function AdminLayout() {
             }}>
               <img src={logoUrl} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
-              <span className="admin-sidebar__logo-name" style={{ margin: 0 }}>Zha Aesthetic Salon</span>
-              <span className="admin-sidebar__logo-sub">Admin Panel</span>
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '0.8', marginTop: '4px' }}>
+              <span className="admin-sidebar__logo-name" style={{ margin: 0, fontFamily: 'var(--font-script)', fontSize: '2.1rem', color: 'var(--admin-accent)', fontWeight: 400 }}>ZHa</span>
+              <span className="admin-sidebar__logo-sub" style={{ fontSize: '9px', letterSpacing: '0.12em', color: 'var(--admin-text-secondary)', textTransform: 'uppercase', marginTop: '2px' }}>Admin Panel</span>
             </div>
           </div>
           {/* Close button for mobile drawer */}
