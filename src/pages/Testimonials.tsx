@@ -48,7 +48,7 @@ export function getRelativeDateString(dateStr: string): string {
 
 export default function Testimonials() {
   const [reviews, setReviews] = useState<TestimonialData[]>([]);
-  useScrollReveal();
+  useScrollReveal([reviews]);
 
   useEffect(() => {
     getPublishedReviews()
