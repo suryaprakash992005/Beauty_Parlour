@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, ShieldCheck, ArrowRight } from 'lucide-react';
 import '../../styles/admin.css';
@@ -36,7 +36,7 @@ export default function AdminLogin() {
       <div className="admin-login__left">
         <div className="admin-login__left-header">
           <div className="admin-login__logo-icon">Z</div>
-          <span className="admin-login__logo-text">ZHA Hair Saloon</span>
+          <span className="admin-login__logo-text">Zha Aesthetic Salon</span>
           <span className="admin-login__logo-badge">ADMIN CONSOLE</span>
         </div>
 
@@ -65,7 +65,7 @@ export default function AdminLogin() {
         </div>
 
         <div className="admin-login__left-footer">
-          <span>© 2026 ZHA Hair Saloon</span>
+          <span>© 2026 Zha Aesthetic Salon</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--admin-accent)' }} />
             <span style={{ color: 'var(--admin-text-secondary)' }}>All systems operational</span>

@@ -1,4 +1,4 @@
-import { Tag } from 'lucide-react';
+﻿import { Tag } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
@@ -9,9 +9,9 @@ export default function Offers() {
     { id: 1, tag: 'Bridal Season', discount: '30% OFF', title: 'Bridal Package Special', desc: 'Book any Silver, Gold or Diamond bridal package and save 30% this monsoon season. Limited slots available.', validity: 'Valid till 31st July 2026', img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80', color: '#D4AF37' },
     { id: 2, tag: 'First Visit',   discount: '₹999',   title: 'Signature Facial for ₹999', desc: 'New clients get our signature revitalising facial at just ₹999 (regular ₹1,999). Make your first visit unforgettable.', validity: 'Valid for first visit only', img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80', color: '#AA8010' },
     { id: 3, tag: 'Friends',       discount: '2 FOR 1', title: 'Bring A Friend Deal',    desc: 'Bring your bestie and both enjoy the same service — pay for one, two enjoy! Valid on facials, hair spa, and nail art.', validity: 'Mon–Thu only', img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80', color: '#D4AF37' },
-    { id: 4, tag: 'Weekend',       discount: '20% OFF', title: 'Sunday Luxury Special',  desc: 'Every Sunday is Luxury Day at ZHA Hair Saloon. Enjoy 20% off on all Skin Care and Spa services.', validity: 'Every Sunday', img: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80', color: '#D4AF37' },
+    { id: 4, tag: 'Weekend',       discount: '20% OFF', title: 'Sunday Luxury Special',  desc: 'Every Sunday is Luxury Day at Zha Aesthetic Salon. Enjoy 20% off on all Skin Care and Spa services.', validity: 'Every Sunday', img: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80', color: '#D4AF37' },
     { id: 5, tag: 'Hair Month',    discount: '₹3,499', title: 'Keratin + Hair Spa Combo', desc: 'Get our premium keratin treatment + a nourishing hair spa together at just ₹3,499 (worth ₹5,998).', validity: 'Valid till 15th Aug 2026', img: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80', color: '#AA8010' },
-    { id: 6, tag: 'Loyalty',       discount: 'FREE',   title: 'Loyalty Card — 6th Visit Free', desc: 'Join the ZHA Hair Saloon Loyalty Club. Your 6th visit earns you a complimentary service worth up to ₹2,000.', validity: 'Ongoing program', img: 'https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=600&q=80', color: '#D4AF37' },
+    { id: 6, tag: 'Loyalty',       discount: 'FREE',   title: 'Loyalty Card — 6th Visit Free', desc: 'Join the Zha Aesthetic Salon Loyalty Club. Your 6th visit earns you a complimentary service worth up to ₹2,000.', validity: 'Ongoing program', img: 'https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=600&q=80', color: '#D4AF37' },
   ];
 
   return (

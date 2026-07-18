@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Save, Eye, Check, CloudUpload, CheckCircle } from 'lucide-react';
 import { getHomepageBanner, updateHomepageBanner, uploadHeroAsset } from '../../services/homepage';
 import type { HomepageBanner } from '../../services/homepage';
@@ -8,7 +8,7 @@ export default function AdminBanner() {
     smallHeading: 'Bespoke Hair Artistry',
     mainHeading: 'Transform Your Style, Reveal Your Confidence',
     subtitle: 'Luxury Beauty Experience',
-    description: 'Experience premium luxury hair styling, organic skincare therapies, and celebrity-grade bridal makeovers at ZHA Hair Saloon.',
+    description: 'Experience premium luxury hair styling, organic skincare therapies, and celebrity-grade bridal makeovers at Zha Aesthetic Salon.',
     primaryBtn: 'Book Appointment',
     secondaryBtn: 'Explore Services',
     imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80'
@@ -203,7 +203,7 @@ export default function AdminBanner() {
               className="form-input" 
               value={banner.smallHeading}
               onChange={e => setBanner(prev => ({ ...prev, smallHeading: e.target.value }))}
-              placeholder="e.g. ZHA Hair Saloon"
+              placeholder="e.g. Zha Aesthetic Salon"
               required
             />
           </div>

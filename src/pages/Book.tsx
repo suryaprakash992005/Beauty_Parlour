@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollReveal } from '../components/shared';
 import { getSalonSettings } from '../services/settings';
@@ -63,7 +63,7 @@ export default function Book() {
 
     const formattedDate = new Date(form.date).toLocaleDateString(undefined, { dateStyle: 'medium' });
 
-    const message = `🌸 *APPOINTMENT BOOKED - ZHA HAIR SALOON* 🌸
+    const message = `🌸 *APPOINTMENT BOOKED - ZHA AESTHETIC SALON* 🌸
 ----------------------------------------------
 *Date:* ${formattedDate}
 *Time:* ${form.time}
@@ -110,7 +110,7 @@ Thank you for booking with us! We look forward to serving you!`;
           <div className="book-layout">
             {/* Info Panel */}
             <aside className="book-info reveal-left">
-              <h2 className="book-info__title">Why Choose ZHA Hair Saloon?</h2>
+              <h2 className="book-info__title">Why Choose Zha Aesthetic Salon?</h2>
               <ul className="book-info__list">
                 {[
                   ['🏅', 'Certified Professionals with years of experience'],

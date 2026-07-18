@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Scissors, Image, Settings, LogOut, Menu, X, Sliders, Star
@@ -73,7 +73,7 @@ export default function AdminLayout() {
               <img src={logoUrl} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
-              <span className="admin-sidebar__logo-name" style={{ margin: 0 }}>ZHA Hair Saloon</span>
+              <span className="admin-sidebar__logo-name" style={{ margin: 0 }}>Zha Aesthetic Salon</span>
               <span className="admin-sidebar__logo-sub">Admin Panel</span>
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function AdminLayout() {
                 className="admin-profile__avatar"
               />
               <div className="admin-profile__info">
-                <span className="admin-profile__name">ZHA Admin</span>
+                <span className="admin-profile__name">Zha Admin</span>
                 <span className="admin-profile__role">Owner</span>
               </div>
             </div>

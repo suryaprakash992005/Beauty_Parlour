@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
 import { SparklesText } from '../components/SparklesText';
@@ -13,12 +13,12 @@ interface TestimonialData {
 }
 
 const FALLBACK_TESTIMONIALS: TestimonialData[] = [
-  { id: 'f-1', reviewer_name: 'Priya Sharma', rating: 5, review_text: 'My bridal makeup was absolutely flawless. Every guest was in awe. The team at ZHA Hair Saloon truly understands luxury beauty. I felt like a queen on my most special day.', review_date: '2026-06-15' },
-  { id: 'f-2', reviewer_name: 'Ananya Mehta', rating: 5, review_text: 'The facial treatment left my skin glowing for days. I have tried many salons in Mumbai, but ZHA Hair Saloon is in a completely different league. The ambience alone is worth it.', review_date: '2026-06-20' },
+  { id: 'f-1', reviewer_name: 'Priya Sharma', rating: 5, review_text: 'My bridal makeup was absolutely flawless. Every guest was in awe. The team at Zha Aesthetic Salon truly understands luxury beauty. I felt like a queen on my most special day.', review_date: '2026-06-15' },
+  { id: 'f-2', reviewer_name: 'Ananya Mehta', rating: 5, review_text: 'The facial treatment left my skin glowing for days. I have tried many salons in Mumbai, but Zha Aesthetic Salon is in a completely different league. The ambience alone is worth it.', review_date: '2026-06-20' },
   { id: 'f-3', reviewer_name: 'Kavitha Nair', rating: 5, review_text: 'Hair spa here is an experience I look forward to every month. The products and expertise are truly world-class. The staff remembers my preferences — that personalised touch is rare.', review_date: '2026-06-25' },
   { id: 'f-4', reviewer_name: 'Sneha Joshi', rating: 5, review_text: 'From the moment I walked in, I felt like royalty. The ambience, service, and results — simply exceptional. My keratin treatment lasted 6 months and my hair has never looked better.', review_date: '2026-07-01' },
   { id: 'f-5', reviewer_name: 'Divya Patel', rating: 5, review_text: 'The keratin treatment smoothened my hair beyond imagination. I wake up with perfect hair every single day now! Every penny spent here is worth it.', review_date: '2026-07-04' },
-  { id: 'f-6', reviewer_name: 'Riya Verma', rating: 5, review_text: 'My party makeup turned heads all night. The makeup artist understood exactly my vibe — flawless and glamorous! I get so many compliments every time I visit ZHA Hair Saloon.', review_date: '2026-07-08' }
+  { id: 'f-6', reviewer_name: 'Riya Verma', rating: 5, review_text: 'My party makeup turned heads all night. The makeup artist understood exactly my vibe — flawless and glamorous! I get so many compliments every time I visit Zha Aesthetic Salon.', review_date: '2026-07-08' }
 ];
 
 export function getRelativeDateString(dateStr: string): string {
@@ -81,7 +81,7 @@ export default function Testimonials() {
           <h1 className="page-hero__title">
             <SparklesText>Love From Our Clients</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Real experiences from real women who chose ZHA Hair Saloon for their most beautiful moments.</p>
+          <p className="page-hero__subtitle">Real experiences from real women who chose Zha Aesthetic Salon for their most beautiful moments.</p>
         </div>
       </section>
 

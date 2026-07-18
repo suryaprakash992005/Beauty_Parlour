@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Save, Check } from 'lucide-react';
 import { getSalonSettings, updateSalonSettings, uploadLogo } from '../../services/settings';
 import type { SalonSettings } from '../../services/settings';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState<SalonSettings>({
-    studioName: 'ZHA Hair Saloon',
+    studioName: 'Zha Aesthetic Salon',
     logoUrl: '',
     phone: '+91 98765 43210',
     whatsapp: '8270904659',

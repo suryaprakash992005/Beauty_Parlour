@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+﻿import { supabase } from '../lib/supabase';
 
 // Helper to convert base64 image data to a Blob for upload
 function base64ToBlob(base64: string): Blob {
@@ -63,7 +63,7 @@ export async function uploadLogo(fileOrBase64: File | string): Promise<string> {
 }
 
 const DEFAULT_SETTINGS: SalonSettings = {
-  studioName: 'ZHA',
+  studioName: 'Zha Aesthetic Salon',
   logoUrl: '/logo.jpg',
   phone: '+91 98765 43210',
   email: 'hello@zhahairsaloon.com',

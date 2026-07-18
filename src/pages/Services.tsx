@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
@@ -56,7 +56,7 @@ export default function Services() {
             <SparklesText>Luxury Services</SparklesText>
           </h1>
           <p className="page-hero__subtitle">
-            Premium hair and beauty services crafted to perfection by ZHA Hair Saloon.
+            Premium hair and beauty services crafted to perfection by Zha Aesthetic Salon.
           </p>
         </div>
       </section>

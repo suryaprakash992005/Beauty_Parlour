@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Calendar,
@@ -208,7 +208,7 @@ export default function BridalPlanner() {
         familyText = '• *No family members added*';
       }
 
-      const whatsappMessage = `🌸 *BRIDAL PLAN CONFIRMED - ZHA HAIR SALOON* 🌸
+      const whatsappMessage = `🌸 *BRIDAL PLAN CONFIRMED - ZHA AESTHETIC SALON* 🌸
 ----------------------------------------------
 *Plan Reference ID:* ${finalId}
 *Date:* ${new Date().toLocaleDateString(undefined, { dateStyle: 'medium' })}
@@ -533,7 +533,7 @@ We look forward to serving you!`;
                   <div className="summary-invoice">
                     <div className="invoice-header">
                       <h3 className="invoice-title">Personalized Bridal Plan</h3>
-                      <div className="invoice-subtitle">ZHA Hair Saloon</div>
+                      <div className="invoice-subtitle">Zha Aesthetic Salon</div>
                     </div>
 
                     <div className="invoice-grid">

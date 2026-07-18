@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { CalendarCheck } from 'lucide-react';
 import { getSalonSettings } from '../services/settings';
@@ -31,14 +31,14 @@ const BrandLogo = ({ logoUrl, studioName }: { logoUrl?: string; studioName?: str
   <Link to="/" className="navbar__logo-group" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
     <div className="navbar__logo-circle">
       {logoUrl ? (
-        <img src={logoUrl} alt={studioName || 'ZHA'} className="navbar__logo-circle-img" />
+        <img src={logoUrl} alt={studioName || 'Zha Aesthetic Salon'} className="navbar__logo-circle-img" />
       ) : (
         <span className="navbar__logo-initial">{studioName ? studioName.charAt(0) : 'Z'}</span>
       )}
     </div>
     <div className="navbar__logo-text-wrap" style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
-      <span className="navbar__logo-name">{studioName || 'ZHA'}</span>
-      <span className="navbar__logo-tagline">HAIR SALOON</span>
+      <span className="navbar__logo-name">{studioName || 'Zha Aesthetic Salon'}</span>
+      <span className="navbar__logo-tagline">AESTHETIC SALON</span>
     </div>
   </Link>
 );

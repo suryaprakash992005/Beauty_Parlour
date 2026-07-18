@@ -1,4 +1,4 @@
-import { Award, Heart, Leaf, Users } from 'lucide-react';
+﻿import { Award, Heart, Leaf, Users } from 'lucide-react';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
@@ -31,7 +31,7 @@ export default function About() {
         <div className="container page-hero__content">
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Story</div>
           <h1 className="page-hero__title">
-            <SparklesText>About ZHA Hair Saloon</SparklesText>
+            <SparklesText>About Zha Aesthetic Salon</SparklesText>
           </h1>
           <p className="page-hero__subtitle">Born from a passion for premium hair styling, redefined for professional elegance.</p>
         </div>
@@ -43,7 +43,7 @@ export default function About() {
           <div className="about-story">
             <div className="about-story__img-col reveal-left">
               <div className="about-story__img-main">
-                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=700&q=80" alt="ZHA Hair Saloon" />
+                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=700&q=80" alt="Zha Aesthetic Salon" />
               </div>
               <div className="about-story__img-accent">
                 <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80" alt="Luxury Service" />
@@ -53,10 +53,10 @@ export default function About() {
               <div className="section-label">Est. 2012</div>
               <h2 className="section-title">A Decade of Luxury Styling Excellence</h2>
               <p className="section-subtitle" style={{ marginTop: 'var(--space-lg)' }}>
-                ZHA Hair Saloon was born from a singular vision — to create an aesthetic sanctuary for premium hair, bridal, and nail care. Founded in 2012 by professional styling experts, ZHA Hair Saloon has grown into Mumbai's most coveted premium styling destination.
+                Zha Aesthetic Salon was born from a singular vision — to create an aesthetic sanctuary for premium hair, bridal, and nail care. Founded in 2012 by professional styling experts, Zha Aesthetic Salon has grown into Mumbai's most coveted premium styling destination.
               </p>
               <p style={{ fontSize: 'var(--text-base)', color: 'var(--color-text-muted)', lineHeight: 1.8, marginTop: 'var(--space-lg)' }}>
-                We believe style is a statement of confidence. Every haircut, treatment, and makeover at ZHA Hair Saloon is delivered with precise techniques and premium products. Our certified specialists bring together years of collective expertise in hair styling, bridal makeup, and aesthetics.
+                We believe style is a statement of confidence. Every haircut, treatment, and makeover at Zha Aesthetic Salon is delivered with precise techniques and premium products. Our certified specialists bring together years of collective expertise in hair styling, bridal makeup, and aesthetics.
               </p>
               <div className="about-values">
                 {[

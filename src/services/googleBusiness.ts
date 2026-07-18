@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+﻿import { supabase } from '../lib/supabase';
 
 export interface GoogleBusinessConnection {
   id?: string;
@@ -22,12 +22,12 @@ const LOCAL_CONN_KEY = 'zha_gmb_connection';
 export const MOCK_GMB_PROFILES: GoogleBusinessProfile[] = [
   {
     location_id: "locations/l-andheri-101",
-    location_name: "ZHA Hair Saloon — Andheri West, Mumbai",
+    location_name: "Zha Aesthetic Salon — Andheri West, Mumbai",
     address: "42, Rose Garden Lane, Luxury District, Mumbai — 400001"
   },
   {
     location_id: "locations/l-bandra-202",
-    location_name: "ZHA Hair & Skin Studio — Bandra, Mumbai",
+    location_name: "Zha Aesthetic Salon & Skin Studio — Bandra, Mumbai",
     address: "102, Pali Hill Road, Bandra West, Mumbai — 400050"
   }
 ];
