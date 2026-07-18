@@ -233,6 +233,12 @@
   letter-spacing: 0.02em;
 }
 
+/* High-specificity overrides to prevent bleed from global light theme styles */
+.admin-layout .form-label,
+.admin-login .form-label {
+  color: var(--admin-text-secondary) !important;
+}
+
 .form-input,
 .form-select,
 .form-textarea {
@@ -248,12 +254,34 @@
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.admin-layout .form-input,
+.admin-layout .form-select,
+.admin-layout .form-textarea,
+.admin-login .form-input,
+.admin-login .form-select,
+.admin-login .form-textarea {
+  color: var(--admin-text) !important;
+  background: #0D0D0D !important;
+  border: 1px solid var(--admin-border) !important;
+}
+
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
   border-color: var(--admin-accent);
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1), var(--admin-glow);
   background: var(--admin-surface);
+}
+
+.admin-layout .form-input:focus,
+.admin-layout .form-select:focus,
+.admin-layout .form-textarea:focus,
+.admin-login .form-input:focus,
+.admin-login .form-select:focus,
+.admin-login .form-textarea:focus {
+  border-color: var(--admin-accent) !important;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1), var(--admin-glow) !important;
+  background: var(--admin-surface) !important;
 }
 
 .admin-login__options {
