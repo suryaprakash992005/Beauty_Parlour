@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Check } from 'lucide-react';
 import { getSalonSettings, updateSalonSettings, uploadLogo } from '../../services/settings';
 import type { SalonSettings } from '../../services/settings';
@@ -9,14 +9,14 @@ export default function AdminSettings() {
     logoUrl: '',
     phone: '+91 98765 43210',
     whatsapp: '8270904659',
-    email: 'appointments@zhahairsaloon.com',
-    address: '102, Gold Crest Plaza, Bandra West, Mumbai, Maharashtra 400050',
-    openHoursWeekdays: '09:00 AM - 08:00 PM',
-    openHoursWeekends: '10:00 AM - 09:00 PM',
-    instagram: 'https://instagram.com/zhahairsaloon',
-    facebook: 'https://facebook.com/zhahairsaloon',
-    youtube: 'https://youtube.com/zhahairsaloon',
-    googleMaps: ''
+    email: 'appointments@zhaaestheticsalon.com',
+    address: '1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015',
+    openHoursWeekdays: '09:00 AM - 09:00 PM',
+    openHoursWeekends: '07:00 AM - 09:00 PM',
+    instagram: 'https://instagram.com/zhaaestheticsalon',
+    facebook: 'https://facebook.com/zhaaestheticsalon',
+    youtube: 'https://youtube.com/zhaaestheticsalon',
+    googleMaps: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.4842525791776!2d78.1382138!3d11.0643187!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baa3363e69a4fb1%3A0x2d0eca41c4df20aa!2sZha%20Aesthetic%20Salon%20-%20UNISEX!5e0!3m2!1sen!2sin!4v1721307180000'
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Star, Search, Filter, ArrowUpDown, Trash2, CheckCircle2, EyeOff, Plus, X, AlertTriangle, Sparkles, Calendar, Loader2, Link2, RefreshCw, Unlink
 } from 'lucide-react';
@@ -168,7 +168,7 @@ export default function AdminReviews() {
       await delay(900);
       const matchedProfile = MOCK_GMB_PROFILES.find(p => p.location_id === selectedLocationId);
       const locationName = matchedProfile ? matchedProfile.location_name : 'Zha Aesthetic Salon';
-      const email = googleEmail || 'admin@zhahairsaloon.com';
+      const email = googleEmail || 'admin@zhaaestheticsalon.com';
 
       const conn = await saveConnection(selectedLocationId, locationName, email);
       setConnection(conn);

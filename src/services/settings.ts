@@ -1,4 +1,4 @@
-﻿import { supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 
 // Helper to convert base64 image data to a Blob for upload
 function base64ToBlob(base64: string): Blob {
@@ -65,16 +65,16 @@ export async function uploadLogo(fileOrBase64: File | string): Promise<string> {
 const DEFAULT_SETTINGS: SalonSettings = {
   studioName: 'Zha Aesthetic Salon',
   logoUrl: '/logo.jpg',
-  phone: '+91 98765 43210',
-  email: 'hello@zhahairsaloon.com',
-  address: '42, Rose Garden Lane, Luxury District, Mumbai — 400001',
-  openHoursWeekdays: 'Mon–Sat: 9 AM – 8 PM',
-  openHoursWeekends: 'Sunday: 10 AM – 6 PM',
+  phone: '+91 9688999188',
+  email: 'suryasuryaprakash2005@gmail.com',
+  address: '1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015',
+  openHoursWeekdays: 'Mon–Fri: 9 AM – 9 PM',
+  openHoursWeekends: 'Sat-Sun: 7 AM – 9 PM',
   whatsapp: '8270904659',
-  instagram: 'https://instagram.com/zhahairsaloon',
-  facebook: 'https://facebook.com/zhahairsaloon',
-  youtube: 'https://youtube.com/zhahairsaloon',
-  googleMaps: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.1160907028!2d72.74109995!3d19.08250475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1687000000000'
+  instagram: 'https://instagram.com/zhaaestheticsalon',
+  facebook: 'https://facebook.com/zhaaestheticsalon',
+  youtube: 'https://youtube.com/zhaaestheticsalon',
+  googleMaps: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.4842525791776!2d78.1382138!3d11.0643187!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baa3363e69a4fb1%3A0x2d0eca41c4df20aa!2sZha%20Aesthetic%20Salon%20-%20UNISEX!5e0!3m2!1sen!2sin!4v1721307180000'
 };
 
 export async function getSalonSettings(): Promise<SalonSettings> {

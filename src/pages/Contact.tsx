@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react';
 import { Instagram, Facebook, Youtube } from '../components/BrandIcons';
 import { useScrollReveal } from '../components/shared';
@@ -21,7 +21,7 @@ export default function Contact() {
       Icon: MapPin,  
       label: 'Visit Us',   
       val: settings?.address || '42, Rose Garden Lane, Luxury District, Mumbai — 400001', 
-      href: 'https://maps.google.com' 
+      href: 'https://maps.app.goo.gl/BP8hTwHFbmMcDkHc9' 
     },
     { 
       Icon: Phone,   
@@ -32,8 +32,8 @@ export default function Contact() {
     { 
       Icon: Mail,    
       label: 'Email Us',   
-      val: settings?.email || 'hello@zhahairsaloon.com', 
-      href: `mailto:${settings?.email || 'hello@zhahairsaloon.com'}` 
+      val: settings?.email || 'hello@zhaaestheticsalon.com', 
+      href: `mailto:${settings?.email || 'hello@zhaaestheticsalon.com'}` 
     },
     { 
       Icon: Clock,   
@@ -44,9 +44,9 @@ export default function Contact() {
   ];
 
   const socialLinks = [
-    { Icon: Instagram,      href: settings?.instagram || 'https://instagram.com/zhahairsaloon', label: 'Instagram' },
-    { Icon: Facebook,       href: settings?.facebook || 'https://facebook.com/zhahairsaloon',  label: 'Facebook'  },
-    { Icon: Youtube,        href: settings?.youtube || 'https://youtube.com/zhahairsaloon',   label: 'YouTube'   },
+    { Icon: Instagram,      href: settings?.instagram || 'https://instagram.com/zhaaestheticsalon', label: 'Instagram' },
+    { Icon: Facebook,       href: settings?.facebook || 'https://facebook.com/zhaaestheticsalon',  label: 'Facebook'  },
+    { Icon: Youtube,        href: settings?.youtube || 'https://youtube.com/zhaaestheticsalon',   label: 'YouTube'   },
     { Icon: MessageCircle,  href: `https://wa.me/91${settings?.whatsapp || '8270904659'}`, label: 'WhatsApp' },
   ];
 

@@ -38,7 +38,7 @@ const BrandLogo = ({ logoUrl, studioName }: { logoUrl?: string; studioName?: str
     </div>
     <div className="navbar__logo-text-wrap" style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
       <span className="navbar__logo-name">{studioName || 'ZHA'}</span>
-      <span className="navbar__logo-tagline">HAIR SALOON</span>
+      <span className="navbar__logo-tagline">AESTHETIC SALON</span>
     </div>
   </Link>
 );
@@ -59,9 +59,9 @@ export default function Navbar() {
   }, []);
 
   const socialItems = [
-    { label: 'Instagram', link: settings?.instagram || 'https://instagram.com/zhahairsaloon' },
-    { label: 'Facebook', link: settings?.facebook || 'https://facebook.com/zhahairsaloon' },
-    { label: 'YouTube', link: settings?.youtube || 'https://youtube.com/zhahairsaloon' }
+    { label: 'Instagram', link: settings?.instagram || 'https://instagram.com/zhaaestheticsalon' },
+    { label: 'Facebook', link: settings?.facebook || 'https://facebook.com/zhaaestheticsalon' },
+    { label: 'YouTube', link: settings?.youtube || 'https://youtube.com/zhaaestheticsalon' }
   ];
 
   return (

@@ -16,9 +16,9 @@ export default function Footer() {
       .catch(err => console.error('Failed to load footer settings:', err));
   }, []);
 
-  const instagramLink = settings?.instagram || 'https://instagram.com/zhahairsaloon';
-  const facebookLink = settings?.facebook || 'https://facebook.com/zhahairsaloon';
-  const youtubeLink = settings?.youtube || 'https://youtube.com/zhahairsaloon';
+  const instagramLink = settings?.instagram || 'https://instagram.com/zhaaestheticsalon';
+  const facebookLink = settings?.facebook || 'https://facebook.com/zhaaestheticsalon';
+  const youtubeLink = settings?.youtube || 'https://youtube.com/zhaaestheticsalon';
 
   return (
     <footer className="footer">
@@ -34,7 +34,7 @@ export default function Footer() {
               )}
               <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
                 <span className="footer__logo-name" style={{ margin: 0 }}>{settings?.studioName || 'ZHA'}</span>
-                <span className="footer__logo-tagline" style={{ marginTop: '2px' }}>Hair Saloon</span>
+                <span className="footer__logo-tagline" style={{ marginTop: '2px' }}>Aesthetic Salon</span>
               </div>
             </div>
             <p className="footer__desc">
@@ -87,7 +87,7 @@ export default function Footer() {
               </div>
               <div className="footer__contact-item">
                 <Mail size={15} className="footer__contact-icon" />
-                <span>{settings?.email || 'hello@zhahairsaloon.com'}</span>
+                <span>{settings?.email || 'hello@zhaaestheticsalon.com'}</span>
               </div>
               <div className="footer__contact-item">
                 <Clock size={15} className="footer__contact-icon" />

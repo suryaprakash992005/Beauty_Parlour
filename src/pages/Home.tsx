@@ -31,8 +31,8 @@ interface TestimonialData {
 }
 
 const FALLBACK_TESTIMONIALS: TestimonialData[] = [
-  { id: 'f-1', review_text: 'My bridal makeup was absolutely flawless. Every guest was in awe. The team at ZHA Hair Saloon truly understands luxury beauty.', reviewer_name: 'Priya Sharma', rating: 5, review_date: '2026-06-15' },
-  { id: 'f-2', review_text: 'The facial treatment left my skin glowing for days. I have tried many salons, but ZHA Hair Saloon is in a completely different league.', reviewer_name: 'Ananya Mehta', rating: 5, review_date: '2026-06-20' },
+  { id: 'f-1', review_text: 'My bridal makeup was absolutely flawless. Every guest was in awe. The team at ZHA Aesthetic Salon truly understands luxury beauty.', reviewer_name: 'Priya Sharma', rating: 5, review_date: '2026-06-15' },
+  { id: 'f-2', review_text: 'The facial treatment left my skin glowing for days. I have tried many salons, but ZHA Aesthetic Salon is in a completely different league.', reviewer_name: 'Ananya Mehta', rating: 5, review_date: '2026-06-20' },
   { id: 'f-3', review_text: 'Hair spa here is an experience I look forward to every month. The products and expertise are truly world-class.', reviewer_name: 'Kavitha Nair', rating: 5, review_date: '2026-06-25' },
   { id: 'f-4', review_text: 'From the moment I walked in, I felt like royalty. The ambience, service, and results — simply exceptional.', reviewer_name: 'Sneha Joshi', rating: 5, review_date: '2026-07-01' },
   { id: 'f-5', review_text: 'The keratin treatment smoothened my hair beyond imagination. I wake up with perfect hair every single day now!', reviewer_name: 'Divya Patel', rating: 5, review_date: '2026-07-04' },
@@ -222,7 +222,7 @@ export default function Home() {
         <div className="container hero__content">
           <div className="hero__eyebrow">
             <Sparkles size={12} />
-            {banner?.smallHeading || 'ZHA Hair Saloon'}
+            {banner?.smallHeading || 'ZHA Aesthetic Salon'}
           </div>
           <h1 className="hero__title">
             <ShinyText
@@ -328,7 +328,7 @@ export default function Home() {
             <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Transformations</div>
             <h2 className="section-title" style={{ color: 'var(--color-white)' }}>See The Difference We Make</h2>
             <p className="section-subtitle mx-auto" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              Drag the slider to witness the professional styling transformations at ZHA Hair Saloon.
+              Drag the slider to witness the professional styling transformations at ZHA Aesthetic Salon.
             </p>
           </div>
           <BeforeAfterSlider />
@@ -395,8 +395,8 @@ export default function Home() {
         <div className="container">
           <div className="section__header section__header--center reveal">
             <div className="section-label">Follow Us</div>
-            <h2 className="section-title">@zhahairsaloon</h2>
-            <p className="section-subtitle mx-auto">Follow our journey of premium hair styling on Instagram and get inspired daily.</p>
+            <h2 className="section-title">@zhaaestheticsalon</h2>
+            <p className="section-subtitle mx-auto">Follow our journey of premium beauty styling on Instagram and get inspired daily.</p>
           </div>
           <div className="instagram-grid">
             {INSTAGRAM_IMGS.map((src, i) => (
