@@ -29,11 +29,11 @@ export default function Footer() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: 'var(--space-md)' }}>
               {settings?.logoUrl && (
                 <div className="navbar__logo-circle" style={{ width: '40px', height: '40px', flexShrink: 0 }}>
-                  <img src={settings.logoUrl} alt={settings?.studioName || 'Zha Aesthetic Salon'} className="navbar__logo-circle-img" />
+                  <img src={settings.logoUrl} alt={settings?.studioName || 'ZHA'} className="navbar__logo-circle-img" />
                 </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
-                <span className="footer__logo-name" style={{ margin: 0 }}>{settings?.studioName || 'Zha Aesthetic Salon'}</span>
+                <span className="footer__logo-name" style={{ margin: 0 }}>{settings?.studioName || 'ZHA'}</span>
                 <span className="footer__logo-tagline" style={{ marginTop: '2px' }}>Hair Saloon</span>
               </div>
             </div>
@@ -103,7 +103,7 @@ export default function Footer() {
 
         <div className="footer__bottom">
           <p className="footer__copyright">
-            © {year} {settings?.studioName || 'Zha Aesthetic Salon'} Hair Saloon. All rights reserved. Crafted with luxury.
+            © {year} {settings?.studioName || 'ZHA'} Hair Saloon. All rights reserved. Crafted with luxury.
           </p>
           <div style={{ display: 'flex', gap: '1.5rem' }}>
             {['Privacy Policy', 'Terms of Service'].map(t => (
