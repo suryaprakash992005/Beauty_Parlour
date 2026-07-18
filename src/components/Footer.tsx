@@ -34,7 +34,7 @@ export default function Footer() {
               )}
               <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
                 <span className="footer__logo-name" style={{ margin: 0 }}>{settings?.studioName || 'Zha Aesthetic Salon'}</span>
-                <span className="footer__logo-tagline" style={{ marginTop: '2px' }}>Aesthetic Salon</span>
+                <span className="footer__logo-tagline" style={{ marginTop: '2px' }}>Hair Saloon</span>
               </div>
             </div>
             <p className="footer__desc">
@@ -103,7 +103,7 @@ export default function Footer() {
 
         <div className="footer__bottom">
           <p className="footer__copyright">
-            © {year} {settings?.studioName || 'Zha Aesthetic Salon'}. All rights reserved. Crafted with luxury.
+            © {year} {settings?.studioName || 'Zha Aesthetic Salon'} Hair Saloon. All rights reserved. Crafted with luxury.
           </p>
           <div style={{ display: 'flex', gap: '1.5rem' }}>
             {['Privacy Policy', 'Terms of Service'].map(t => (
