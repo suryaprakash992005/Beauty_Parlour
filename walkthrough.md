@@ -173,6 +173,7 @@ We replaced the manual Google Business ID inputs with a secure OAuth connection 
   - **Contact Us Page ([Contact.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Contact.tsx))**: Upgraded label/value text in dark green boxes to white and light gold.
   - **Offers Page ([Offers.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Offers.tsx))**: Upgraded titles and descriptions inside the dark cards to white and champagne.
   - **Light Theme Forms ([book.css](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/styles/book.css))**: Made input fields white, input borders darker/clearer, placeholder text highly visible dark sage, and labels rich Forest Green.
+  - **Testimonials Scroll Reveal Fix**: Fixed a React hook lifecycle bug on [Testimonials.tsx](file:///c:/Users/ADMIN/OneDrive/Pictures/Documents/Beauty_parlour/src/pages/Testimonials.tsx) where `useScrollReveal()` was called without a dependency array. Because reviews are loaded asynchronously from Supabase, the elements did not exist in the DOM during mount, leaving them invisible (`opacity: 0`). Passed `[reviews]` as a dependency so the hook recalculates and applies visibility classes immediately after reviews are loaded.
 
 ---
 
