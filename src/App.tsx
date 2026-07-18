@@ -1,7 +1,8 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import { WhatsAppButton, ScrollToTop } from './components/shared';
+import { WhatsAppButton, ScrollToTop, PageTransition } from './components/shared';
 
 // Public Pages
 import Home from './pages/Home';
@@ -30,17 +31,19 @@ function PublicLayout() {
     <>
       <ScrollToTop />
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/bridal-planner" element={<BridalPlanner />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/offers" element={<Offers />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/book-appointment" element={<Book />} />
-        <Route path="/testimonials" element={<Testimonials />} />
-      </Routes>
+      <PageTransition>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/bridal-planner" element={<BridalPlanner />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/offers" element={<Offers />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/book-appointment" element={<Book />} />
+          <Route path="/testimonials" element={<Testimonials />} />
+        </Routes>
+      </PageTransition>
       <Footer />
       <WhatsAppButton />
     </>

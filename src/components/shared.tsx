@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 /* ── Custom Cursor ── */
 export function Cursor() {
@@ -93,12 +94,41 @@ export function WhatsAppButton() {
   );
 }
 
-/* ── Scroll to Top ── */
+/* ── Scroll to Top on Route Change ── */
 export function ScrollToTop() {
+  const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  });
+    // Instantly scroll to top whenever the route changes
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
   return null;
+}
+
+/* ── Page Transition Wrapper ── */
+export function PageTransition({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setVisible(false);
+    const t = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setVisible(true));
+    });
+    return () => cancelAnimationFrame(t);
+  }, [pathname]);
+
+  return (
+    <div
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(12px)',
+        transition: 'opacity 0.45s cubic-bezier(0.25,1,0.5,1), transform 0.45s cubic-bezier(0.25,1,0.5,1)',
+        willChange: 'opacity, transform',
+      }}
+    >
+      {children}
+    </div>
+  );
 }
 
 /* ── useScrollReveal hook ── */

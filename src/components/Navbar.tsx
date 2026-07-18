@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { MessageSquare } from 'lucide-react';
+import { CalendarCheck } from 'lucide-react';
 import { getSalonSettings } from '../services/settings';
 import type { SalonSettings } from '../services/settings';
 import '../styles/layout.css';
@@ -91,8 +91,8 @@ export default function Navbar() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
               <ThemeToggle />
               <Link to="/book-appointment" className="navbar__whatsapp-btn">
-                <MessageSquare size={15} />
-                <span>Book on WhatsApp</span>
+                <CalendarCheck size={15} />
+                <span>Book Appointment</span>
               </Link>
             </div>
           </div>
