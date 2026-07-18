@@ -23,7 +23,6 @@ import AdminGallery from './pages/admin/AdminGallery';
 import AdminBanner from './pages/admin/AdminBanner';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminReviews from './pages/admin/AdminReviews';
-import AdminTryOn from './pages/admin/AdminTryOn';
 
 // Public Site Wrapper Layout
 function PublicLayout() {
@@ -63,7 +62,6 @@ export default function App() {
           <Route path="gallery" element={<AdminGallery />} />
           <Route path="banner" element={<AdminBanner />} />
           <Route path="reviews" element={<AdminReviews />} />
-          <Route path="tryon" element={<AdminTryOn />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
 
