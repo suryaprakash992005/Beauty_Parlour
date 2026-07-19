@@ -15,6 +15,7 @@ const CATEGORIES: Category[] = ['All', 'Hair Care', 'Skin Care', 'Makeup', 'Brid
 export default function Services() {
   const [active, setActive] = useState<Category>('All');
   const [services, setServices] = useState<ServiceItem[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,9 +35,12 @@ export default function Services() {
       });
   }, []);
 
-  const filtered = active === 'All' 
-    ? services 
-    : services.filter(s => s.category.toLowerCase().trim() === active.toLowerCase().trim());
+  const filtered = services.filter(s => {
+    const matchesCategory = active === 'All' || s.category.toLowerCase().trim() === active.toLowerCase().trim();
+    const matchesSearch = s.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          s.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   // Map categories to PillNav items
   const pillNavItems = CATEGORIES.map(cat => ({
@@ -61,8 +65,8 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Filter */}
-      <div className="services-filter" style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-md)', padding: '0 12px' }}>
+      {/* Filter & Search Bar */}
+      <div className="services-filter" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-md)', padding: 'var(--space-md) 16px', borderBottom: '1px solid var(--color-border)' }}>
         <PillNav
           items={pillNavItems}
           activeHref={`#${active}`}
@@ -73,7 +77,54 @@ export default function Services() {
           pillTextColor="var(--color-champagne)"
           onItemClick={(item) => setActive(item.label as Category)}
           initialLoadAnimation={false}
+          disableMobileCollapse={true}
         />
+        
+        {/* Search Space */}
+        <div className="services-search-container" style={{ width: '100%', maxWidth: '480px', position: 'relative', marginTop: '4px' }}>
+          <input
+            type="text"
+            placeholder="Search for haircuts, spa, facial..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px 16px',
+              paddingLeft: '40px',
+              borderRadius: '50px',
+              border: '1.5px solid var(--color-border)',
+              background: 'rgba(255, 255, 255, 0.02)',
+              color: 'var(--color-text)',
+              fontSize: '14px',
+              outline: 'none',
+              transition: 'all 0.3s ease',
+              boxSizing: 'border-box'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = 'var(--color-champagne)';
+              e.target.style.boxShadow = '0 0 10px rgba(212, 175, 55, 0.15)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'var(--color-border)';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+          <svg
+            style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }}
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
       </div>
 
       {/* Grid */}
@@ -91,7 +142,12 @@ export default function Services() {
           ) : filtered.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '80px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
               <Sparkles size={24} style={{ color: 'var(--color-champagne)', opacity: 0.5 }} />
-              <p style={{ color: 'var(--color-text-muted)', fontSize: '15px' }}>No service offerings listed under {active} category.</p>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '15px' }}>
+                {searchQuery 
+                  ? `No services found matching "${searchQuery}"${active !== 'All' ? ` under ${active}` : ''}.`
+                  : `No service offerings listed under ${active} category.`
+                }
+              </p>
             </div>
           ) : (
             <div className="services-grid-full">

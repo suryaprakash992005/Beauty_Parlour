@@ -24,6 +24,7 @@ interface PillNavProps {
   onItemClick?: (item: PillNavItem) => void;
   initialLoadAnimation?: boolean;
   relative?: boolean;
+  disableMobileCollapse?: boolean;
 }
 
 const PillNav = ({
@@ -40,7 +41,8 @@ const PillNav = ({
   onMobileMenuClick,
   onItemClick,
   initialLoadAnimation = true,
-  relative = false
+  relative = false,
+  disableMobileCollapse = false
 }: PillNavProps) => {
   const resolvedPillTextColor = pillTextColor ?? baseColor;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -257,7 +259,7 @@ const PillNav = ({
         zIndex: 99
       }}
     >
-      <nav className={`pill-nav ${className}`} aria-label="Primary" style={cssVars}>
+      <nav className={`pill-nav ${disableMobileCollapse ? 'pill-nav--no-collapse' : ''} ${className}`} aria-label="Primary" style={cssVars}>
         {logo && (
           isRouterLink(items?.[0]?.href) ? (
             <Link
@@ -349,48 +351,52 @@ const PillNav = ({
           </ul>
         </div>
 
-        <button
-          className="mobile-menu-button mobile-only"
-          onClick={toggleMobileMenu}
-          aria-label="Toggle menu"
-          ref={hamburgerRef}
-        >
-          <span className="hamburger-line" />
-          <span className="hamburger-line" />
-        </button>
+        {!disableMobileCollapse && (
+          <button
+            className="mobile-menu-button mobile-only"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+            ref={hamburgerRef}
+          >
+            <span className="hamburger-line" />
+            <span className="hamburger-line" />
+          </button>
+        )}
       </nav>
 
-      <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>
-        <ul className="mobile-menu-list">
-          {items.map((item, i) => (
-            <li key={item.href || `mobile-item-${i}`}>
-              {isRouterLink(item.href) && !onItemClick ? (
-                <Link
-                  to={item.href}
-                  className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <a
-                  href={item.href}
-                  className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
-                  onClick={e => {
-                    setIsMobileMenuOpen(false);
-                    if (onItemClick) {
-                      e.preventDefault();
-                      onItemClick(item);
-                    }
-                  }}
-                >
-                  {item.label}
-                </a>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {!disableMobileCollapse && (
+        <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>
+          <ul className="mobile-menu-list">
+            {items.map((item, i) => (
+              <li key={item.href || `mobile-item-${i}`}>
+                {isRouterLink(item.href) && !onItemClick ? (
+                  <Link
+                    to={item.href}
+                    className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <a
+                    href={item.href}
+                    className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
+                    onClick={e => {
+                      setIsMobileMenuOpen(false);
+                      if (onItemClick) {
+                        e.preventDefault();
+                        onItemClick(item);
+                      }
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

@@ -92,6 +92,7 @@ export default function Gallery() {
           pillTextColor="var(--color-champagne)"
           onItemClick={(item: PillNavItem) => setActive(item.label as GalleryCategory)}
           initialLoadAnimation={false}
+          disableMobileCollapse={true}
         />
       </div>
 

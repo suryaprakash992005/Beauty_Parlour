@@ -230,3 +230,45 @@
   background-color: var(--base);
   color: var(--hover-text, #fff);
 }
+
+/* ── Prevent Mobile Collapse (Horizontal Swipeable Pillbar) ── */
+.pill-nav--no-collapse {
+  width: 100% !important;
+  max-width: 100vw !important;
+  padding: 0 var(--space-md) !important;
+  justify-content: center !important;
+}
+
+@media (max-width: 768px) {
+  .pill-nav--no-collapse .desktop-only {
+    display: block !important;
+  }
+  .pill-nav--no-collapse .mobile-only {
+    display: none !important;
+  }
+  .pill-nav--no-collapse .pill-nav-items {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 3px 12px !important;
+    display: flex !important;
+    scrollbar-width: none !important; /* Firefox */
+  }
+  .pill-nav--no-collapse .pill-nav-items::-webkit-scrollbar {
+    display: none !important; /* Safari and Chrome */
+  }
+  .pill-nav--no-collapse .pill-list {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: var(--pill-gap) !important;
+  }
+  .pill-nav--no-collapse .pill {
+    padding: 0 16px !important;
+    font-size: 13px !important;
+  }
+}

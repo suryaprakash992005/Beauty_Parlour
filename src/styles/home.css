@@ -343,8 +343,12 @@
 .service-card__name {
   font-family: var(--font-serif);
   font-size: var(--text-xl);
-  font-weight: 600;
-  color: var(--color-text);
+  font-weight: 700;
+  color: var(--color-champagne);
+  transition: text-shadow var(--transition-base);
+}
+.service-card:hover .service-card__name {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.45);
 }
 .service-card__desc {
   font-size: var(--text-sm);
