@@ -15,7 +15,6 @@ export default function AdminServices() {
   const [formName, setFormName] = useState('');
   const [formCategory, setFormCategory] = useState('Hair Care');
   const [formDescription, setFormDescription] = useState('');
-  const [formPrice, setFormPrice] = useState('');
   const [formDuration, setFormDuration] = useState('');
   const [formImageUrl, setFormImageUrl] = useState('');
 
@@ -96,7 +95,6 @@ export default function AdminServices() {
     setFormName('');
     setFormCategory('Hair Care');
     setFormDescription('');
-    setFormPrice('');
     setFormDuration('');
     setFormImageUrl('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80');
     setUploadProgress(null);
@@ -110,7 +108,6 @@ export default function AdminServices() {
     setFormName(svc.name);
     setFormCategory(svc.category);
     setFormDescription(svc.description);
-    setFormPrice(svc.price);
     setFormDuration(svc.duration);
     setFormImageUrl(svc.imageUrl);
     setUploadProgress(null);
@@ -130,19 +127,6 @@ export default function AdminServices() {
     }
   };
 
-  const handleToggleActive = async (id: number) => {
-    const service = services.find(x => x.id === id);
-    if (!service) return;
-
-    try {
-      const newActive = !service.active;
-      await updateService(id, { active: newActive });
-      setServices(prev => prev.map(x => x.id === id ? { ...x, active: newActive } : x));
-    } catch (err) {
-      console.error('Failed to toggle active status:', err);
-    }
-  };
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -157,10 +141,8 @@ export default function AdminServices() {
           name: formName,
           category: formCategory,
           description: formDescription,
-          price: formPrice,
           duration: formDuration,
-          imageUrl: finalImageUrl || 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80',
-          active: true
+          imageUrl: finalImageUrl || 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80'
         });
         setServices(prev => [...prev, newService]);
       } else if (modalMode === 'edit' && currentId !== null) {
@@ -168,7 +150,6 @@ export default function AdminServices() {
           name: formName,
           category: formCategory,
           description: formDescription,
-          price: formPrice,
           duration: formDuration,
           imageUrl: finalImageUrl
         });
@@ -261,32 +242,12 @@ export default function AdminServices() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-text-light)', fontSize: '0.78rem' }}>
                   <Clock size={14} />
-                  <span>{svc.duration}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-champagne)', fontSize: '1rem', fontWeight: 700 }}>
-                  <Tag size={14} />
-                  <span>₹{svc.price}</span>
+                  <span>{svc.duration || 'No duration specified'}</span>
                 </div>
               </div>
 
               {/* Footer Actions */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
-                <button 
-                  onClick={() => handleToggleActive(svc.id!)}
-                  style={{
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    padding: '4px 12px',
-                    borderRadius: '100px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    background: svc.active ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                    color: svc.active ? '#22c55e' : '#ef4444'
-                  }}
-                >
-                  {svc.active ? '● Active' : '○ Inactive'}
-                </button>
-
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button 
                     className="admin-action-btn" 
