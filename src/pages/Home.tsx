@@ -5,12 +5,14 @@ import { Instagram } from '../components/BrandIcons';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import ShinyText from '../components/ShinyText';
+import DomeGallery from '../components/DomeGallery';
 import { getHomepageBanner } from '../services/homepage';
 import type { HomepageBanner } from '../services/homepage';
 import { getServices } from '../services/services';
 import type { ServiceItem } from '../services/services';
 import { getPublishedReviews } from '../services/reviews';
 import { getRelativeDateString } from './Testimonials';
+import { getGalleryItems } from '../services/gallery';
 import bridalBeforeImg from '../assets/bridal_before.png';
 import bridalAfterImg from '../assets/bridal_after.png';
 import '../styles/home.css';
@@ -37,15 +39,6 @@ const FALLBACK_TESTIMONIALS: TestimonialData[] = [
   { id: 'f-4', review_text: 'From the moment I walked in, I felt like royalty. The ambience, service, and results — simply exceptional.', reviewer_name: 'Sneha Joshi', rating: 5, review_date: '2026-07-01' },
   { id: 'f-5', review_text: 'The keratin treatment smoothened my hair beyond imagination. I wake up with perfect hair every single day now!', reviewer_name: 'Divya Patel', rating: 5, review_date: '2026-07-04' },
   { id: 'f-6', review_text: 'My party makeup turned heads all night. The makeup artist understood exactly my vibe — flawless and glamorous!', reviewer_name: 'Riya Verma', rating: 5, review_date: '2026-07-08' }
-];
-
-const INSTAGRAM_IMGS = [
-  'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400&q=80',
-  'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80',
-  'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80',
-  'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&q=80',
-  'https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=400&q=80',
-  'https://images.unsplash.com/photo-1510706019490-f8f2be44b6b0?w=400&q=80',
 ];
 
 /* ─── Counter Stat ─── */
@@ -124,6 +117,7 @@ export default function Home() {
   const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadedBgs, setLoadedBgs] = useState<string[]>([]);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
 
   useScrollReveal([services]);
 
@@ -203,6 +197,15 @@ export default function Home() {
         console.error('Failed to load testimonials:', err);
         setHomeReviews(FALLBACK_TESTIMONIALS);
       });
+
+    // Load Portfolio Gallery items for Dome
+    getGalleryItems()
+      .then(data => {
+        if (data && data.length > 0) {
+          setGalleryImages(data.map(img => img.url));
+        }
+      })
+      .catch(err => console.error('Failed to load gallery for dome:', err));
 
     const timer = setInterval(() => {
       setBgIndex(prev => (prev + 1) % HERO_BGS.length);
@@ -440,14 +443,20 @@ export default function Home() {
             <h2 className="section-title">@zha_aesthetic_salon</h2>
             <p className="section-subtitle mx-auto">Follow our journey of aesthetic styling on Instagram and get inspired daily.</p>
           </div>
-          <div className="instagram-grid">
-            {INSTAGRAM_IMGS.map((src, i) => (
-              <a key={i} href="https://www.instagram.com/zha_aesthetic_salon/" target="_blank" rel="noopener noreferrer"
-                className={`instagram-item reveal delay-${(i % 4) + 1}`}>
-                <img className="instagram-item__img" src={src} alt={`Instagram post ${i + 1}`} loading="lazy" />
-                <div className="instagram-item__overlay"><Instagram size={22} /></div>
-              </a>
-            ))}
+          <div style={{ width: '100%', height: '520px', position: 'relative', marginTop: 'var(--space-xl)', overflow: 'hidden' }} className="reveal">
+            <DomeGallery 
+              images={galleryImages.length > 0 ? galleryImages : undefined} 
+              fit={0.45}
+              minRadius={480}
+              maxRadius={900}
+              grayscale={false}
+              overlayBlurColor="var(--color-bg)"
+              openedImageWidth="340px"
+              openedImageHeight="400px"
+              openedImageBorderRadius="20px"
+              imageBorderRadius="16px"
+              dragSensitivity={15}
+            />
           </div>
         </div>
       </section>

@@ -152,7 +152,7 @@ export default function Services() {
           ) : (
             <div className="services-grid-full">
               {filtered.map((s, i) => (
-                <article key={s.id || i} className={`service-card-full reveal delay-${(i % 4) + 1}`}>
+                <article key={s.id || i} className={`service-card-full delay-${(i % 4) + 1}`}>
                   <div className="service-card-full__img-wrap">
                     <img src={s.imageUrl} alt={s.name} loading="lazy" className="service-card-full__img" />
                     <span className="service-card-full__cat">{s.category}</span>
