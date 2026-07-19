@@ -123,8 +123,49 @@ export default function Home() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadedBgs, setLoadedBgs] = useState<string[]>([]);
 
   useScrollReveal([services]);
+
+  useEffect(() => {
+    const urls = [
+      banner?.imageUrl || HERO_BGS[0],
+      HERO_BGS[1],
+      HERO_BGS[2]
+    ];
+
+    let active = true;
+
+    async function preloadSequentially() {
+      for (const url of urls) {
+        if (!url) continue;
+        try {
+          await new Promise<void>((resolve) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => {
+              if (active) {
+                setLoadedBgs(prev => {
+                  if (prev.includes(url)) return prev;
+                  return [...prev, url];
+                });
+              }
+              resolve();
+            };
+            img.onerror = () => resolve();
+          });
+        } catch (e) {
+          console.error('Failed to preload image:', url, e);
+        }
+      }
+    }
+
+    preloadSequentially();
+
+    return () => {
+      active = false;
+    };
+  }, [banner]);
 
   useEffect(() => {
     // Load Homepage Banner config
@@ -187,18 +228,22 @@ export default function Home() {
       <section className="hero" aria-label="Hero">
         <div className="hero__bg" />
         
-        {HERO_BGS.map((bg, idx) => (
-          <div
-            key={idx}
-            className="hero__image-overlay"
-            style={{
-              backgroundImage: `url('${idx === 0 && banner?.imageUrl ? banner.imageUrl : bg}')`,
-              opacity: idx === bgIndex ? 1.0 : 0,
-              transition: 'opacity 1.5s ease-in-out'
-            }}
-            aria-hidden="true"
-          />
-        ))}
+        {HERO_BGS.map((bg, idx) => {
+          const url = idx === 0 && banner?.imageUrl ? banner.imageUrl : bg;
+          const isLoaded = loadedBgs.includes(url);
+          return (
+            <div
+              key={idx}
+              className="hero__image-overlay"
+              style={{
+                backgroundImage: isLoaded ? `url('${url}')` : 'none',
+                opacity: idx === bgIndex && isLoaded ? 1.0 : 0,
+                transition: 'opacity 1.5s ease-in-out'
+              }}
+              aria-hidden="true"
+            />
+          );
+        })}
 
         {/* Soft luxury dark overlay to protect text contrast while background is Bright */}
         <div className="hero__dark-overlay" />
@@ -299,10 +344,7 @@ export default function Home() {
                   <div className="service-card__body">
                     <h3 className="service-card__name">{s.name}</h3>
                     <p className="service-card__desc">{s.description}</p>
-                    <div className="service-card__footer">
-                      <div className="service-card__price">
-                        {s.price && String(s.price).startsWith('₹') ? s.price : `₹${s.price || '0'}`} <small>onwards</small>
-                      </div>
+                    <div className="service-card__footer" style={{ justifyContent: 'center' }}>
                       <InteractiveHoverButton to="/book-appointment" className="interactive-hover-btn--sm">
                         Book Now
                       </InteractiveHoverButton>
