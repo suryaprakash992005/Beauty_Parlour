@@ -345,7 +345,7 @@ export default function Home() {
                     <h3 className="service-card__name">{s.name}</h3>
                     <p className="service-card__desc">{s.description}</p>
                     <div className="service-card__footer" style={{ justifyContent: 'center' }}>
-                      <InteractiveHoverButton to="/book-appointment" className="interactive-hover-btn--sm">
+                      <InteractiveHoverButton to="/book-appointment" state={{ service: s.name }} className="interactive-hover-btn--sm">
                         Book Now
                       </InteractiveHoverButton>
                     </div>
@@ -437,12 +437,12 @@ export default function Home() {
         <div className="container">
           <div className="section__header section__header--center reveal">
             <div className="section-label">Follow Us</div>
-            <h2 className="section-title">@zhahairsaloon</h2>
-            <p className="section-subtitle mx-auto">Follow our journey of premium hair styling on Instagram and get inspired daily.</p>
+            <h2 className="section-title">@zha_aesthetic_salon</h2>
+            <p className="section-subtitle mx-auto">Follow our journey of aesthetic styling on Instagram and get inspired daily.</p>
           </div>
           <div className="instagram-grid">
             {INSTAGRAM_IMGS.map((src, i) => (
-              <a key={i} href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+              <a key={i} href="https://www.instagram.com/zha_aesthetic_salon/" target="_blank" rel="noopener noreferrer"
                 className={`instagram-item reveal delay-${(i % 4) + 1}`}>
                 <img className="instagram-item__img" src={src} alt={`Instagram post ${i + 1}`} loading="lazy" />
                 <div className="instagram-item__overlay"><Instagram size={22} /></div>

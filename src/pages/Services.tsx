@@ -165,7 +165,7 @@ export default function Services() {
                         <span className="service-card-full__dur">⏱ {s.duration}</span>
                       </div>
                     )}
-                    <InteractiveHoverButton to="/book-appointment" className="service-card-full__cta">
+                    <InteractiveHoverButton to="/book-appointment" state={{ service: s.name }} className="service-card-full__cta">
                       Book Now
                     </InteractiveHoverButton>
                   </div>

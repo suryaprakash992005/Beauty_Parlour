@@ -1,13 +1,77 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollReveal } from '../components/shared';
 import { getSalonSettings } from '../services/settings';
 import '../styles/book.css';
 
 const SERVICES_LIST = [
-  'Hair Cut', 'Hair Coloring', 'Hair Spa', 'Keratin Treatment', 'Facial',
-  'Bridal Makeup', 'Nail Art', 'Waxing', 'Threading', 'Pedicure', 'Manicure',
-  'Silver Bridal Package', 'Gold Bridal Package', 'Diamond Luxury Bridal Package',
+  // ── HAIR CARE & STYLING ──
+  "Women's Haircut",
+  "Hair Trim",
+  "Blow Dry",
+  "Hair Wash & Blow Dry",
+  "Hair Styling",
+  "Curling",
+  "Straightening (Styling)",
+  "Ironing",
+  "Party Hairstyle",
+  "Bridal Hairstyle",
+  "Formal Updo",
+  "Hair Spa",
+  "Deep Conditioning",
+  "Scalp Detox",
+  "Keratin Treatment",
+  "Hair Smoothening",
+  "Hair Rebonding",
+  "Botox Hair Treatment",
+  "Hair Extensions",
+
+  // ── SKIN CARE & FACIALS ──
+  "Basic Clean-Up",
+  "Fruit Clean-Up",
+  "De-Tan Clean-Up",
+  "Hydrating Facial",
+  "Glow Facial",
+  "Brightening Facial",
+  "Anti-Aging Facial",
+  "Gold Facial",
+  "Diamond Facial",
+  "Vitamin C Facial",
+  "Acne Control Facial",
+
+  // ── HAIR REMOVAL & WAXING ──
+  "Full Body Wax",
+  "Half Arms",
+  "Full Arms",
+  "Half Legs",
+  "Full Legs",
+  "Underarms",
+  "Rica Wax",
+  "Chocolate Wax",
+  "Honey Wax",
+  "Liposoluble Wax",
+
+  // ── THREADING ──
+  "Eyebrows",
+  "Upper Lip",
+  "Chin",
+  "Forehead",
+  "Full Face",
+
+  // ── BRIDAL MAKEUP & PACKAGES ──
+  "Bridal Makeup",
+  "HD Bridal Makeup",
+  "Airbrush Bridal Makeup",
+  "Engagement Makeup",
+  "Reception Makeup",
+  "Bridal Touch-Up",
+  "Saree Draping",
+  "Bridal Hair Styling",
+  "Pre-Bridal Grooming Package",
+
+  // ── NAILS & GROOMING ──
+  "Manicure",
+  "Pedicure"
 ];
 
 const TIME_SLOTS = [
@@ -39,14 +103,28 @@ export default function Book() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [whatsapp, setWhatsapp] = useState('8270904659');
+  const [phoneDisplay, setPhoneDisplay] = useState('+91 82709 04659');
 
   useEffect(() => {
     getSalonSettings().then(data => {
       if (data.whatsapp) {
         setWhatsapp(data.whatsapp.replace(/[^0-9]/g, ''));
       }
+      if (data.phone) {
+        setPhoneDisplay(data.phone);
+      }
     }).catch(err => console.error('Failed to load booking whatsapp:', err));
   }, []);
+
+  useEffect(() => {
+    if (prefilled.service) {
+      setForm(prev => ({
+        ...prev,
+        service: prefilled.service || prev.service,
+        request: prefilled.request || prev.request
+      }));
+    }
+  }, [location.state]);
 
   const set = (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm(prev => ({ ...prev, [key]: e.target.value }));
@@ -129,7 +207,7 @@ Thank you for booking with us! We look forward to serving you!`;
 
               <div className="book-contact-strip">
                 <p>Need help choosing? Call us:</p>
-                <a href="tel:+919876543210" className="book-phone">+91 98765 43210</a>
+                <a href={`tel:${phoneDisplay.replace(/[^0-9+]/g, '')}`} className="book-phone">{phoneDisplay}</a>
               </div>
             </aside>
 
