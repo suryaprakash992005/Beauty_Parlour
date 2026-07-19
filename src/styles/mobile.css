@@ -430,10 +430,10 @@
     letter-spacing: 0.08em !important;
   }
 
-  .lightbox { padding: 16px !important; }
-  .lightbox__close { top: 16px !important; right: 16px !important; width: 48px !important; height: 48px !important; }
+  .lightbox { padding: 16px !important; z-index: 99999 !important; }
+  .lightbox__close { top: 16px !important; right: 16px !important; width: 48px !important; height: 48px !important; z-index: 100000 !important; }
   .lightbox__img-wrap { max-width: 100% !important; max-height: 85vh !important; border-radius: var(--radius-lg) !important; }
-  .lightbox__img { max-width: 100% !important; max-height: 75vh !important; }
+  .lightbox__img { width: auto !important; height: auto !important; max-width: 100% !important; max-height: 75vh !important; object-fit: contain !important; }
   .lightbox__caption { font-size: 14px !important; padding: 16px !important; }
 }
 

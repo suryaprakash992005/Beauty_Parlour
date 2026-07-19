@@ -226,31 +226,37 @@
   }
 
   .services-grid-full {
-    grid-template-columns: 1fr !important;
-    gap: var(--space-md) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--space-sm) !important;
   }
   .service-card-full {
-    border-radius: var(--radius-lg) !important;
-    max-width: 350px !important;
-    margin-inline: auto !important;
+    border-radius: var(--radius-md) !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
   }
   .service-card-full__img-wrap {
-    height: 180px !important;
+    height: 120px !important;
   }
   .service-card-full__body {
-    padding: var(--space-lg) !important;
+    padding: var(--space-md) !important;
+    gap: 6px !important;
   }
   .service-card-full__name {
-    font-size: 16px !important;
+    font-size: 14px !important;
   }
   .service-card-full__desc {
-    font-size: 13px !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
   }
   .service-card-full__meta {
-    padding: var(--space-sm) 0 !important;
+    padding: 6px 0 !important;
   }
-  .service-card-full__price {
-    font-size: 16px !important;
+  .service-card-full__dur {
+    font-size: 10px !important;
+  }
+  .service-card-full__cta {
+    padding: 6px 12px !important;
+    font-size: 11px !important;
   }
 }
 
