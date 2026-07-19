@@ -23,7 +23,8 @@ export default function Services() {
   useEffect(() => {
     getServices()
       .then(data => {
-        setServices(data);
+        // Filter active services only for customer-facing list
+        setServices(data.filter(s => s.active !== false));
         setLoading(false);
       })
       .catch(err => {
@@ -103,7 +104,7 @@ export default function Services() {
                   <div className="service-card-full__body">
                     <h3 className="service-card-full__name">{s.name}</h3>
                     <p className="service-card-full__desc">{s.description}</p>
-                    {s.duration && s.duration.trim() && (
+                    {s.duration && (
                       <div className="service-card-full__meta">
                         <span className="service-card-full__dur">⏱ {s.duration}</span>
                       </div>

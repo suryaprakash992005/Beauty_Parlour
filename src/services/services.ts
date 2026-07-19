@@ -17,9 +17,11 @@ export interface ServiceItem {
   id?: number;
   name: string;
   category: string;
+  price: string;
   duration: string;
   description: string;
   imageUrl: string;
+  active: boolean;
 }
 
 export async function uploadServiceImage(fileOrBase64: File | string): Promise<string> {
@@ -59,7 +61,7 @@ export async function uploadServiceImage(fileOrBase64: File | string): Promise<s
 export async function getServices(): Promise<ServiceItem[]> {
   const { data, error } = await supabase
     .from('services')
-    .select('id, service_name, category, duration, description, cover_image')
+    .select('*')
     .order('id', { ascending: true });
 
   if (error) {
@@ -68,11 +70,13 @@ export async function getServices(): Promise<ServiceItem[]> {
 
   return (data || []).map(item => ({
     id: item.id,
-    name: item.service_name,
+    name: item.name,
     category: item.category,
-    duration: item.duration || '',
-    description: item.description || '',
-    imageUrl: item.cover_image || ''
+    price: item.price,
+    duration: item.duration,
+    description: item.description,
+    imageUrl: item.image_url || item.imageUrl,
+    active: item.active !== false
   }));
 }
 
@@ -80,11 +84,13 @@ export async function addService(service: Omit<ServiceItem, 'id'>): Promise<Serv
   const { data, error } = await supabase
     .from('services')
     .insert({
-      service_name: service.name,
+      name: service.name,
       category: service.category,
+      price: service.price,
       duration: service.duration,
       description: service.description,
-      cover_image: service.imageUrl
+      image_url: service.imageUrl,
+      active: service.active
     })
     .select()
     .single();
@@ -95,21 +101,25 @@ export async function addService(service: Omit<ServiceItem, 'id'>): Promise<Serv
 
   return {
     id: data.id,
-    name: data.service_name,
+    name: data.name,
     category: data.category,
-    duration: data.duration || '',
-    description: data.description || '',
-    imageUrl: data.cover_image || ''
+    price: data.price,
+    duration: data.duration,
+    description: data.description,
+    imageUrl: data.image_url,
+    active: data.active
   };
 }
 
 export async function updateService(id: number, service: Partial<ServiceItem>): Promise<ServiceItem> {
   const updatePayload: any = {};
-  if (service.name !== undefined) updatePayload.service_name = service.name;
+  if (service.name !== undefined) updatePayload.name = service.name;
   if (service.category !== undefined) updatePayload.category = service.category;
+  if (service.price !== undefined) updatePayload.price = service.price;
   if (service.duration !== undefined) updatePayload.duration = service.duration;
   if (service.description !== undefined) updatePayload.description = service.description;
-  if (service.imageUrl !== undefined) updatePayload.cover_image = service.imageUrl;
+  if (service.imageUrl !== undefined) updatePayload.image_url = service.imageUrl;
+  if (service.active !== undefined) updatePayload.active = service.active;
 
   const { data, error } = await supabase
     .from('services')
@@ -124,11 +134,13 @@ export async function updateService(id: number, service: Partial<ServiceItem>): 
 
   return {
     id: data.id,
-    name: data.service_name,
+    name: data.name,
     category: data.category,
-    duration: data.duration || '',
-    description: data.description || '',
-    imageUrl: data.cover_image || ''
+    price: data.price,
+    duration: data.duration,
+    description: data.description,
+    imageUrl: data.image_url,
+    active: data.active
   };
 }
 

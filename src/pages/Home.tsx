@@ -176,7 +176,7 @@ export default function Home() {
     // Load Featured Services
     getServices()
       .then(data => {
-        setServices(data.slice(0, 6));
+        setServices(data.filter(s => s.active !== false).slice(0, 6));
         setLoading(false);
       })
       .catch(err => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, X, Sparkles, Clock, CloudUpload, CheckCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Sparkles, Clock, Tag, CloudUpload, CheckCircle } from 'lucide-react';
 import { getServices, addService, updateService, deleteService, uploadServiceImage } from '../../services/services';
 import type { ServiceItem } from '../../services/services';
 
@@ -15,6 +15,7 @@ export default function AdminServices() {
   const [formName, setFormName] = useState('');
   const [formCategory, setFormCategory] = useState('Hair Care');
   const [formDescription, setFormDescription] = useState('');
+  const [formPrice, setFormPrice] = useState('');
   const [formDuration, setFormDuration] = useState('');
   const [formImageUrl, setFormImageUrl] = useState('');
 
@@ -95,6 +96,7 @@ export default function AdminServices() {
     setFormName('');
     setFormCategory('Hair Care');
     setFormDescription('');
+    setFormPrice('');
     setFormDuration('');
     setFormImageUrl('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80');
     setUploadProgress(null);
@@ -108,6 +110,7 @@ export default function AdminServices() {
     setFormName(svc.name);
     setFormCategory(svc.category);
     setFormDescription(svc.description);
+    setFormPrice(svc.price);
     setFormDuration(svc.duration);
     setFormImageUrl(svc.imageUrl);
     setUploadProgress(null);
@@ -127,6 +130,19 @@ export default function AdminServices() {
     }
   };
 
+  const handleToggleActive = async (id: number) => {
+    const service = services.find(x => x.id === id);
+    if (!service) return;
+
+    try {
+      const newActive = !service.active;
+      await updateService(id, { active: newActive });
+      setServices(prev => prev.map(x => x.id === id ? { ...x, active: newActive } : x));
+    } catch (err) {
+      console.error('Failed to toggle active status:', err);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -141,8 +157,10 @@ export default function AdminServices() {
           name: formName,
           category: formCategory,
           description: formDescription,
+          price: formPrice,
           duration: formDuration,
-          imageUrl: finalImageUrl || 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80'
+          imageUrl: finalImageUrl || 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80',
+          active: true
         });
         setServices(prev => [...prev, newService]);
       } else if (modalMode === 'edit' && currentId !== null) {
@@ -150,6 +168,7 @@ export default function AdminServices() {
           name: formName,
           category: formCategory,
           description: formDescription,
+          price: formPrice,
           duration: formDuration,
           imageUrl: finalImageUrl
         });
@@ -242,12 +261,32 @@ export default function AdminServices() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-text-light)', fontSize: '0.78rem' }}>
                   <Clock size={14} />
-                  <span>{svc.duration || 'No duration specified'}</span>
+                  <span>{svc.duration || 'Not specified'}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-champagne)', fontSize: '1rem', fontWeight: 700 }}>
+                  <Tag size={14} />
+                  <span>{svc.price ? `₹${svc.price}` : 'No price'}</span>
                 </div>
               </div>
 
               {/* Footer Actions */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
+                <button 
+                  onClick={() => handleToggleActive(svc.id!)}
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    padding: '4px 12px',
+                    borderRadius: '100px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    background: svc.active ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                    color: svc.active ? '#22c55e' : '#ef4444'
+                  }}
+                >
+                  {svc.active ? '● Active' : '○ Inactive'}
+                </button>
+
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button 
                     className="admin-action-btn" 
@@ -319,20 +358,32 @@ export default function AdminServices() {
                   />
                 </div>
 
-                <div className="form-group">
-                  <label className="form-label" htmlFor="modal-category">Category *</label>
-                  <select 
-                    id="modal-category"
-                    className="form-input" 
-                    value={formCategory}
-                    onChange={e => setFormCategory(e.target.value)}
-                  >
-                    <option value="Hair Care">Hair Care</option>
-                    <option value="Skin Care">Skin Care</option>
-                    <option value="Bridal">Bridal</option>
-                    <option value="Nails">Nails</option>
-                    <option value="Makeup">Makeup</option>
-                  </select>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 'var(--space-md)' }}>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="modal-category">Category *</label>
+                    <select 
+                      id="modal-category"
+                      className="form-input" 
+                      value={formCategory}
+                      onChange={e => setFormCategory(e.target.value)}
+                    >
+                      <option value="Hair Care">Hair Care</option>
+                      <option value="Skin Care">Skin Care</option>
+                      <option value="Bridal">Bridal</option>
+                      <option value="Nails">Nails</option>
+                      <option value="Makeup">Makeup</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="modal-price">Price (₹)</label>
+                    <input 
+                      id="modal-price"
+                      className="form-input" 
+                      value={formPrice}
+                      onChange={e => setFormPrice(e.target.value)}
+                      placeholder="e.g. 1500"
+                    />
+                  </div>
                 </div>
 
                 <div className="form-group">
