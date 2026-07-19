@@ -23,8 +23,7 @@ export default function Services() {
   useEffect(() => {
     getServices()
       .then(data => {
-        // Filter active services only for customer-facing list
-        setServices(data.filter(s => s.active !== false));
+        setServices(data);
         setLoading(false);
       })
       .catch(err => {

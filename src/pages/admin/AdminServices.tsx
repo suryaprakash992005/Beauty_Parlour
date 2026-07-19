@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, X, Sparkles, Clock, Tag, CloudUpload, CheckCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Sparkles, Clock, CloudUpload, CheckCircle } from 'lucide-react';
 import { getServices, addService, updateService, deleteService, uploadServiceImage } from '../../services/services';
 import type { ServiceItem } from '../../services/services';
 
