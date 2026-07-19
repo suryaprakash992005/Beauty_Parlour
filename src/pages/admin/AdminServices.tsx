@@ -358,44 +358,30 @@ export default function AdminServices() {
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 'var(--space-md)' }}>
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="modal-category">Category *</label>
-                    <select 
-                      id="modal-category"
-                      className="form-input" 
-                      value={formCategory}
-                      onChange={e => setFormCategory(e.target.value)}
-                    >
-                      <option value="Hair Care">Hair Care</option>
-                      <option value="Skin Care">Skin Care</option>
-                      <option value="Bridal">Bridal</option>
-                      <option value="Nails">Nails</option>
-                      <option value="Makeup">Makeup</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="modal-price">Price (₹) *</label>
-                    <input 
-                      id="modal-price"
-                      className="form-input" 
-                      value={formPrice}
-                      onChange={e => setFormPrice(e.target.value)}
-                      placeholder="e.g. 1500"
-                      required
-                    />
-                  </div>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="modal-category">Category *</label>
+                  <select 
+                    id="modal-category"
+                    className="form-input" 
+                    value={formCategory}
+                    onChange={e => setFormCategory(e.target.value)}
+                  >
+                    <option value="Hair Care">Hair Care</option>
+                    <option value="Skin Care">Skin Care</option>
+                    <option value="Bridal">Bridal</option>
+                    <option value="Nails">Nails</option>
+                    <option value="Makeup">Makeup</option>
+                  </select>
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label" htmlFor="modal-duration">Duration *</label>
+                  <label className="form-label" htmlFor="modal-duration">Duration</label>
                   <input 
                     id="modal-duration"
                     className="form-input" 
                     value={formDuration}
                     onChange={e => setFormDuration(e.target.value)}
                     placeholder="e.g. 60 min"
-                    required
                   />
                 </div>
 

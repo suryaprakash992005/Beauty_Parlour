@@ -1,16 +1,8 @@
-﻿import { Award, Heart, Leaf, Users } from 'lucide-react';
+import { Award, Heart, Leaf, Users } from 'lucide-react';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
 import '../styles/about.css';
-
-const TEAM = [
-  { name: 'Meera Kapoor',   role: 'Founder & Creative Director',   img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80', exp: '15 Years' },
-  { name: 'Aisha Rahman',   role: 'Senior Bridal Artist',          img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80', exp: '10 Years' },
-  { name: 'Preethi Nair',   role: 'Hair Specialist & Colorist',    img: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&q=80', exp: '12 Years' },
-  { name: 'Deepa Suresh',   role: 'Skin & Spa Therapist',          img: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&q=80', exp: '8 Years' },
-];
-
 function StatItem({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   const ref = useCounterAnimation(value);
   return (
@@ -94,30 +86,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="section">
-        <div className="container">
-          <div className="section__header section__header--center reveal">
-            <div className="section-label">Meet The Team</div>
-            <h2 className="section-title">The Artists Behind Your Transformation</h2>
-            <p className="section-subtitle mx-auto">Our certified beauty experts are passionate about making you look and feel extraordinary.</p>
-          </div>
-          <div className="team-grid">
-            {TEAM.map((member, i) => (
-              <div key={member.name} className={`team-card reveal delay-${i + 1}`}>
-                <div className="team-card__img-wrap">
-                  <img src={member.img} alt={member.name} className="team-card__img" loading="lazy" />
-                </div>
-                <div className="team-card__info">
-                  <h3 className="team-card__name">{member.name}</h3>
-                  <p className="team-card__role">{member.role}</p>
-                  <span className="gold-badge" style={{ marginTop: '0.5rem' }}>{member.exp} Exp.</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
     </main>
   );
 }

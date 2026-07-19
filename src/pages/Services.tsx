@@ -104,9 +104,11 @@ export default function Services() {
                   <div className="service-card-full__body">
                     <h3 className="service-card-full__name">{s.name}</h3>
                     <p className="service-card-full__desc">{s.description}</p>
-                    <div className="service-card-full__meta">
-                      <span className="service-card-full__dur">⏱ {s.duration}</span>
-                    </div>
+                    {s.duration && s.duration.trim() && (
+                      <div className="service-card-full__meta">
+                        <span className="service-card-full__dur">⏱ {s.duration}</span>
+                      </div>
+                    )}
                     <InteractiveHoverButton to="/book-appointment" className="service-card-full__cta">
                       Book Now
                     </InteractiveHoverButton>
