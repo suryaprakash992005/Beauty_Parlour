@@ -1,9 +1,15 @@
-﻿import { Tag } from 'lucide-react';
+import { Tag } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
+import Breadcrumb from '../components/Breadcrumb';
+import { useSEO, PAGE_SEO } from '../hooks/useSEO';
 
 export default function Offers() {
+  useSEO({
+    ...PAGE_SEO.offers,
+    breadcrumbs: [{ name: 'Offers', url: '/offers' }],
+  });
   useScrollReveal();
   const OFFERS = [
     { id: 1, tag: 'Bridal Season', discount: '30% OFF', title: 'Bridal Package Special', desc: 'Book any Silver, Gold or Diamond bridal package and save 30% this monsoon season. Limited slots available.', validity: 'Valid till 31st July 2026', img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80', color: '#D4AF37' },
@@ -20,11 +26,12 @@ export default function Offers() {
         <div className="page-hero__bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=1400&q=80')" }} />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
+          <Breadcrumb items={[{ label: 'Offers' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Exclusive Deals</div>
           <h1 className="page-hero__title">
-            <SparklesText>Luxury Offers</SparklesText>
+            <SparklesText>Beauty Offers in Mohanur</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Premium beauty experiences at exceptional value. Limited time only.</p>
+          <p className="page-hero__subtitle">Exclusive hair styling, facial, and bridal package deals at ZHa Aesthetic Salon, Mohanur.</p>
         </div>
       </section>
 

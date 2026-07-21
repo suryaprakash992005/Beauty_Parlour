@@ -2,7 +2,10 @@ import { Award, Heart, Leaf, Users } from 'lucide-react';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
+import Breadcrumb from '../components/Breadcrumb';
+import { useSEO, PAGE_SEO } from '../hooks/useSEO';
 import '../styles/about.css';
+
 function StatItem({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   const ref = useCounterAnimation(value);
   return (
@@ -14,18 +17,24 @@ function StatItem({ value, suffix, label }: { value: number; suffix: string; lab
 }
 
 export default function About() {
+  useSEO({
+    ...PAGE_SEO.about,
+    breadcrumbs: [{ name: 'About Us', url: '/about' }],
+  });
   useScrollReveal();
+
   return (
     <main className="about-page">
       <section className="page-hero">
         <div className="page-hero__bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=1400&q=80')" }} />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
+          <Breadcrumb items={[{ label: 'About Us' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Story</div>
           <h1 className="page-hero__title">
-            <SparklesText>About Zha Aesthetic Salon</SparklesText>
+            <SparklesText>About ZHa Aesthetic Salon</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Born from a passion for premium hair styling, redefined for professional elegance.</p>
+          <p className="page-hero__subtitle">Born from a passion for luxury hair styling and aesthetic excellence in Mohanur, Namakkal.</p>
         </div>
       </section>
 
@@ -35,27 +44,27 @@ export default function About() {
           <div className="about-story">
             <div className="about-story__img-col reveal-left">
               <div className="about-story__img-main">
-                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=700&q=80" alt="Zha Aesthetic Salon" />
+                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=700&q=80" alt="ZHa Aesthetic Salon interior in Mohanur" loading="lazy" />
               </div>
               <div className="about-story__img-accent">
-                <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80" alt="Luxury Service" />
+                <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80" alt="Luxury facial and skin care service" loading="lazy" />
               </div>
             </div>
             <div className="about-story__text reveal-right">
               <div className="section-label">Est. 2012</div>
-              <h2 className="section-title">A Decade of Luxury Styling Excellence</h2>
+              <h2 className="section-title">A Decade of Luxury Styling Excellence in Mohanur</h2>
               <p className="section-subtitle" style={{ marginTop: 'var(--space-lg)' }}>
-                Zha Aesthetic Salon was born from a singular vision — to create an aesthetic sanctuary for premium hair, bridal, and nail care. Founded in 2012 by professional styling experts, Zha Aesthetic Salon has grown into Mumbai's most coveted premium styling destination.
+                ZHa Aesthetic Salon was born from a singular vision — to create an aesthetic sanctuary for premium hair, bridal makeup, skin care, and spa therapy. Founded in 2012 by professional styling experts, ZHa Aesthetic Salon has grown into Mohanur's most coveted luxury beauty destination.
               </p>
               <p style={{ fontSize: 'var(--text-base)', color: 'var(--color-text-muted)', lineHeight: 1.8, marginTop: 'var(--space-lg)' }}>
-                We believe style is a statement of confidence. Every haircut, treatment, and makeover at Zha Aesthetic Salon is delivered with precise techniques and premium products. Our certified specialists bring together years of collective expertise in hair styling, bridal makeup, and aesthetics.
+                We believe style is a statement of confidence. Every haircut, keratin treatment, facial, and bridal makeover at ZHa Aesthetic Salon is delivered with precise techniques and dermatologist-approved products. Our certified specialists bring together years of collective expertise to make Mohanur look and feel extraordinary.
               </p>
               <div className="about-values">
                 {[
-                  { Icon: Heart,   label: 'Client-First',     desc: 'Your comfort and satisfaction are our highest priority.' },
+                  { Icon: Heart,   label: 'Client-First',     desc: 'Your comfort, privacy, and satisfaction are our highest priority.' },
                   { Icon: Award,   label: 'Excellence',        desc: 'We never compromise on quality, products, or artistry.' },
                   { Icon: Leaf,    label: 'Clean Beauty',      desc: 'All products are cruelty-free and dermatologist approved.' },
-                  { Icon: Users,   label: 'Expert Team',       desc: 'Certified artists with international training.' },
+                  { Icon: Users,   label: 'Expert Team',       desc: 'Certified artists with professional salon training.' },
                 ].map(({ Icon, label, desc }) => (
                   <div key={label} className="about-value">
                     <Icon size={20} style={{ color: 'var(--color-rose-gold)' }} />

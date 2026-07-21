@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollReveal } from '../components/shared';
 import { getSalonSettings } from '../services/settings';
+import Breadcrumb from '../components/Breadcrumb';
+import { useSEO, PAGE_SEO } from '../hooks/useSEO';
 import '../styles/book.css';
 
 const SERVICES_LIST = [
@@ -87,6 +89,10 @@ interface FormState {
 }
 
 export default function Book() {
+  useSEO({
+    ...PAGE_SEO.book,
+    breadcrumbs: [{ name: 'Book Appointment', url: '/book-appointment' }],
+  });
   useScrollReveal();
   const location = useLocation();
   const prefilled = (location.state as Partial<FormState> | null) || {};
@@ -177,9 +183,10 @@ Thank you for booking with us! We look forward to serving you!`;
         <div className="page-hero__bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=1400&q=80')" }} />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
+          <Breadcrumb items={[{ label: 'Book Appointment' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Reserve Your Visit</div>
-          <h1 className="page-hero__title">Book Your Appointment</h1>
-          <p className="page-hero__subtitle">Secure your luxury beauty experience with just a few details below.</p>
+          <h1 className="page-hero__title">Book Your Beauty Appointment in Mohanur</h1>
+          <p className="page-hero__subtitle">Secure your luxury hair styling, facial, or bridal makeover experience at ZHa Aesthetic Salon, Mohanur.</p>
         </div>
       </section>
 

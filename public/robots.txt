@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Disallow admin panel from crawlers
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin-login
+
+# Block common bot traps
+Disallow: /api/
+Disallow: /*.json$
+
+# Sitemap
+Sitemap: https://zhaaestheticsalon.com/sitemap.xml
+
+# Crawl-delay for polite bots
+Crawl-delay: 1

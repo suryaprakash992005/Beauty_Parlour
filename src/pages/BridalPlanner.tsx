@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Calendar,
@@ -14,6 +14,9 @@ import {
 } from 'lucide-react';
 import { SparklesText } from '../components/SparklesText';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
+import Breadcrumb from '../components/Breadcrumb';
+import { useSEO, PAGE_SEO } from '../hooks/useSEO';
+import { getSalonSettings } from '../services/settings';
 import '../styles/bridal-planner.css';
 
 interface FamilyMember {
@@ -48,6 +51,10 @@ const PACKAGES = [
 ];
 
 export default function BridalPlanner() {
+  useSEO({
+    ...PAGE_SEO.bridal,
+    breadcrumbs: [{ name: 'Bridal Planner', url: '/bridal-planner' }],
+  });
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -56,13 +63,11 @@ export default function BridalPlanner() {
   const [whatsapp, setWhatsapp] = useState('8270904659');
 
   useEffect(() => {
-    import('../services/settings').then(({ getSalonSettings }) => {
-      getSalonSettings().then(data => {
-        if (data.whatsapp) {
-          setWhatsapp(data.whatsapp.replace(/[^0-9]/g, ''));
-        }
-      }).catch(err => console.error(err));
-    });
+    getSalonSettings().then(data => {
+      if (data.whatsapp) {
+        setWhatsapp(data.whatsapp.replace(/[^0-9]/g, ''));
+      }
+    }).catch(err => console.error(err));
   }, []);
 
   // Form State
@@ -271,10 +276,12 @@ We look forward to serving you!`;
         />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
+          <Breadcrumb items={[{ label: 'Bridal Planner' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Bespoke Planning</div>
           <h1 className="page-hero__title">
-            <SparklesText>Bridal Planner</SparklesText>
+            <SparklesText>Bridal Makeup & Package Planner Mohanur</SparklesText>
           </h1>
+          <p className="page-hero__subtitle">Design your custom bridal makeover, trial session, and family packages with ZHa Aesthetic Salon in Mohanur.</p>
         </div>
       </section>
 

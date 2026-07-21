@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Home Page — Highest Priority -->
+  <url>
+    <loc>https://zhaaestheticsalon.com/</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://zhaaestheticsalon.com/salon_green_theme_1.jpg</image:loc>
+      <image:title>ZHa Aesthetic Salon — Best Beauty Salon in Mohanur</image:title>
+      <image:caption>Professional beauty salon services in Mohanur, Namakkal, Tamil Nadu</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Services Page -->
+  <url>
+    <loc>https://zhaaestheticsalon.com/services</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- Bridal Planner Page -->
+  <url>
+    <loc>https://zhaaestheticsalon.com/bridal-planner</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Gallery Page -->
+  <url>
+    <loc>https://zhaaestheticsalon.com/gallery</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Book Appointment Page -->
+  <url>
+    <loc>https://zhaaestheticsalon.com/book-appointment</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- About Page -->
+  <url>
+    <loc>https://zhaaestheticsalon.com/about</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Contact Page -->
+  <url>
+    <loc>https://zhaaestheticsalon.com/contact</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Offers Page -->
+  <url>
+    <loc>https://zhaaestheticsalon.com/offers</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- Testimonials Page -->
+  <url>
+    <loc>https://zhaaestheticsalon.com/testimonials</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+</urlset>

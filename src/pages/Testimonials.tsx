@@ -1,8 +1,10 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
 import { SparklesText } from '../components/SparklesText';
 import { getPublishedReviews } from '../services/reviews';
+import Breadcrumb from '../components/Breadcrumb';
+import { useSEO, PAGE_SEO } from '../hooks/useSEO';
 
 interface TestimonialData {
   id: string | number;
@@ -47,6 +49,10 @@ export function getRelativeDateString(dateStr: string): string {
 }
 
 export default function Testimonials() {
+  useSEO({
+    ...PAGE_SEO.testimonials,
+    breadcrumbs: [{ name: 'Testimonials', url: '/testimonials' }],
+  });
   const [reviews, setReviews] = useState<TestimonialData[]>([]);
   useScrollReveal([reviews]);
 
@@ -77,11 +83,12 @@ export default function Testimonials() {
         <div className="page-hero__bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1400&q=80')" }} />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
+          <Breadcrumb items={[{ label: 'Testimonials' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Client Stories</div>
           <h1 className="page-hero__title">
-            <SparklesText>Love From Our Clients</SparklesText>
+            <SparklesText>Reviews — ZHa Aesthetic Salon Mohanur</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Real experiences from real women who chose Zha Aesthetic Salon for their most beautiful moments.</p>
+          <p className="page-hero__subtitle">Real experiences from real clients who chose ZHa Aesthetic Salon in Mohanur for their beauty and hair transformation.</p>
         </div>
       </section>
 

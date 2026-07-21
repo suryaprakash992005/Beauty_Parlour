@@ -481,3 +481,50 @@ h4, h5, h6 { font-family: var(--font-sans);  font-weight: 600; line-height: 1.3;
   background: rgba(183, 110, 121, 0.2);
   color: var(--color-btn-gold-text);
 }
+
+/* ── Breadcrumb Navigation ── */
+.breadcrumb {
+  padding: var(--space-sm) 0;
+  margin-bottom: var(--space-md);
+}
+
+.breadcrumb__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb__link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb__link:hover {
+  color: var(--color-champagne);
+}
+
+.breadcrumb__sep {
+  color: var(--color-text-light);
+  opacity: 0.6;
+}
+
+.breadcrumb__current {
+  color: var(--color-champagne);
+  font-weight: 500;
+}

@@ -25,6 +25,8 @@ import AdminBanner from './pages/admin/AdminBanner';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminReviews from './pages/admin/AdminReviews';
 
+import NotFound from './pages/NotFound';
+
 // Public Site Wrapper Layout
 function PublicLayout() {
   return (
@@ -42,6 +44,7 @@ function PublicLayout() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/book-appointment" element={<Book />} />
           <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </PageTransition>
       <Footer />

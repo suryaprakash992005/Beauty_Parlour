@@ -64,9 +64,9 @@ export default function Navbar() {
   }, []);
 
   const socialItems = [
-    { label: 'Instagram', link: settings?.instagram || 'https://instagram.com/zhahairsaloon' },
-    { label: 'Facebook', link: settings?.facebook || 'https://facebook.com/zhahairsaloon' },
-    { label: 'YouTube', link: settings?.youtube || 'https://youtube.com/zhahairsaloon' }
+    { label: 'Instagram', link: settings?.instagram || 'https://www.instagram.com/zha_aesthetic_salon/' },
+    { label: 'Facebook', link: settings?.facebook || 'https://www.instagram.com/zha_aesthetic_salon/' },
+    { label: 'YouTube', link: settings?.youtube || 'https://www.instagram.com/zha_aesthetic_salon/' }
   ];
 
   return (

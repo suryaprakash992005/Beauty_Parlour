@@ -5,8 +5,14 @@ import { useScrollReveal } from '../components/shared';
 import { SparklesText } from '../components/SparklesText';
 import { getSalonSettings } from '../services/settings';
 import type { SalonSettings } from '../services/settings';
+import Breadcrumb from '../components/Breadcrumb';
+import { useSEO, PAGE_SEO } from '../hooks/useSEO';
 
 export default function Contact() {
+  useSEO({
+    ...PAGE_SEO.contact,
+    breadcrumbs: [{ name: 'Contact', url: '/contact' }],
+  });
   useScrollReveal();
   const [settings, setSettings] = useState<SalonSettings | null>(null);
 
@@ -20,33 +26,33 @@ export default function Contact() {
     { 
       Icon: MapPin,  
       label: 'Visit Us',   
-      val: settings?.address || '42, Rose Garden Lane, Luxury District, Mumbai — 400001', 
+      val: settings?.address || '1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015', 
       href: 'https://maps.app.goo.gl/BP8hTwHFbmMcDkHc9' 
     },
     { 
       Icon: Phone,   
       label: 'Call Us',    
-      val: settings?.phone || '+91 98765 43210', 
-      href: `tel:${(settings?.phone || '+919876543210').replace(/[^+\d]/g, '')}` 
+      val: settings?.phone || '+91 82709 04659', 
+      href: `tel:${(settings?.phone || '+918270904659').replace(/[^+\d]/g, '')}` 
     },
     { 
       Icon: Mail,    
       label: 'Email Us',   
-      val: settings?.email || 'hello@zhahairsaloon.com', 
-      href: `mailto:${settings?.email || 'hello@zhahairsaloon.com'}` 
+      val: settings?.email || 'suryasuryaprakash2005@gmail.com', 
+      href: `mailto:${settings?.email || 'suryasuryaprakash2005@gmail.com'}` 
     },
     { 
       Icon: Clock,   
       label: 'Open Hours', 
-      val: `${settings?.openHoursWeekdays || 'Mon–Sat: 9 AM – 8 PM'}  |  ${settings?.openHoursWeekends || 'Sunday: 10 AM – 6 PM'}`, 
+      val: `${settings?.openHoursWeekdays || 'Mon–Fri: 9 AM – 9 PM'}  |  ${settings?.openHoursWeekends || 'Sat–Sun: 7 AM – 9 PM'}`, 
       href: null 
     },
   ];
 
   const socialLinks = [
-    { Icon: Instagram,      href: settings?.instagram || 'https://instagram.com/zhahairsaloon', label: 'Instagram' },
-    { Icon: Facebook,       href: settings?.facebook || 'https://facebook.com/zhahairsaloon',  label: 'Facebook'  },
-    { Icon: Youtube,        href: settings?.youtube || 'https://youtube.com/zhahairsaloon',   label: 'YouTube'   },
+    { Icon: Instagram,      href: settings?.instagram || 'https://www.instagram.com/zha_aesthetic_salon/', label: 'Instagram' },
+    { Icon: Facebook,       href: settings?.facebook || 'https://www.instagram.com/zha_aesthetic_salon/',  label: 'Facebook'  },
+    { Icon: Youtube,        href: settings?.youtube || 'https://www.instagram.com/zha_aesthetic_salon/',   label: 'YouTube'   },
     { Icon: MessageCircle,  href: `https://wa.me/91${settings?.whatsapp || '8270904659'}`, label: 'WhatsApp' },
   ];
 
@@ -56,11 +62,12 @@ export default function Contact() {
         <div className="page-hero__bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=1400&q=80')" }} />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
+          <Breadcrumb items={[{ label: 'Contact' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Get In Touch</div>
           <h1 className="page-hero__title">
-            <SparklesText>Contact Us</SparklesText>
+            <SparklesText>Contact ZHa Aesthetic Salon</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">We would love to hear from you. Reach out for appointments, queries, and collaborations.</p>
+          <p className="page-hero__subtitle">Visit us in Mohanur, Namakkal or reach out for appointments, queries, and bridal bookings.</p>
         </div>
       </section>
 

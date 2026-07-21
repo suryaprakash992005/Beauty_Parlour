@@ -16,12 +16,12 @@ export default function Footer() {
       .catch(err => console.error('Failed to load footer settings:', err));
   }, []);
 
-  const instagramLink = settings?.instagram || 'https://instagram.com/zhahairsaloon';
-  const facebookLink = settings?.facebook || 'https://facebook.com/zhahairsaloon';
-  const youtubeLink = settings?.youtube || 'https://youtube.com/zhahairsaloon';
+  const instagramLink = settings?.instagram || 'https://www.instagram.com/zha_aesthetic_salon/';
+  const facebookLink = settings?.facebook || 'https://www.instagram.com/zha_aesthetic_salon/';
+  const youtubeLink = settings?.youtube || 'https://www.instagram.com/zha_aesthetic_salon/';
 
   return (
-    <footer className="footer">
+    <footer className="footer" itemScope itemType="https://schema.org/WPFooter">
       <div className="container">
         <div className="footer__grid">
           {/* Brand */}
@@ -29,7 +29,7 @@ export default function Footer() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: 'var(--space-md)' }}>
               {settings?.logoUrl && (
                 <div className="navbar__logo-circle" style={{ width: '40px', height: '40px', flexShrink: 0 }}>
-                  <img src={settings.logoUrl} alt={settings?.studioName || 'ZHA'} className="navbar__logo-circle-img" />
+                  <img src={settings.logoUrl} alt={settings?.studioName || 'ZHa Aesthetic Salon Mohanur'} className="navbar__logo-circle-img" loading="lazy" />
                 </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
@@ -40,8 +40,8 @@ export default function Footer() {
               </div>
             </div>
             <p className="footer__desc">
-              A premier luxury salon destination for professional hair styling, 
-              bridal makeup, nail art, and skincare experts.
+              Mohanur's premier luxury salon destination for professional hair styling, 
+              bridal makeup, keratin treatment, facials, and spa care.
             </p>
             <div className="footer__socials">
               {[
@@ -49,7 +49,7 @@ export default function Footer() {
                 { Icon: Facebook,  href: facebookLink, label: 'Facebook'  },
                 { Icon: Youtube,   href: youtubeLink, label: 'YouTube'   },
               ].map(({ Icon, href, label }) => (
-                <a key={label} href={href} className="footer__social-link" aria-label={label} target="_blank" rel="noopener noreferrer">
+                <a key={label} href={href} className="footer__social-link" aria-label={`Follow ZHa Aesthetic Salon on ${label}`} target="_blank" rel="noopener noreferrer">
                   <Icon size={16} />
                 </a>
               ))}
@@ -62,6 +62,7 @@ export default function Footer() {
             <ul className="footer__links">
               {[
                 { label: 'Home',             to: '/'          },
+                { label: 'Services',         to: '/services'  },
                 { label: 'About Us',         to: '/about'     },
                 { label: 'Bridal Planner',   to: '/bridal-planner' },
                 { label: 'Gallery',          to: '/gallery'   },
@@ -79,23 +80,29 @@ export default function Footer() {
           <div>
             <h3 className="footer__col-title">Contact Us</h3>
             <div className="footer__contact-item">
-              <Phone size={16} className="footer__contact-icon" />
-              <span>{settings?.phone || '+91 9688999188'}</span>
+              <Phone size={16} className="footer__contact-icon" aria-hidden="true" />
+              <a href={`tel:${(settings?.phone || '+918270904659').replace(/[^+\d]/g, '')}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                {settings?.phone || '+91 82709 04659'}
+              </a>
             </div>
             <div className="footer__contact-item">
-              <Mail size={16} className="footer__contact-icon" />
-              <span>{settings?.email || 'suryasuryaprakash2005@gmail.com'}</span>
+              <Mail size={16} className="footer__contact-icon" aria-hidden="true" />
+              <a href={`mailto:${settings?.email || 'suryasuryaprakash2005@gmail.com'}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                {settings?.email || 'suryasuryaprakash2005@gmail.com'}
+              </a>
             </div>
             <div className="footer__contact-item">
-              <MapPin size={16} className="footer__contact-icon" />
-              <span>{settings?.address || '1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015'}</span>
+              <MapPin size={16} className="footer__contact-icon" aria-hidden="true" />
+              <a href="https://maps.app.goo.gl/BP8hTwHFbmMcDkHc9" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                {settings?.address || '1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015'}
+              </a>
             </div>
             <div className="footer__contact-item">
-              <Clock size={16} className="footer__contact-icon" />
+              <Clock size={16} className="footer__contact-icon" aria-hidden="true" />
               <span>
                 {settings?.openHoursWeekdays || 'Mon–Fri: 9 AM – 9 PM'}
                 <br />
-                {settings?.openHoursWeekends || 'Sat-Sun: 7 AM – 9 PM'}
+                {settings?.openHoursWeekends || 'Sat–Sun: 7 AM – 9 PM'}
               </span>
             </div>
           </div>

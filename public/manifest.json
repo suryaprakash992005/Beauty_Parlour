@@ -1,0 +1,45 @@
+{
+  "name": "ZHa Aesthetic Salon",
+  "short_name": "ZHa Salon",
+  "description": "Best Beauty Salon in Mohanur, Namakkal — Professional hair styling, bridal makeup, keratin treatment, facials, waxing, and luxury spa services.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0B0B",
+  "theme_color": "#D4AF37",
+  "orientation": "portrait-primary",
+  "lang": "en-IN",
+  "scope": "/",
+  "categories": ["beauty", "health", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Book Appointment",
+      "short_name": "Book Now",
+      "description": "Book a beauty appointment at ZHa Aesthetic Salon",
+      "url": "/book-appointment",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Our Services",
+      "short_name": "Services",
+      "description": "View all beauty services offered",
+      "url": "/services",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

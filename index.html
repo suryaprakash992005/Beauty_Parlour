@@ -1,20 +1,311 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zha Aesthetic Salon — Transform Your Style</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- ── Theme Flash Prevention ── -->
     <script>
       (function() {
-        const theme = localStorage.getItem('zha_theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', theme);
-        document.documentElement.style.backgroundColor = theme === 'dark' ? '#0B0B0B' : '#f5f8f6';
+        var t = localStorage.getItem('zha_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.style.backgroundColor = t === 'dark' ? '#0B0B0B' : '#f5f8f6';
       })();
+    </script>
+
+    <!-- ── Primary SEO Meta ── -->
+    <title>ZHa Aesthetic Salon — Best Beauty Salon in Mohanur, Namakkal</title>
+    <meta name="description" content="ZHa Aesthetic Salon in Mohanur, Namakkal — Professional hair styling, bridal makeup, keratin treatment, facials, waxing & luxury spa services. Book your appointment today!" />
+    <meta name="keywords" content="beauty salon Mohanur, beauty parlour Mohanur, hair spa Mohanur, bridal makeup Mohanur, facial services Mohanur, keratin treatment Mohanur, hair coloring Mohanur, luxury salon Namakkal, professional makeup artist Mohanur, beauty services Mohanur Tamil Nadu" />
+    <meta name="author" content="ZHa Aesthetic Salon" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="language" content="English" />
+    <meta name="geo.region" content="IN-TN" />
+    <meta name="geo.placename" content="Mohanur, Namakkal, Tamil Nadu" />
+    <meta name="geo.position" content="11.0785;78.1510" />
+    <meta name="ICBM" content="11.0785, 78.1510" />
+    <link rel="canonical" href="https://zhaaestheticsalon.com/" />
+
+    <!-- ── Open Graph (Facebook / WhatsApp / LinkedIn) ── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ZHa Aesthetic Salon" />
+    <meta property="og:title" content="ZHa Aesthetic Salon — Best Beauty Salon in Mohanur, Namakkal" />
+    <meta property="og:description" content="Professional hair styling, bridal makeup, keratin treatment, facials & luxury spa in Mohanur, Namakkal. Book your appointment now!" />
+    <meta property="og:url" content="https://zhaaestheticsalon.com/" />
+    <meta property="og:image" content="https://zhaaestheticsalon.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ZHa Aesthetic Salon — Beauty Salon in Mohanur, Namakkal" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- ── Twitter Card ── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ZHa Aesthetic Salon — Best Beauty Salon in Mohanur" />
+    <meta name="twitter:description" content="Professional hair styling, bridal makeup, keratin treatment & luxury spa in Mohanur, Namakkal, Tamil Nadu." />
+    <meta name="twitter:image" content="https://zhaaestheticsalon.com/og-image.jpg" />
+    <meta name="twitter:image:alt" content="ZHa Aesthetic Salon Beauty Services" />
+    <meta name="twitter:site" content="@zha_aesthetic_salon" />
+    <meta name="twitter:creator" content="@zha_aesthetic_salon" />
+
+    <!-- ── Favicon & Icons ── -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/logo.jpg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#D4AF37" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0B0B0B" media="(prefers-color-scheme: light)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ZHa Salon" />
+    <meta name="application-name" content="ZHa Aesthetic Salon" />
+    <meta name="msapplication-TileColor" content="#0B0B0B" />
+
+    <!-- ── Performance: Preconnect to critical origins ── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://supabase.co" />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+
+    <!-- ── Preload critical hero images ── -->
+    <link rel="preload" as="image" href="/salon_green_theme_1.jpg" fetchpriority="high" />
+
+    <!-- ── Structured Data: LocalBusiness + BeautySalon + Organization ── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": ["LocalBusiness", "BeautySalon"],
+          "@id": "https://zhaaestheticsalon.com/#business",
+          "name": "ZHa Aesthetic Salon",
+          "alternateName": ["Zha Aesthetic Salon", "ZHA Aesthetic Salon", "Zha Salon Mohanur"],
+          "description": "ZHa Aesthetic Salon is Mohanur's premier beauty destination offering professional hair styling, bridal makeup, keratin treatment, facials, waxing and luxury spa services.",
+          "url": "https://zhaaestheticsalon.com",
+          "telephone": "+918270904659",
+          "email": "suryasuryaprakash2005@gmail.com",
+          "priceRange": "₹₹",
+          "currenciesAccepted": "INR",
+          "paymentAccepted": "Cash, Credit Card, Debit Card, UPI",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://zhaaestheticsalon.com/logo.jpg",
+            "width": 512,
+            "height": 512
+          },
+          "image": [
+            "https://zhaaestheticsalon.com/salon_green_theme_1.jpg",
+            "https://zhaaestheticsalon.com/salon_green_theme_2.jpg",
+            "https://zhaaestheticsalon.com/salon_green_theme_3.jpg"
+          ],
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar",
+            "addressLocality": "Mohanur",
+            "addressRegion": "Tamil Nadu",
+            "postalCode": "637015",
+            "addressCountry": "IN"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 11.0785,
+            "longitude": 78.1510
+          },
+          "hasMap": "https://maps.app.goo.gl/BP8hTwHFbmMcDkHc9",
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              "opens": "09:00",
+              "closes": "21:00"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Saturday", "Sunday"],
+              "opens": "07:00",
+              "closes": "21:00"
+            }
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+918270904659",
+            "contactType": "customer service",
+            "availableLanguage": ["Tamil", "English"],
+            "contactOption": "TollFree",
+            "areaServed": ["Mohanur", "Namakkal", "Tamil Nadu"]
+          },
+          "sameAs": [
+            "https://www.instagram.com/zha_aesthetic_salon/",
+            "https://maps.app.goo.gl/BP8hTwHFbmMcDkHc9"
+          ],
+          "areaServed": {
+            "@type": "GeoCircle",
+            "geoMidpoint": {
+              "@type": "GeoCoordinates",
+              "latitude": 11.0785,
+              "longitude": 78.1510
+            },
+            "geoRadius": "30000"
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Beauty Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Bridal Makeup",
+                  "description": "Professional bridal makeup including HD bridal makeup, airbrush bridal makeup, and pre-bridal grooming packages.",
+                  "provider": { "@id": "https://zhaaestheticsalon.com/#business" }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Keratin Treatment",
+                  "description": "Professional keratin treatment for smooth, frizz-free hair.",
+                  "provider": { "@id": "https://zhaaestheticsalon.com/#business" }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Hair Spa",
+                  "description": "Deep conditioning hair spa treatment for nourishment and shine.",
+                  "provider": { "@id": "https://zhaaestheticsalon.com/#business" }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Facial Services",
+                  "description": "Range of facial treatments including hydrating, gold, diamond, vitamin C and anti-ageing facials.",
+                  "provider": { "@id": "https://zhaaestheticsalon.com/#business" }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Manicure & Pedicure",
+                  "description": "Professional manicure and pedicure nail care services.",
+                  "provider": { "@id": "https://zhaaestheticsalon.com/#business" }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://zhaaestheticsalon.com/#organization",
+          "name": "ZHa Aesthetic Salon",
+          "url": "https://zhaaestheticsalon.com",
+          "logo": "https://zhaaestheticsalon.com/logo.jpg",
+          "sameAs": ["https://www.instagram.com/zha_aesthetic_salon/"]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://zhaaestheticsalon.com/#website",
+          "name": "ZHa Aesthetic Salon",
+          "url": "https://zhaaestheticsalon.com",
+          "publisher": { "@id": "https://zhaaestheticsalon.com/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://zhaaestheticsalon.com/services?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://zhaaestheticsalon.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Where is ZHa Aesthetic Salon located?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ZHa Aesthetic Salon is located at 1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015. We are easily accessible in the heart of Mohanur."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What services does ZHa Aesthetic Salon offer?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We offer a comprehensive range of beauty services including hair styling (haircuts, blow dry, keratin treatment, hair spa, rebonding, smoothening), bridal makeup, facials (gold, diamond, vitamin C, anti-ageing), waxing, threading, manicure, pedicure, and bridal packages."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How can I book an appointment at ZHa Aesthetic Salon?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can book an appointment online through our website at zhaaestheticsalon.com/book-appointment or call us at +91 82709 04659. Walk-ins are also welcome."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What are the opening hours of ZHa Aesthetic Salon?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ZHa Aesthetic Salon is open Monday to Friday from 9 AM to 9 PM, and on Saturday and Sunday from 7 AM to 9 PM."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does ZHa Aesthetic Salon offer bridal packages?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! We offer complete bridal packages including HD bridal makeup, airbrush bridal makeup, bridal hairstyling, saree draping, bridal touch-up, and pre-bridal grooming packages. Contact us to book your bridal appointment well in advance."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which is the best beauty salon in Mohanur?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ZHa Aesthetic Salon is widely regarded as the best beauty salon in Mohanur, Namakkal, Tamil Nadu. We offer premium, professional beauty services with certified stylists and high-quality products."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://zhaaestheticsalon.com/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://zhaaestheticsalon.com/"
+            }
+          ]
+        }
+      ]
+    }
     </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="text-align:center;padding:40px;font-family:sans-serif;">
+        <h1>ZHa Aesthetic Salon — Mohanur, Namakkal</h1>
+        <p>Best beauty salon in Mohanur offering professional hair styling, bridal makeup, facials, and luxury spa services.</p>
+        <p>📍 1st floor, MPS Traders Building, Nehru Nagar, Mohanur, Tamil Nadu 637015</p>
+        <p>📞 <a href="tel:+918270904659">+91 82709 04659</a></p>
+        <p>Please enable JavaScript to use this website.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

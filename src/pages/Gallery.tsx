@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { X, ZoomIn, Sparkles } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { X, Sparkles } from 'lucide-react';
 import { SparklesText } from '../components/SparklesText';
 import { getGalleryItems } from '../services/gallery';
 import type { GalleryItem } from '../services/gallery';
 import Masonry from '../components/Masonry';
 import PillNav from '../components/PillNav';
 import type { PillNavItem } from '../components/PillNav';
+import Breadcrumb from '../components/Breadcrumb';
+import { useSEO, PAGE_SEO } from '../hooks/useSEO';
 import '../styles/gallery.css';
 
 type GalleryCategory = 'All' | 'Bridal' | 'Hair' | 'Makeup' | 'Nails' | 'Spa';
@@ -13,6 +16,10 @@ type GalleryCategory = 'All' | 'Bridal' | 'Hair' | 'Makeup' | 'Nails' | 'Spa';
 const CATS: GalleryCategory[] = ['All', 'Bridal', 'Hair', 'Makeup', 'Nails', 'Spa'];
 
 export default function Gallery() {
+  useSEO({
+    ...PAGE_SEO.gallery,
+    breadcrumbs: [{ name: 'Gallery', url: '/gallery' }],
+  });
   const [active, setActive] = useState<GalleryCategory>('All');
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,6 +38,18 @@ export default function Gallery() {
         setLoading(false);
       });
   }, []);
+
+  // Lock body scroll when lightbox modal is open
+  useEffect(() => {
+    if (lightbox) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [lightbox]);
 
   const normalizeCat = (dbCat: string): GalleryCategory => {
     const c = dbCat.toLowerCase().trim();
@@ -72,11 +91,12 @@ export default function Gallery() {
         <div className="page-hero__bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=80')" }} />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
+          <Breadcrumb items={[{ label: 'Gallery' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Work</div>
           <h1 className="page-hero__title">
-            <SparklesText>Beauty Gallery</SparklesText>
+            <SparklesText>Beauty Gallery Mohanur</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">A curated showcase of transformations, artistry, and luxury experiences.</p>
+          <p className="page-hero__subtitle">A curated showcase of hair transformations, bridal makeovers & spa artistry at ZHa Aesthetic Salon.</p>
         </div>
       </section>
 
@@ -127,7 +147,6 @@ export default function Gallery() {
               renderItem={(item) => (
                 <>
                   <div className="gallery-item__overlay" style={{ opacity: 1, background: 'rgba(62, 39, 35, 0.45)' }}>
-                    <ZoomIn size={24} />
                     <span>{item.rawItem.title}</span>
                   </div>
                   <span className="gallery-item__cat">{normalizeCat(item.rawItem.category)}</span>
@@ -138,17 +157,18 @@ export default function Gallery() {
         </div>
       </section>
 
-      {/* Lightbox */}
-      {lightbox && (
+      {/* Lightbox rendered into body portal to break free of any transform containers */}
+      {lightbox && createPortal(
         <div className="lightbox" onClick={() => setLightbox(null)} role="dialog" aria-modal="true" aria-label={lightbox.title}>
           <button className="lightbox__close" onClick={() => setLightbox(null)} aria-label="Close lightbox">
-            <X size={24} />
+            <X size={22} />
           </button>
           <div className="lightbox__img-wrap" onClick={e => e.stopPropagation()}>
             <img src={lightbox.url} alt={lightbox.title} className="lightbox__img" />
-            <p className="lightbox__caption">{lightbox.title}</p>
+            {lightbox.title && <p className="lightbox__caption">{lightbox.title}</p>}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </main>
   );

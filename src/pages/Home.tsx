@@ -12,6 +12,7 @@ import type { ServiceItem } from '../services/services';
 import { getPublishedReviews } from '../services/reviews';
 import { getRelativeDateString } from './Testimonials';
 import { getGalleryItems } from '../services/gallery';
+import { useSEO, PAGE_SEO } from '../hooks/useSEO';
 import bridalBeforeImg from '../assets/bridal_before.png';
 import bridalAfterImg from '../assets/bridal_after.png';
 import '../styles/home.css';
@@ -110,6 +111,7 @@ function BeforeAfterSlider() {
 
 /* ─── Home Page ─── */
 export default function Home() {
+  useSEO(PAGE_SEO.home);
   const [bgIndex, setBgIndex] = useState(0);
   const [banner, setBanner] = useState<HomepageBanner | null>(null);
   const [services, setServices] = useState<ServiceItem[]>([]);

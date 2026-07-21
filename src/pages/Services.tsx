@@ -6,6 +6,8 @@ import { SparklesText } from '../components/SparklesText';
 import { getServices } from '../services/services';
 import type { ServiceItem } from '../services/services';
 import PillNav from '../components/PillNav';
+import Breadcrumb from '../components/Breadcrumb';
+import { useSEO, PAGE_SEO } from '../hooks/useSEO';
 import '../styles/services.css';
 
 type Category = 'All' | 'Hair Care' | 'Skin Care' | 'Makeup' | 'Bridal' | 'Spa' | 'Nails';
@@ -13,6 +15,10 @@ type Category = 'All' | 'Hair Care' | 'Skin Care' | 'Makeup' | 'Bridal' | 'Spa' 
 const CATEGORIES: Category[] = ['All', 'Hair Care', 'Skin Care', 'Makeup', 'Bridal', 'Spa', 'Nails'];
 
 export default function Services() {
+  useSEO({
+    ...PAGE_SEO.services,
+    breadcrumbs: [{ name: 'Services', url: '/services' }],
+  });
   const [active, setActive] = useState<Category>('All');
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -55,12 +61,13 @@ export default function Services() {
         <div className="page-hero__bg" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1400&q=80')" }} />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
+          <Breadcrumb items={[{ label: 'Services' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Offerings</div>
           <h1 className="page-hero__title">
-            <SparklesText>Luxury Services</SparklesText>
+            <SparklesText>Luxury Services in Mohanur</SparklesText>
           </h1>
           <p className="page-hero__subtitle">
-            Premium hair and beauty services crafted to perfection by Zha Aesthetic Salon.
+            Premium hair, bridal, skin care & spa services crafted to perfection by ZHa Aesthetic Salon in Mohanur, Namakkal.
           </p>
         </div>
       </section>
