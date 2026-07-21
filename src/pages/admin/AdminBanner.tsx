@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Eye, Check, CloudUpload, CheckCircle } from 'lucide-react';
 import { getHomepageBanner, updateHomepageBanner, uploadHeroAsset } from '../../services/homepage';
 import type { HomepageBanner } from '../../services/homepage';
@@ -135,7 +135,7 @@ export default function AdminBanner() {
         </div>
       </div>
 
-      <div className="admin-banner-grid" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 'var(--space-2xl)' }}>
+      <div className="admin-banner-grid">
         {/* Editor Form */}
         <form onSubmit={handleSave} className="admin-card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
           <h3 className="admin-card__title">Banner Configuration</h3>
@@ -234,7 +234,7 @@ export default function AdminBanner() {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
+          <div className="admin-grid-2col">
             <div className="form-group">
               <label className="form-label" htmlFor="banner-primaryBtn">Primary Button Label</label>
               <input 

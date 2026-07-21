@@ -412,21 +412,147 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* Responsive adjustment */
+
+/* ────────────────────────────────────────────────────────────
+   BRIDAL PLANNER — RESPONSIVE BREAKPOINTS
+   ──────────────────────────────────────────────────────────── */
+
+/* Tablet (768px and below) */
 @media (max-width: 768px) {
+  .planner-container {
+    margin-top: var(--space-2xl);
+    padding: 0 var(--space-sm);
+  }
+
+  .planner-card {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+
+  /* Step indicator: shrink dots and hide step labels */
+  .planner-steps {
+    margin-bottom: var(--space-4xl);
+  }
+
+  .planner-step {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .planner-step__label {
+    font-size: 9px;
+    bottom: -20px;
+  }
+
+  /* Family row: 4-col → 1-col stacked */
+  .family-row {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+
+  .btn-remove {
+    width: 100%;
+    height: 42px;
+  }
+
+  /* Package grid: 2-col → 1-col */
   .package-select-grid {
     grid-template-columns: 1fr;
   }
-  .family-row {
+
+  /* Custom options checkboxes: 2-col → 1-col */
+  .custom-options {
     grid-template-columns: 1fr;
-    gap: var(--space-sm);
   }
-  .btn-remove {
-    width: 100%;
-  }
+
+  /* Invoice grid: 2-col → 1-col */
   .invoice-grid {
     grid-template-columns: 1fr;
     gap: var(--space-md);
+  }
+
+  /* Navigation actions: stack or justify */
+  .planner-actions {
+    flex-direction: row;
+    gap: var(--space-md);
+  }
+
+  .planner-actions .btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 14px !important;
+    padding: 14px 16px !important;
+  }
+
+  /* Success step: adjust success card */
+  .success-actions {
+    max-width: 100%;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .planner-container {
+    padding: 0 12px;
+  }
+
+  .planner-card {
+    padding: var(--space-lg) var(--space-md);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Step labels completely hidden at 480px */
+  .planner-step__label {
+    display: none;
+  }
+
+  .planner-steps {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .planner-step {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .planner-title {
+    font-size: var(--text-lg);
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  /* Family row: fully stacked */
+  .family-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Package selection card: tighter padding */
+  .package-select-card {
+    padding: var(--space-lg);
+  }
+
+  .package-select-card__name {
+    font-size: var(--text-base);
+  }
+
+  .package-select-card__price {
+    font-size: var(--text-xl);
+  }
+
+  /* Navigation actions: stack vertically on very small */
+  .planner-actions {
+    flex-direction: column-reverse;
+    gap: var(--space-sm);
+  }
+
+  .planner-actions .btn {
+    width: 100% !important;
+  }
+
+  /* Summary invoice */
+  .summary-invoice {
+    padding: var(--space-md);
   }
 }
 

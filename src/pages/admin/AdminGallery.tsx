@@ -166,7 +166,7 @@ export default function AdminGallery() {
         <div className="admin-card" style={{ marginBottom: 'var(--space-xl)', animation: 'slideIn 0.3s ease' }}>
           <h3 className="admin-card__title" style={{ marginBottom: 'var(--space-lg)' }}>Add New Portfolio Photo</h3>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 'var(--space-xl)' }} className="admin-gallery-upload-layout">
+          <div className="admin-grid-banner admin-gallery-upload-layout">
             <form onSubmit={handleAdd} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
               <div className="form-group">
                 <label className="form-label" htmlFor="gallery-title">Photo Label/Title</label>
@@ -180,7 +180,7 @@ export default function AdminGallery() {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
+              <div className="admin-grid-2col">
                 <div className="form-group">
                   <label className="form-label" htmlFor="gallery-category">Category</label>
                   <select 

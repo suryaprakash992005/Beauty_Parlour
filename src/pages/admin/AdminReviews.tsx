@@ -671,7 +671,7 @@ export default function AdminReviews() {
               />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
+            <div className="admin-grid-2col">
               <div className="form-group">
                 <label className="form-label" htmlFor="new-review-rating">Rating (Stars) *</label>
                 <select 

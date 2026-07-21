@@ -10,6 +10,7 @@ interface InteractiveHoverButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
+  state?: Record<string, unknown>;
 }
 
 export function InteractiveHoverButton({

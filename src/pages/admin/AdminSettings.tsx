@@ -93,7 +93,7 @@ export default function AdminSettings() {
           <h3 className="admin-card__title" style={{ borderBottom: '1px solid var(--admin-border)', paddingBottom: '8px', marginBottom: '16px' }}>
             Branding & Core Info
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '16px' }}>
+          <div className="admin-grid-2col-uneven">
             <div className="form-group">
               <label className="form-label" htmlFor="settings-studioName">Salon Name</label>
               <input 
@@ -130,7 +130,7 @@ export default function AdminSettings() {
           <h3 className="admin-card__title" style={{ borderBottom: '1px solid var(--admin-border)', paddingBottom: '8px', marginBottom: '16px' }}>
             Contact & Coordination
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+          <div className="admin-grid-3col">
             <div className="form-group">
               <label className="form-label" htmlFor="settings-phone">Contact Number</label>
               <input 
@@ -194,7 +194,7 @@ export default function AdminSettings() {
           <h3 className="admin-card__title" style={{ borderBottom: '1px solid var(--admin-border)', paddingBottom: '8px', marginBottom: '16px' }}>
             Operating Hours
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="admin-grid-2col">
             <div className="form-group">
               <label className="form-label" htmlFor="settings-openHoursWeekdays">Weekdays (Mon - Fri)</label>
               <input 

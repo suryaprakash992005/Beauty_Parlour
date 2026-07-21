@@ -343,7 +343,7 @@ export default function AdminServices() {
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 'var(--space-xl)', alignItems: 'start' }}>
+            <div className="admin-grid-2col-modal">
               {/* Left Column: Form Fields */}
               <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
                 <div className="form-group">
@@ -358,7 +358,7 @@ export default function AdminServices() {
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 'var(--space-md)' }}>
+                <div className="admin-grid-modal-inner">
                   <div className="form-group">
                     <label className="form-label" htmlFor="modal-category">Category *</label>
                     <select 
