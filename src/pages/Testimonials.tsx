@@ -86,9 +86,9 @@ export default function Testimonials() {
           <Breadcrumb items={[{ label: 'Testimonials' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Client Stories</div>
           <h1 className="page-hero__title">
-            <SparklesText>Reviews — ZHa Aesthetic Salon Mohanur</SparklesText>
+            <SparklesText>Love From Our Clients</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Real experiences from real clients who chose ZHa Aesthetic Salon in Mohanur for their beauty and hair transformation.</p>
+          <p className="page-hero__subtitle">Real experiences from real clients who chose ZHa Aesthetic Salon for their beauty and hair transformation.</p>
         </div>
       </section>
 

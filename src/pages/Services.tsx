@@ -64,10 +64,10 @@ export default function Services() {
           <Breadcrumb items={[{ label: 'Services' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Offerings</div>
           <h1 className="page-hero__title">
-            <SparklesText>Luxury Services in Mohanur</SparklesText>
+            <SparklesText>Luxury Services</SparklesText>
           </h1>
           <p className="page-hero__subtitle">
-            Premium hair, bridal, skin care & spa services crafted to perfection by ZHa Aesthetic Salon in Mohanur, Namakkal.
+            Premium hair, bridal, skin care & spa services crafted to perfection by ZHa Aesthetic Salon.
           </p>
         </div>
       </section>

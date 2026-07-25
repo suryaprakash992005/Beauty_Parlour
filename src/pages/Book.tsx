@@ -185,8 +185,8 @@ Thank you for booking with us! We look forward to serving you!`;
         <div className="container page-hero__content">
           <Breadcrumb items={[{ label: 'Book Appointment' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Reserve Your Visit</div>
-          <h1 className="page-hero__title">Book Your Beauty Appointment in Mohanur</h1>
-          <p className="page-hero__subtitle">Secure your luxury hair styling, facial, or bridal makeover experience at ZHa Aesthetic Salon, Mohanur.</p>
+          <h1 className="page-hero__title">Book Your Beauty Appointment</h1>
+          <p className="page-hero__subtitle">Secure your luxury hair styling, facial, or bridal makeover experience at ZHa Aesthetic Salon.</p>
         </div>
       </section>
 

@@ -29,7 +29,7 @@ export default function Footer() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: 'var(--space-md)' }}>
               {settings?.logoUrl && (
                 <div className="navbar__logo-circle" style={{ width: '40px', height: '40px', flexShrink: 0 }}>
-                  <img src={settings.logoUrl} alt={settings?.studioName || 'ZHa Aesthetic Salon Mohanur'} className="navbar__logo-circle-img" loading="lazy" />
+                  <img src={settings.logoUrl} alt={settings?.studioName || 'ZHa Aesthetic Salon'} className="navbar__logo-circle-img" loading="lazy" />
                 </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
@@ -40,7 +40,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="footer__desc">
-              Mohanur's premier luxury salon destination for professional hair styling, 
+              A premier luxury salon destination for professional hair styling, 
               bridal makeup, keratin treatment, facials, and spa care.
             </p>
             <div className="footer__socials">

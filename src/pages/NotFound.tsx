@@ -7,7 +7,7 @@ import { useSEO } from '../hooks/useSEO';
 export default function NotFound() {
   useSEO({
     title: '404 Page Not Found — ZHa Aesthetic Salon',
-    description: 'The page you are looking for does not exist. Explore our hair styling, facials, and bridal services at ZHa Aesthetic Salon in Mohanur.',
+    description: 'The page you are looking for does not exist. Explore our hair styling, facials, and bridal services at ZHa Aesthetic Salon.',
     noIndex: true,
   });
 
@@ -31,7 +31,7 @@ export default function NotFound() {
       <section className="section" style={{ textAlign: 'center', padding: '80px 20px' }}>
         <div className="container" style={{ maxWidth: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', lineHeight: '1.7' }}>
-            We couldn't find what you were looking for. You can return to our homepage or explore our list of luxury salon services in Mohanur.
+            We couldn't find what you were looking for. You can return to our homepage or explore our list of luxury salon services.
           </p>
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <InteractiveHoverButton to="/">

@@ -11,8 +11,8 @@ const PUBLIC_ROUTES = [
     changefreq: 'weekly',
     image: {
       url: `${DOMAIN}/salon_green_theme_1.jpg`,
-      title: 'ZHa Aesthetic Salon — Best Beauty Salon in Mohanur',
-      caption: 'Professional beauty salon services in Mohanur, Namakkal, Tamil Nadu',
+      title: 'ZHa Aesthetic Salon — Luxury Beauty Salon',
+      caption: 'Professional beauty salon services',
     },
   },
   {

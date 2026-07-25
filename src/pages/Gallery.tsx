@@ -94,7 +94,7 @@ export default function Gallery() {
           <Breadcrumb items={[{ label: 'Gallery' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Work</div>
           <h1 className="page-hero__title">
-            <SparklesText>Beauty Gallery Mohanur</SparklesText>
+            <SparklesText>Beauty Gallery</SparklesText>
           </h1>
           <p className="page-hero__subtitle">A curated showcase of hair transformations, bridal makeovers & spa artistry at ZHa Aesthetic Salon.</p>
         </div>

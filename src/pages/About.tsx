@@ -34,7 +34,7 @@ export default function About() {
           <h1 className="page-hero__title">
             <SparklesText>About ZHa Aesthetic Salon</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Born from a passion for luxury hair styling and aesthetic excellence in Mohanur, Namakkal.</p>
+          <p className="page-hero__subtitle">Born from a passion for luxury hair styling and aesthetic excellence.</p>
         </div>
       </section>
 
@@ -44,7 +44,7 @@ export default function About() {
           <div className="about-story">
             <div className="about-story__img-col reveal-left">
               <div className="about-story__img-main">
-                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=700&q=80" alt="ZHa Aesthetic Salon interior in Mohanur" loading="lazy" />
+                <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=700&q=80" alt="ZHa Aesthetic Salon interior" loading="lazy" />
               </div>
               <div className="about-story__img-accent">
                 <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80" alt="Luxury facial and skin care service" loading="lazy" />
@@ -52,12 +52,12 @@ export default function About() {
             </div>
             <div className="about-story__text reveal-right">
               <div className="section-label">Est. 2012</div>
-              <h2 className="section-title">A Decade of Luxury Styling Excellence in Mohanur</h2>
+              <h2 className="section-title">A Decade of Luxury Styling Excellence</h2>
               <p className="section-subtitle" style={{ marginTop: 'var(--space-lg)' }}>
-                ZHa Aesthetic Salon was born from a singular vision — to create an aesthetic sanctuary for premium hair, bridal makeup, skin care, and spa therapy. Founded in 2012 by professional styling experts, ZHa Aesthetic Salon has grown into Mohanur's most coveted luxury beauty destination.
+                ZHa Aesthetic Salon was born from a singular vision — to create an aesthetic sanctuary for premium hair, bridal makeup, skin care, and spa therapy. Founded in 2012 by professional styling experts, ZHa Aesthetic Salon has grown into a coveted luxury beauty destination.
               </p>
               <p style={{ fontSize: 'var(--text-base)', color: 'var(--color-text-muted)', lineHeight: 1.8, marginTop: 'var(--space-lg)' }}>
-                We believe style is a statement of confidence. Every haircut, keratin treatment, facial, and bridal makeover at ZHa Aesthetic Salon is delivered with precise techniques and dermatologist-approved products. Our certified specialists bring together years of collective expertise to make Mohanur look and feel extraordinary.
+                We believe style is a statement of confidence. Every haircut, keratin treatment, facial, and bridal makeover at ZHa Aesthetic Salon is delivered with precise techniques and dermatologist-approved products. Our certified specialists bring together years of collective expertise to make you look and feel extraordinary.
               </p>
               <div className="about-values">
                 {[

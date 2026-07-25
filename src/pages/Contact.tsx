@@ -67,7 +67,7 @@ export default function Contact() {
           <h1 className="page-hero__title">
             <SparklesText>Contact ZHa Aesthetic Salon</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Visit us in Mohanur, Namakkal or reach out for appointments, queries, and bridal bookings.</p>
+          <p className="page-hero__subtitle">Visit us or reach out for appointments, queries, and bridal bookings.</p>
         </div>
       </section>
 

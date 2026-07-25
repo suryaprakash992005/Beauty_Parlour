@@ -29,9 +29,9 @@ export default function Offers() {
           <Breadcrumb items={[{ label: 'Offers' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Exclusive Deals</div>
           <h1 className="page-hero__title">
-            <SparklesText>Beauty Offers in Mohanur</SparklesText>
+            <SparklesText>Beauty Offers</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Exclusive hair styling, facial, and bridal package deals at ZHa Aesthetic Salon, Mohanur.</p>
+          <p className="page-hero__subtitle">Exclusive hair styling, facial, and bridal package deals at ZHa Aesthetic Salon.</p>
         </div>
       </section>
 

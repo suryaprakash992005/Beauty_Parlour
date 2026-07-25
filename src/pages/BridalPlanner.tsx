@@ -279,9 +279,9 @@ We look forward to serving you!`;
           <Breadcrumb items={[{ label: 'Bridal Planner' }]} />
           <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Bespoke Planning</div>
           <h1 className="page-hero__title">
-            <SparklesText>Bridal Makeup & Package Planner Mohanur</SparklesText>
+            <SparklesText>Bridal Makeup & Package Planner</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Design your custom bridal makeover, trial session, and family packages with ZHa Aesthetic Salon in Mohanur.</p>
+          <p className="page-hero__subtitle">Design your custom bridal makeover, trial session, and family packages with ZHa Aesthetic Salon.</p>
         </div>
       </section>
 
