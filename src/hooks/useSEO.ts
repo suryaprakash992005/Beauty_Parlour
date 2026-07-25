@@ -4,7 +4,7 @@ const SITE_NAME = 'ZHa Aesthetic Salon';
 const DEFAULT_TITLE = `${SITE_NAME} — Best Beauty Salon in Mohanur, Namakkal`;
 const DEFAULT_DESCRIPTION =
   'ZHa Aesthetic Salon in Mohanur, Namakkal — Professional hair styling, bridal makeup, keratin treatment, facials & luxury spa. Book now!';
-const SITE_URL = 'https://zhaaestheticsalon.com';
+const SITE_URL = 'https://zhaaestheticsalon.in';
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 interface SEOProps {

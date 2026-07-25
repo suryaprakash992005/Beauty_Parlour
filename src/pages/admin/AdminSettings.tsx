@@ -9,13 +9,13 @@ export default function AdminSettings() {
     logoUrl: '',
     phone: '+91 98765 43210',
     whatsapp: '8270904659',
-    email: 'appointments@zhahairsaloon.com',
-    address: '102, Gold Crest Plaza, Bandra West, Mumbai, Maharashtra 400050',
-    openHoursWeekdays: '09:00 AM - 08:00 PM',
-    openHoursWeekends: '10:00 AM - 09:00 PM',
-    instagram: 'https://instagram.com/zhahairsaloon',
-    facebook: 'https://facebook.com/zhahairsaloon',
-    youtube: 'https://youtube.com/zhahairsaloon',
+    email: 'suryasuryaprakash2005@gmail.com',
+    address: '1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015',
+    openHoursWeekdays: 'Mon–Fri: 9 AM – 9 PM',
+    openHoursWeekends: 'Sat-Sun: 7 AM – 9 PM',
+    instagram: 'https://www.instagram.com/zha_aesthetic_salon/',
+    facebook: 'https://www.instagram.com/zha_aesthetic_salon/',
+    youtube: 'https://www.instagram.com/zha_aesthetic_salon/',
     googleMaps: ''
   });
   const [loading, setLoading] = useState(true);
