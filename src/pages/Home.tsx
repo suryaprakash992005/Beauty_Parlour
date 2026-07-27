@@ -129,26 +129,9 @@ export default function Home() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadedBgs, setLoadedBgs] = useState<string[]>([HERO_BGS[0]]); // Initial hero is marked loaded immediately
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
 
   useScrollReveal([services]);
-
-  // Deferred Background Preloading (Secondary slides only)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const secondaryUrls = [HERO_BGS[1], HERO_BGS[2]];
-      secondaryUrls.forEach(url => {
-        const img = new Image();
-        img.src = url;
-        img.onload = () => {
-          setLoadedBgs(prev => (prev.includes(url) ? prev : [...prev, url]));
-        };
-      });
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     // Load Homepage Banner config
@@ -218,26 +201,31 @@ export default function Home() {
     }));
   }, []);
 
+  // Stable hero slides list (Paints initial hero instantly, crossfades smoothly one by one)
+  const heroSlides = useMemo(() => {
+    const primary = banner?.imageUrl || (IS_MOBILE ? '/salon_green_theme_1_mobile.jpg' : 'https://rkbxikbzjemccuppiuuu.supabase.co/storage/v1/object/public/hero/hero_1784208729302.webp');
+    const slide2  = IS_MOBILE ? '/salon_green_theme_2_mobile.jpg' : '/salon_green_theme_2.jpg';
+    const slide3  = IS_MOBILE ? '/salon_green_theme_3_mobile.jpg' : '/salon_green_theme_3.jpg';
+    return [primary, slide2, slide3];
+  }, [banner?.imageUrl]);
+
   return (
     <main>
       {/* ── HERO ── */}
       <section className="hero" aria-label="Hero">
         <div className="hero__bg" />
         
-        {HERO_BGS.map((bg, idx) => {
-          const url = idx === 0 && banner?.imageUrl ? banner.imageUrl : bg;
-          // Initial main hero background (idx === 0) is displayed IMMEDIATELY without JS delay
-          const isAvailable = idx === 0 || loadedBgs.includes(url);
+        {heroSlides.map((url, idx) => {
           const isVisible = idx === bgIndex;
-
           return (
             <div
-              key={idx}
+              key={`${url}-${idx}`}
               className="hero__image-overlay"
               style={{
-                backgroundImage: isAvailable ? `url('${url}')` : 'none',
-                opacity: isVisible && isAvailable ? 1.0 : 0,
-                transition: 'opacity 1.2s ease-in-out'
+                backgroundImage: `url('${url}')`,
+                opacity: isVisible ? 1.0 : 0,
+                transition: 'opacity 1.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                willChange: 'opacity'
               }}
               aria-hidden="true"
             />

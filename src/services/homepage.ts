@@ -1,4 +1,4 @@
-﻿import { supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 
 // Helper to convert base64 image data to a Blob for upload
 function base64ToBlob(base64: string): Blob {
@@ -67,7 +67,7 @@ const DEFAULT_BANNER: HomepageBanner = {
   description: 'Where premium style meets expert care. Experience the ultimate hair design, bridal cosmetics, nail artistry, and soothing spa therapies at Zha Aesthetic Salon.',
   primaryBtn: 'Book Appointment',
   secondaryBtn: 'Explore Services',
-  imageUrl: '/salon_green_theme_1.jpg',
+  imageUrl: 'https://rkbxikbzjemccuppiuuu.supabase.co/storage/v1/object/public/hero/hero_1784208729302.webp',
 };
 
 export async function getHomepageBanner(): Promise<HomepageBanner> {
