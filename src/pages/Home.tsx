@@ -1,10 +1,9 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback, useState, useMemo, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import ShinyText from '../components/ShinyText';
-import DomeGallery from '../components/DomeGallery';
 import { getHomepageBanner } from '../services/homepage';
 import type { HomepageBanner } from '../services/homepage';
 import { getServices } from '../services/services';
@@ -17,12 +16,25 @@ import bridalBeforeImg from '../assets/bridal_before.png';
 import bridalAfterImg from '../assets/bridal_after.png';
 import '../styles/home.css';
 
-/* ─── Data ─── */
-const HERO_BGS = [
+// Lazy-load heavy below-the-fold 3D Dome Gallery
+const DomeGallery = lazy(() => import('../components/DomeGallery'));
+
+/* ─── Responsive Hero Background Assets ─── */
+const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth <= 768;
+
+const HERO_BGS_DESKTOP = [
   '/salon_green_theme_1.jpg',
   '/salon_green_theme_2.jpg',
   '/salon_green_theme_3.jpg'
 ];
+
+const HERO_BGS_MOBILE = [
+  '/salon_green_theme_1_mobile.jpg',
+  '/salon_green_theme_2_mobile.jpg',
+  '/salon_green_theme_3_mobile.jpg'
+];
+
+const HERO_BGS = IS_MOBILE ? HERO_BGS_MOBILE : HERO_BGS_DESKTOP;
 
 interface TestimonialData {
   id: string | number;
@@ -77,8 +89,8 @@ function BeforeAfterSlider() {
       setPos(x);
     };
     const stop = () => { dragging.current = false; };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove);
+    window.addEventListener('mousemove', onMove, { passive: true });
+    window.addEventListener('touchmove', onMove, { passive: true });
     window.addEventListener('mouseup',  stop);
     window.addEventListener('touchend', stop);
     return () => {
@@ -98,8 +110,8 @@ function BeforeAfterSlider() {
       onMouseMove={e => { if (dragging.current) setPos(e.clientX); }}
       onTouchMove={e => { if (dragging.current) setPos(e.touches[0].clientX); }}
     >
-      <img className="slider-img" src={bridalBeforeImg} alt="Before" />
-      <img className="slider-img slider-after" ref={afterRef} src={bridalAfterImg} alt="After" />
+      <img className="slider-img" src={bridalBeforeImg} alt="Before Makeup Transformation" loading="lazy" decoding="async" width="600" height="450" />
+      <img className="slider-img slider-after" ref={afterRef} src={bridalAfterImg} alt="After Makeup Transformation" loading="lazy" decoding="async" width="600" height="450" />
       <div className="slider-handle" ref={handleRef} />
       <div className="slider-labels">
         <span className="slider-label">Before</span>
@@ -117,50 +129,26 @@ export default function Home() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadedBgs, setLoadedBgs] = useState<string[]>([]);
+  const [loadedBgs, setLoadedBgs] = useState<string[]>([HERO_BGS[0]]); // Initial hero is marked loaded immediately
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
 
   useScrollReveal([services]);
 
+  // Deferred Background Preloading (Secondary slides only)
   useEffect(() => {
-    const urls = [
-      banner?.imageUrl || HERO_BGS[0],
-      HERO_BGS[1],
-      HERO_BGS[2]
-    ];
+    const timer = setTimeout(() => {
+      const secondaryUrls = [HERO_BGS[1], HERO_BGS[2]];
+      secondaryUrls.forEach(url => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => {
+          setLoadedBgs(prev => (prev.includes(url) ? prev : [...prev, url]));
+        };
+      });
+    }, 2000);
 
-    let active = true;
-
-    async function preloadSequentially() {
-      for (const url of urls) {
-        if (!url) continue;
-        try {
-          await new Promise<void>((resolve) => {
-            const img = new Image();
-            img.src = url;
-            img.onload = () => {
-              if (active) {
-                setLoadedBgs(prev => {
-                  if (prev.includes(url)) return prev;
-                  return [...prev, url];
-                });
-              }
-              resolve();
-            };
-            img.onerror = () => resolve();
-          });
-        } catch (e) {
-          console.error('Failed to preload image:', url, e);
-        }
-      }
-    }
-
-    preloadSequentially();
-
-    return () => {
-      active = false;
-    };
-  }, [banner]);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     // Load Homepage Banner config
@@ -208,23 +196,27 @@ export default function Home() {
       })
       .catch(err => console.error('Failed to load gallery for dome:', err));
 
-    const timer = setInterval(() => {
+    const slideTimer = setInterval(() => {
       setBgIndex(prev => (prev + 1) % HERO_BGS.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    }, 5500);
+
+    return () => clearInterval(slideTimer);
   }, []);
 
-  // Particle data
-  const particles = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    size: Math.random() * 60 + 20,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    tx: (Math.random() - 0.5) * 60,
-    ty: -(Math.random() * 60 + 10),
-    dur: Math.random() * 6 + 6,
-    delay: Math.random() * 4,
-  }));
+  // Memoized Particle data (Lightweight count for mobile)
+  const particles = useMemo(() => {
+    const count = IS_MOBILE ? 5 : 12;
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      size: Math.random() * (IS_MOBILE ? 35 : 50) + 15,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      tx: (Math.random() - 0.5) * 40,
+      ty: -(Math.random() * 40 + 10),
+      dur: Math.random() * 5 + 6,
+      delay: Math.random() * 3,
+    }));
+  }, []);
 
   return (
     <main>
@@ -234,22 +226,25 @@ export default function Home() {
         
         {HERO_BGS.map((bg, idx) => {
           const url = idx === 0 && banner?.imageUrl ? banner.imageUrl : bg;
-          const isLoaded = loadedBgs.includes(url);
+          // Initial main hero background (idx === 0) is displayed IMMEDIATELY without JS delay
+          const isAvailable = idx === 0 || loadedBgs.includes(url);
+          const isVisible = idx === bgIndex;
+
           return (
             <div
               key={idx}
               className="hero__image-overlay"
               style={{
-                backgroundImage: isLoaded ? `url('${url}')` : 'none',
-                opacity: idx === bgIndex && isLoaded ? 1.0 : 0,
-                transition: 'opacity 1.5s ease-in-out'
+                backgroundImage: isAvailable ? `url('${url}')` : 'none',
+                opacity: isVisible && isAvailable ? 1.0 : 0,
+                transition: 'opacity 1.2s ease-in-out'
               }}
               aria-hidden="true"
             />
           );
         })}
 
-        {/* Soft luxury dark overlay to protect text contrast while background is Bright */}
+        {/* Soft luxury dark overlay */}
         <div className="hero__dark-overlay" />
 
         {/* Floating particles */}
@@ -343,7 +338,15 @@ export default function Home() {
                   aria-label={s.name}
                 >
                   <div className="service-card__img-wrap">
-                    <img className="service-card__img" src={s.imageUrl} alt={s.name} loading="lazy" />
+                    <img 
+                      className="service-card__img" 
+                      src={s.imageUrl} 
+                      alt={s.name} 
+                      loading="lazy" 
+                      decoding="async" 
+                      width="400" 
+                      height="280" 
+                    />
                   </div>
                   <div className="service-card__body">
                     <h3 className="service-card__name">{s.name}</h3>
@@ -436,7 +439,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── INSTAGRAM ── */}
+      {/* ── INSTAGRAM / DOME GALLERY ── */}
       <section className="instagram-section" aria-label="Instagram Gallery">
         <div className="container">
           <div className="section__header section__header--center reveal">
@@ -445,19 +448,25 @@ export default function Home() {
             <p className="section-subtitle mx-auto">Follow our journey of aesthetic styling on Instagram and get inspired daily.</p>
           </div>
           <div style={{ width: '100%', height: '520px', position: 'relative', marginTop: 'var(--space-xl)', overflow: 'hidden' }} className="reveal">
-            <DomeGallery 
-              images={galleryImages.length > 0 ? galleryImages : undefined} 
-              fit={0.45}
-              minRadius={480}
-              maxRadius={900}
-              grayscale={false}
-              overlayBlurColor="var(--color-bg)"
-              openedImageWidth="340px"
-              openedImageHeight="400px"
-              openedImageBorderRadius="20px"
-              imageBorderRadius="16px"
-              dragSensitivity={15}
-            />
+            <Suspense fallback={
+              <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="book-loader" style={{ width: '32px', height: '32px', borderTopColor: 'var(--color-champagne)' }} />
+              </div>
+            }>
+              <DomeGallery 
+                images={galleryImages.length > 0 ? galleryImages : undefined} 
+                fit={0.45}
+                minRadius={480}
+                maxRadius={900}
+                grayscale={false}
+                overlayBlurColor="var(--color-bg)"
+                openedImageWidth="340px"
+                openedImageHeight="400px"
+                openedImageBorderRadius="20px"
+                imageBorderRadius="16px"
+                dragSensitivity={15}
+              />
+            </Suspense>
           </div>
         </div>
       </section>
