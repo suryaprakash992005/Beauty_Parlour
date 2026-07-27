@@ -175,6 +175,19 @@
   }
 }
 
+/* Tablet & Mobile Touch GPU Acceleration */
+@media (max-width: 1024px) {
+  .hero__bg,
+  .hero__image-overlay {
+    background-position: center center !important;
+    background-size: cover !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    transform: translateZ(0) !important;
+    will-change: opacity !important;
+  }
+}
+
 @media (max-width: 360px) {
   .hero__title { font-size: 1.85rem !important; }
   .hero__subtitle { font-size: 14px !important; }

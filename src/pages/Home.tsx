@@ -201,11 +201,12 @@ export default function Home() {
     }));
   }, []);
 
-  // Stable hero slides list (Paints initial hero instantly, crossfades smoothly one by one)
+  // Stable hero slides list for Desktop, Tablet, and Mobile
   const heroSlides = useMemo(() => {
-    const primary = banner?.imageUrl || (IS_MOBILE ? '/salon_green_theme_1_mobile.jpg' : 'https://rkbxikbzjemccuppiuuu.supabase.co/storage/v1/object/public/hero/hero_1784208729302.webp');
-    const slide2  = IS_MOBILE ? '/salon_green_theme_2_mobile.jpg' : '/salon_green_theme_2.jpg';
-    const slide3  = IS_MOBILE ? '/salon_green_theme_3_mobile.jpg' : '/salon_green_theme_3.jpg';
+    const isMobileOrTablet = typeof window !== 'undefined' && window.innerWidth <= 1024;
+    const primary = banner?.imageUrl || (isMobileOrTablet ? '/salon_green_theme_1_mobile.jpg' : 'https://rkbxikbzjemccuppiuuu.supabase.co/storage/v1/object/public/hero/hero_1784208729302.webp');
+    const slide2  = isMobileOrTablet ? '/salon_green_theme_2_mobile.jpg' : '/salon_green_theme_2.jpg';
+    const slide3  = isMobileOrTablet ? '/salon_green_theme_3_mobile.jpg' : '/salon_green_theme_3.jpg';
     return [primary, slide2, slide3];
   }, [banner?.imageUrl]);
 
