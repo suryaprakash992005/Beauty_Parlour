@@ -209,6 +209,16 @@ export default function Home() {
     return [primary, slide2, slide3];
   }, [banner?.imageUrl]);
 
+  // Preload all hero slides into memory so transitions on mobile/desktop are 100% instant and gapless
+  useEffect(() => {
+    heroSlides.forEach(url => {
+      if (url) {
+        const img = new Image();
+        img.src = url;
+      }
+    });
+  }, [heroSlides]);
+
   return (
     <main>
       {/* ── HERO ── */}
@@ -219,12 +229,12 @@ export default function Home() {
           const isVisible = idx === bgIndex;
           return (
             <div
-              key={`${url}-${idx}`}
+              key={idx}
               className="hero__image-overlay"
               style={{
                 backgroundImage: `url('${url}')`,
                 opacity: isVisible ? 1.0 : 0,
-                transition: 'opacity 1.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: 'opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1)',
                 willChange: 'opacity'
               }}
               aria-hidden="true"

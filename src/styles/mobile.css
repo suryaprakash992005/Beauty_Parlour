@@ -168,6 +168,10 @@
   .hero__image-overlay {
     background-position: center center !important;
     background-size: cover !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    transform: translateZ(0) !important;
+    will-change: opacity !important;
   }
 }
 
