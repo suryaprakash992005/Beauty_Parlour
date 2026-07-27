@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate, Outlet, useLocation } from 'react-router-do
 import {
   LayoutDashboard, Scissors, Image, Settings, LogOut, Menu, X, Sliders, Star
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { getSalonSettings } from '../../services/settings';
 import '../../styles/admin.css';
 
@@ -16,26 +17,24 @@ const LINKS = [
 ];
 
 export default function AdminLayout() {
+  const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [logoUrl, setLogoUrl] = useState('/logo.jpg');
 
   useEffect(() => {
-    const isAdmin = localStorage.getItem('zha_admin');
-    if (!isAdmin) {
-      navigate('/admin-login', { replace: true });
-    }
     getSalonSettings()
       .then(s => {
-        if (s.logoUrl) setLogoUrl(s.logoUrl);
+        if (s?.logoUrl) setLogoUrl(s.logoUrl);
       })
       .catch(() => {});
-  }, [navigate]);
+  }, []);
 
-  const logout = () => {
-    localStorage.removeItem('zha_admin');
-    navigate('/admin-login');
+  const handleLogout = async () => {
+    await logout();
+    window.history.pushState(null, '', '/admin-login');
+    navigate('/admin-login', { replace: true });
   };
 
   // Get current page title dynamically based on route
@@ -98,7 +97,7 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        <button className="admin-sidebar__logout" onClick={logout} title="Logout">
+        <button className="admin-sidebar__logout" onClick={handleLogout} title="Logout">
           <LogOut size={18} />
           <span>Logout</span>
         </button>
@@ -125,8 +124,10 @@ export default function AdminLayout() {
                 className="admin-profile__avatar"
               />
               <div className="admin-profile__info">
-                <span className="admin-profile__name">Zha Admin</span>
-                <span className="admin-profile__role">Owner</span>
+                <span className="admin-profile__name" style={{ maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {user?.email || 'Zha Admin'}
+                </span>
+                <span className="admin-profile__role">Administrator</span>
               </div>
             </div>
           </div>

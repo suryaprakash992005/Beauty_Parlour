@@ -1,33 +1,68 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Lock, ShieldCheck, ArrowRight } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import '../../styles/admin.css';
 
 export default function AdminLogin() {
-  const [creds, setCreds] = useState({ username: '', password: '' });
+  const { login, session } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const handle = (e: React.FormEvent) => {
+  // Auto-redirect if user is already authenticated
+  useEffect(() => {
+    if (session) {
+      navigate('/admin/dashboard', { replace: true });
+    }
+  }, [session, navigate]);
+
+  const handle = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading || success) return;
+
+    if (!email.trim()) {
+      setError('Please enter your administrator email.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    if (!password) {
+      setError('Please enter your password.');
+      return;
+    }
+
     setLoading(true);
     setError('');
-    
-    setTimeout(() => {
-      if (creds.username === 'admin' && creds.password === 'zhahair2026') {
-        setSuccess(true);
-        localStorage.setItem('zha_admin', 'true');
-        setTimeout(() => {
-          navigate('/admin/dashboard');
-        }, 800);
+
+    const { error: loginError } = await login(email.trim(), password);
+
+    if (loginError) {
+      setLoading(false);
+      const msg = loginError.message.toLowerCase();
+      if (msg.includes('invalid login credentials') || msg.includes('invalid credentials')) {
+        setError('Invalid credentials. Please check your email and password.');
+      } else if (msg.includes('network') || msg.includes('fetch')) {
+        setError('Network connection error. Please verify your connection.');
       } else {
-        setError('Invalid credentials. Please use admin / zhahair2026');
-        setLoading(false);
+        setError(loginError.message || 'Login failed. Please check your credentials.');
       }
-    }, 1200);
+    } else {
+      setSuccess(true);
+      localStorage.setItem('zha_admin', 'true');
+      setTimeout(() => {
+        navigate('/admin/dashboard', { replace: true });
+      }, 700);
+    }
   };
 
   return (
@@ -88,14 +123,14 @@ export default function AdminLogin() {
 
           <form onSubmit={handle} className="admin-login__form">
             <div className="form-group">
-              <label className="form-label" htmlFor="admin-username">Username or Email</label>
+              <label className="form-label" htmlFor="admin-email">Administrator Email</label>
               <input
-                id="admin-username"
+                id="admin-email"
                 className="form-input"
-                type="text"
-                value={creds.username}
-                onChange={e => setCreds(p => ({ ...p, username: e.target.value }))}
-                placeholder="admin"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="admin@zhaaestheticsalon.in"
                 disabled={loading || success}
                 required
               />
@@ -104,16 +139,16 @@ export default function AdminLogin() {
             <div className="form-group">
               <div className="form-label-row">
                 <label className="form-label" htmlFor="admin-password">Password</label>
-                <a href="#forgot" className="admin-login__forgot" onClick={e => { e.preventDefault(); alert('Default credentials: admin / zhahair2026'); }}>
+                <Link to="/forgot-password" className="admin-login__forgot">
                   Forgot password?
-                </a>
+                </Link>
               </div>
               <input
                 id="admin-password"
                 className="form-input"
                 type="password"
-                value={creds.password}
-                onChange={e => setCreds(p => ({ ...p, password: e.target.value }))}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
                 disabled={loading || success}
                 required

@@ -1,10 +1,12 @@
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { WhatsAppButton, ScrollToTop, PageTransition } from './components/shared';
 
-// Public Pages
+// Public Pages (Eager Loaded)
 import Home from './pages/Home';
 import Services from './pages/Services';
 import BridalPlanner from './pages/BridalPlanner';
@@ -14,20 +16,45 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Book from './pages/Book';
 import Testimonials from './pages/Testimonials';
-
-// Admin Pages
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminLayout from './pages/admin/AdminLayout';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminServices from './pages/admin/AdminServices';
-import AdminGallery from './pages/admin/AdminGallery';
-import AdminBanner from './pages/admin/AdminBanner';
-import AdminSettings from './pages/admin/AdminSettings';
-import AdminReviews from './pages/admin/AdminReviews';
-
 import NotFound from './pages/NotFound';
 
-// Public Site Wrapper Layout
+// Auth & Admin Pages (Lazy Loaded for High Performance)
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+const ForgotPassword = lazy(() => import('./pages/admin/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/admin/ResetPassword'));
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminServices = lazy(() => import('./pages/admin/AdminServices'));
+const AdminGallery = lazy(() => import('./pages/admin/AdminGallery'));
+const AdminBanner = lazy(() => import('./pages/admin/AdminBanner'));
+const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
+const AdminReviews = lazy(() => import('./pages/admin/AdminReviews'));
+
+function AdminFallback() {
+  return (
+    <div 
+      style={{ 
+        minHeight: '100vh', 
+        backgroundColor: '#0B0B0B', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center' 
+      }}
+    >
+      <div 
+        className="book-loader" 
+        style={{ 
+          width: '32px', 
+          height: '32px', 
+          borderWidth: '3px', 
+          borderColor: 'var(--admin-accent, #22C55E)', 
+          borderTopColor: 'transparent' 
+        }} 
+      />
+    </div>
+  );
+}
+
 function PublicLayout() {
   return (
     <>
@@ -55,25 +82,43 @@ function PublicLayout() {
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Admin Login - No headers, footers or floating FABs */}
-        <Route path="/admin-login" element={<AdminLogin />} />
+    <AuthProvider>
+      <Router>
+        <Suspense fallback={<AdminFallback />}>
+          <Routes>
+            {/* Auth Pages */}
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Admin Dashboard Pages */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="services" element={<AdminServices />} />
-          <Route path="gallery" element={<AdminGallery />} />
-          <Route path="banner" element={<AdminBanner />} />
-          <Route path="reviews" element={<AdminReviews />} />
-          <Route path="settings" element={<AdminSettings />} />
-        </Route>
+            {/* Protected Admin Console Routes */}
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="services" element={<AdminServices />} />
+              <Route path="gallery" element={<AdminGallery />} />
+              <Route path="banner" element={<AdminBanner />} />
+              <Route path="reviews" element={<AdminReviews />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
 
-        {/* Public Routes */}
-        <Route path="/*" element={<PublicLayout />} />
-      </Routes>
-    </Router>
+            {/* Admin Shortcuts / Aliases */}
+            <Route path="/products" element={<Navigate to="/admin/services" replace />} />
+            <Route path="/categories" element={<Navigate to="/admin/services" replace />} />
+            <Route path="/banners" element={<Navigate to="/admin/banner" replace />} />
+
+            {/* Public Site Routes */}
+            <Route path="/*" element={<PublicLayout />} />
+          </Routes>
+        </Suspense>
+      </Router>
+    </AuthProvider>
   );
 }
