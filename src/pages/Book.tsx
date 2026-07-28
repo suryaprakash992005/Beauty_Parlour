@@ -184,9 +184,9 @@ Thank you for booking with us! We look forward to serving you!`;
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <Breadcrumb items={[{ label: 'Book Appointment' }]} />
-          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Reserve Your Visit</div>
-          <h1 className="page-hero__title">Book Your Beauty Appointment</h1>
-          <p className="page-hero__subtitle">Secure your luxury hair styling, facial, or bridal makeover experience at ZHa Aesthetic Salon.</p>
+          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Reserve Your Visit in Namakkal</div>
+          <h1 className="page-hero__title">Book Salon Appointment in Namakkal</h1>
+          <p className="page-hero__subtitle">Secure your haircut, HD bridal makeup, keratin treatment or hair spa at ZHa Aesthetic Salon in Mohanur, Namakkal District.</p>
         </div>
       </section>
 

@@ -26,14 +26,14 @@ export default function Contact() {
     { 
       Icon: MapPin,  
       label: 'Visit Us',   
-      val: settings?.address || '1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015', 
+      val: settings?.address || '1st Floor, MPS Traders Building, Opposite Taluka Office, Nehru Nagar, Mohanur, Namakkal District, Tamil Nadu - 637015', 
       href: 'https://maps.app.goo.gl/BP8hTwHFbmMcDkHc9' 
     },
     { 
       Icon: Phone,   
       label: 'Call Us',    
-      val: settings?.phone || '+91 82709 04659', 
-      href: `tel:${(settings?.phone || '+918270904659').replace(/[^+\d]/g, '')}` 
+      val: settings?.phone || '+91 96889 99188 / +91 82709 04659', 
+      href: 'tel:+919688999188' 
     },
     { 
       Icon: Mail,    
@@ -53,7 +53,7 @@ export default function Contact() {
     { Icon: Instagram,      href: settings?.instagram || 'https://www.instagram.com/zha_aesthetic_salon/', label: 'Instagram' },
     { Icon: Facebook,       href: settings?.facebook || 'https://www.instagram.com/zha_aesthetic_salon/',  label: 'Facebook'  },
     { Icon: Youtube,        href: settings?.youtube || 'https://www.instagram.com/zha_aesthetic_salon/',   label: 'YouTube'   },
-    { Icon: MessageCircle,  href: `https://wa.me/91${settings?.whatsapp || '8270904659'}`, label: 'WhatsApp' },
+    { Icon: MessageCircle,  href: `https://wa.me/919688999188`, label: 'WhatsApp' },
   ];
 
   return (
@@ -63,11 +63,11 @@ export default function Contact() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <Breadcrumb items={[{ label: 'Contact' }]} />
-          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Get In Touch</div>
+          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Contact The Best Salon in Namakkal</div>
           <h1 className="page-hero__title">
             <SparklesText>Contact ZHa Aesthetic Salon</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Visit us or reach out for appointments, queries, and bridal bookings.</p>
+          <p className="page-hero__subtitle">Located in Mohanur, Namakkal District. Reach out for haircuts, HD bridal makeup & keratin appointments.</p>
         </div>
       </section>
 
@@ -114,8 +114,8 @@ export default function Contact() {
             {/* Map */}
             <div className="contact-map reveal-right">
               <iframe
-                title="Zha Aesthetic Salon Location"
-                src={settings?.googleMaps || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.1160907028!2d72.74109995!3d19.08250475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1687000000000"}
+                title="Zha Aesthetic Salon Location in Mohanur Namakkal"
+                src={settings?.googleMaps || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15664.846542152861!2d78.140733!3d11.078496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baa250882e75cb7%3A0x8673a5a7b6070624!2sMohanur%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1700000000000"}
                 width="100%"
                 height="420"
                 style={{ border: 0, borderRadius: 'var(--radius-xl)' }}

@@ -44,6 +44,24 @@ async function optimize() {
     }
   }
 
+  // Generate SEO-named image files
+  const seoImageMappings = [
+    { src: 'salon_green_theme_1.jpg', dest: 'best-beauty-salon-namakkal.jpg' },
+    { src: 'salon_green_theme_2.jpg', dest: 'hair-spa-namakkal.jpg' },
+    { src: 'salon_green_theme_3.jpg', dest: 'bridal-makeup-namakkal.jpg' },
+    { src: 'salon_green_theme_1.jpg', dest: 'keratin-treatment-namakkal.jpg' },
+    { src: 'salon_green_theme_2.jpg', dest: 'luxury-salon-namakkal.jpg' },
+  ];
+
+  for (const mapping of seoImageMappings) {
+    const srcPath = path.join(publicDir, mapping.src);
+    const destPath = path.join(publicDir, mapping.dest);
+    if (fs.existsSync(srcPath)) {
+      fs.copyFileSync(srcPath, destPath);
+      console.log(`[SEO Image] Copied ${mapping.src} -> ${mapping.dest}`);
+    }
+  }
+
   // Also compress src/assets/bridal_before.png and bridal_after.png
   const assetsDir = path.join(process.cwd(), 'src', 'assets');
   const bridalFiles = ['bridal_before.png', 'bridal_after.png'];
@@ -53,7 +71,6 @@ async function optimize() {
     try {
       const img = await Jimp.read(inputPath);
       const originalSize = fs.statSync(inputPath).size;
-      // Convert heavy 1MB PNGs to quality-optimized JPEGs/PNGs
       const buf = await img.getBuffer('image/png');
       fs.writeFileSync(inputPath, buf);
       const newSize = fs.statSync(inputPath).size;

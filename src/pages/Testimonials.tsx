@@ -84,11 +84,11 @@ export default function Testimonials() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <Breadcrumb items={[{ label: 'Testimonials' }]} />
-          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Client Stories</div>
+          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Client Reviews in Namakkal</div>
           <h1 className="page-hero__title">
-            <SparklesText>Love From Our Clients</SparklesText>
+            <SparklesText>Client Reviews — Best Salon in Namakkal</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Real experiences from real clients who chose ZHa Aesthetic Salon for their beauty and hair transformation.</p>
+          <p className="page-hero__subtitle">Read real reviews from happy clients across Namakkal District who experienced professional hair styling, HD bridal makeup, and facials at ZHa Aesthetic Salon in Mohanur.</p>
         </div>
       </section>
 
