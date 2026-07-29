@@ -75,18 +75,18 @@
     <link rel="preload" as="image" href="/salon_green_theme_1_mobile.jpg" media="(max-width: 1024px)" fetchpriority="high" />
     <link rel="preload" as="image" href="https://rkbxikbzjemccuppiuuu.supabase.co/storage/v1/object/public/hero/hero_1784208729302.webp" media="(min-width: 1025px)" fetchpriority="high" />
 
-    <!-- ── Structured Data: LocalBusiness + BeautySalon + Organization ── -->
+    <!-- ── Structured Data: LocalBusiness + BeautySalon + HairSalon + Organization ── -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
         {
-          "@type": ["LocalBusiness", "BeautySalon"],
-          "@id": "https://zhaaestheticsalon.in/#business",
+          "@type": ["LocalBusiness", "BeautySalon", "HairSalon"],
+          "@id": "https://www.zhaaestheticsalon.in/#business",
           "name": "ZHa Aesthetic Salon",
-          "alternateName": ["Zha Aesthetic Salon", "ZHA Aesthetic Salon"],
-          "description": "ZHa Aesthetic Salon is a premier beauty destination offering professional hair styling, bridal makeup, keratin treatment, facials, waxing and luxury spa services.",
-          "url": "https://zhaaestheticsalon.in",
+          "alternateName": ["Zha Aesthetic Salon", "ZHA Aesthetic Salon", "ZHa Salon Mohanur", "ZHa Salon Namakkal"],
+          "description": "ZHa Aesthetic Salon is a premier unisex beauty salon & hair studio serving Mohanur, Namakkal, and Namakkal District, Tamil Nadu. Specializing in HD bridal makeup, hair styling, keratin, botox treatment, hydra facials, waxing, pedicure & nails.",
+          "url": "https://www.zhaaestheticsalon.in",
           "telephone": "+918270904659",
           "email": "suryasuryaprakash2005@gmail.com",
           "priceRange": "₹₹",
@@ -94,14 +94,14 @@
           "paymentAccepted": "Cash, Credit Card, Debit Card, UPI",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://zhaaestheticsalon.in/logo.jpg",
+            "url": "https://www.zhaaestheticsalon.in/logo.jpg",
             "width": 512,
             "height": 512
           },
           "image": [
-            "https://zhaaestheticsalon.in/salon_green_theme_1.jpg",
-            "https://zhaaestheticsalon.in/salon_green_theme_2.jpg",
-            "https://zhaaestheticsalon.in/salon_green_theme_3.jpg"
+            "https://www.zhaaestheticsalon.in/salon_green_theme_1.jpg",
+            "https://www.zhaaestheticsalon.in/salon_green_theme_2.jpg",
+            "https://www.zhaaestheticsalon.in/salon_green_theme_3.jpg"
           ],
           "address": {
             "@type": "PostalAddress",
@@ -113,8 +113,8 @@
           },
           "geo": {
             "@type": "GeoCoordinates",
-            "latitude": 11.0785,
-            "longitude": 78.1510
+            "latitude": 11.0475,
+            "longitude": 78.1458
           },
           "hasMap": "https://maps.app.goo.gl/BP8hTwHFbmMcDkHc9",
           "openingHoursSpecification": [
@@ -131,74 +131,64 @@
               "closes": "21:00"
             }
           ],
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+918270904659",
-            "contactType": "customer service",
-            "availableLanguage": ["Tamil", "English"],
-            "contactOption": "TollFree",
-            "areaServed": ["Mohanur", "Namakkal", "Tamil Nadu"]
-          },
+          "areaServed": [
+            {
+              "@type": "City",
+              "name": "Mohanur",
+              "@id": "https://en.wikipedia.org/wiki/Mohanur"
+            },
+            {
+              "@type": "City",
+              "name": "Namakkal",
+              "@id": "https://en.wikipedia.org/wiki/Namakkal"
+            },
+            {
+              "@type": "AdministrativeArea",
+              "name": "Namakkal District, Tamil Nadu"
+            }
+          ],
           "sameAs": [
             "https://www.instagram.com/zha_aesthetic_salon/",
             "https://maps.app.goo.gl/BP8hTwHFbmMcDkHc9"
           ],
-          "areaServed": {
-            "@type": "GeoCircle",
-            "geoMidpoint": {
-              "@type": "GeoCoordinates",
-              "latitude": 11.0785,
-              "longitude": 78.1510
-            },
-            "geoRadius": "30000"
-          },
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
-            "name": "Beauty Services",
+            "name": "Beauty & Hair Services",
             "itemListElement": [
               {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Bridal Makeup",
-                  "description": "Professional bridal makeup including HD bridal makeup, airbrush bridal makeup, and pre-bridal grooming packages.",
-                  "provider": { "@id": "https://zhaaestheticsalon.in/#business" }
+                  "name": "HD Bridal Makeup & Styling (Mohanur & Namakkal)",
+                  "description": "Professional HD bridal makeup, airbrush makeup, saree draping, and pre-bridal grooming packages in Mohanur & Namakkal.",
+                  "provider": { "@id": "https://www.zhaaestheticsalon.in/#business" }
                 }
               },
               {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Keratin Treatment",
-                  "description": "Professional keratin treatment for smooth, frizz-free hair.",
-                  "provider": { "@id": "https://zhaaestheticsalon.in/#business" }
+                  "name": "Keratin & Botox Hair Treatment (Mohanur & Namakkal)",
+                  "description": "Premium keratin smoothening and hair botox treatment for frizz-free, smooth hair.",
+                  "provider": { "@id": "https://www.zhaaestheticsalon.in/#business" }
                 }
               },
               {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Hair Spa",
-                  "description": "Deep conditioning hair spa treatment for nourishment and shine.",
-                  "provider": { "@id": "https://zhaaestheticsalon.in/#business" }
+                  "name": "Therapeutic Hair Spa & Cut (Mohanur & Namakkal)",
+                  "description": "Deep conditioning hair spa, hair cuts, coloring & scalp treatment.",
+                  "provider": { "@id": "https://www.zhaaestheticsalon.in/#business" }
                 }
               },
               {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Facial Services",
-                  "description": "Range of facial treatments including hydrating, gold, diamond, vitamin C and anti-ageing facials.",
-                  "provider": { "@id": "https://zhaaestheticsalon.in/#business" }
-                }
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Service",
-                  "name": "Manicure & Pedicure",
-                  "description": "Professional manicure and pedicure nail care services.",
-                  "provider": { "@id": "https://zhaaestheticsalon.in/#business" }
+                  "name": "Hydra Facial & Skincare (Mohanur & Namakkal)",
+                  "description": "Advanced hydra facials, skin brightening, cleanup, and anti-aging treatments.",
+                  "provider": { "@id": "https://www.zhaaestheticsalon.in/#business" }
                 }
               }
             ]
@@ -206,45 +196,38 @@
         },
         {
           "@type": "Organization",
-          "@id": "https://zhaaestheticsalon.in/#organization",
+          "@id": "https://www.zhaaestheticsalon.in/#organization",
           "name": "ZHa Aesthetic Salon",
-          "url": "https://zhaaestheticsalon.in",
-          "logo": "https://zhaaestheticsalon.in/logo.jpg",
+          "url": "https://www.zhaaestheticsalon.in",
+          "logo": "https://www.zhaaestheticsalon.in/logo.jpg",
           "sameAs": ["https://www.instagram.com/zha_aesthetic_salon/"]
         },
         {
           "@type": "WebSite",
-          "@id": "https://zhaaestheticsalon.in/#website",
+          "@id": "https://www.zhaaestheticsalon.in/#website",
           "name": "ZHa Aesthetic Salon",
-          "url": "https://zhaaestheticsalon.in",
-          "publisher": { "@id": "https://zhaaestheticsalon.in/#organization" },
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": {
-              "@type": "EntryPoint",
-              "urlTemplate": "https://zhaaestheticsalon.in/services?q={search_term_string}"
-            },
-            "query-input": "required name=search_term_string"
-          }
+          "url": "https://www.zhaaestheticsalon.in",
+          "publisher": { "@id": "https://www.zhaaestheticsalon.in/#organization" },
+          "inLanguage": "en-IN"
         },
         {
           "@type": "FAQPage",
-          "@id": "https://zhaaestheticsalon.in/#faq",
+          "@id": "https://www.zhaaestheticsalon.in/#faq",
           "mainEntity": [
             {
               "@type": "Question",
               "name": "Where is ZHa Aesthetic Salon located?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "ZHa Aesthetic Salon is located at 1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015. We are easily accessible in the heart of Mohanur."
+                "text": "ZHa Aesthetic Salon is located at 1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015. We serve clients across Mohanur, Namakkal, and the entire Namakkal District."
               }
             },
             {
               "@type": "Question",
-              "name": "What services does ZHa Aesthetic Salon offer?",
+              "name": "What beauty services does ZHa Aesthetic Salon offer in Mohanur & Namakkal?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "We offer a comprehensive range of beauty services including hair styling (haircuts, blow dry, keratin treatment, hair spa, rebonding, smoothening), bridal makeup, facials (gold, diamond, vitamin C, anti-ageing), waxing, threading, manicure, pedicure, and bridal packages."
+                "text": "We offer a comprehensive range of beauty services including hair styling (haircuts, blow dry, keratin treatment, hair botox, hair spa, smoothening), HD bridal makeup, facials (hydra facial, skin brightening, anti-ageing), waxing, threading, manicure, pedicure, and bridal grooming packages for clients in Mohanur & Namakkal."
               }
             },
             {
@@ -252,7 +235,7 @@
               "name": "How can I book an appointment at ZHa Aesthetic Salon?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "You can book an appointment online through our website at zhaaestheticsalon.in/book-appointment or call us at +91 82709 04659. Walk-ins are also welcome."
+                "text": "You can book an appointment online through our website at www.zhaaestheticsalon.in/book-appointment or call us directly at +91 82709 04659. Walk-ins are also welcome at our Mohanur salon."
               }
             },
             {
@@ -260,15 +243,15 @@
               "name": "What are the opening hours of ZHa Aesthetic Salon?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "ZHa Aesthetic Salon is open Monday to Friday from 9 AM to 9 PM, and on Saturday and Sunday from 7 AM to 9 PM."
+                "text": "ZHa Aesthetic Salon is open Monday to Friday from 9:00 AM to 9:00 PM, and on Saturday & Sunday from 7:00 AM to 9:00 PM."
               }
             },
             {
               "@type": "Question",
-              "name": "Does ZHa Aesthetic Salon offer bridal packages?",
+              "name": "Does ZHa Aesthetic Salon offer HD bridal makeup packages in Namakkal & Mohanur?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! We offer complete bridal packages including HD bridal makeup, airbrush bridal makeup, bridal hairstyling, saree draping, bridal touch-up, and pre-bridal grooming packages. Contact us to book your bridal appointment well in advance."
+                "text": "Yes! We specialize in HD bridal makeup, airbrush makeup, saree draping, bridal hairstyling, and comprehensive pre-bridal grooming packages for brides in Mohanur, Namakkal, and surrounding regions."
               }
             },
             {

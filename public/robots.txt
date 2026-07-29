@@ -11,7 +11,7 @@ Disallow: /api/
 Disallow: /*.json$
 
 # Sitemap
-Sitemap: https://zhaaestheticsalon.in/sitemap.xml
+Sitemap: https://www.zhaaestheticsalon.in/sitemap.xml
 
 # Crawl-delay for polite bots
 Crawl-delay: 1

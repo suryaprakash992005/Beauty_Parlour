@@ -18,6 +18,10 @@ import Book from './pages/Book';
 import Testimonials from './pages/Testimonials';
 import NotFound from './pages/NotFound';
 
+// Blog Pages (Lazy Loaded for SEO & Speed)
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+
 // Auth & Admin Pages (Lazy Loaded for High Performance)
 const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
 const ForgotPassword = lazy(() => import('./pages/admin/ForgotPassword'));
@@ -71,6 +75,8 @@ function PublicLayout() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/book-appointment" element={<Book />} />
           <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </PageTransition>

@@ -4,71 +4,120 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
   <url>
-    <loc>https://zhaaestheticsalon.in/</loc>
+    <loc>https://www.zhaaestheticsalon.in/</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://zhaaestheticsalon.in/salon_green_theme_1.jpg</image:loc>
-      <image:title>ZHa Aesthetic Salon — Luxury Beauty Salon</image:title>
-      <image:caption>Professional beauty salon services</image:caption>
+      <image:loc>https://www.zhaaestheticsalon.in/salon_green_theme_1.jpg</image:loc>
+      <image:title>ZHa Aesthetic Salon — Best Beauty Salon in Mohanur & Namakkal</image:title>
+      <image:caption>Professional hair styling, HD bridal makeup & spa treatments in Mohanur & Namakkal</image:caption>
     </image:image>
   </url>
 
   <url>
-    <loc>https://zhaaestheticsalon.in/services</loc>
+    <loc>https://www.zhaaestheticsalon.in/services</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
 
   <url>
-    <loc>https://zhaaestheticsalon.in/bridal-planner</loc>
+    <loc>https://www.zhaaestheticsalon.in/bridal-planner</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <url>
+    <loc>https://www.zhaaestheticsalon.in/gallery</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://zhaaestheticsalon.in/gallery</loc>
+    <loc>https://www.zhaaestheticsalon.in/book-appointment</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <url>
+    <loc>https://www.zhaaestheticsalon.in/about</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://www.zhaaestheticsalon.in/contact</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://www.zhaaestheticsalon.in/offers</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://www.zhaaestheticsalon.in/testimonials</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://www.zhaaestheticsalon.in/blog</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://zhaaestheticsalon.in/book-appointment</loc>
-    <lastmod>2026-07-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
-  </url>
-
-  <url>
-    <loc>https://zhaaestheticsalon.in/about</loc>
+    <loc>https://www.zhaaestheticsalon.in/blog/best-bridal-makeup-artist-namakkal-mohanur</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://zhaaestheticsalon.in/contact</loc>
+    <loc>https://www.zhaaestheticsalon.in/blog/keratin-hair-treatment-guide-namakkal-mohanur</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://zhaaestheticsalon.in/offers</loc>
+    <loc>https://www.zhaaestheticsalon.in/blog/benefits-of-professional-hair-spa-mohanur-namakkal</loc>
     <lastmod>2026-07-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://zhaaestheticsalon.in/testimonials</loc>
+    <loc>https://www.zhaaestheticsalon.in/blog/pre-wedding-beauty-preparation-timeline-for-brides</loc>
     <lastmod>2026-07-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.70</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://www.zhaaestheticsalon.in/blog/latest-hair-colour-and-highlight-trends-namakkal</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://www.zhaaestheticsalon.in/blog/pre-bridal-skincare-routine-and-facials</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
   </url>
 
 </urlset>

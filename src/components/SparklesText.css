@@ -1,3 +1,5 @@
+/* SparklesText.css */
+
 .sparkles-text-container {
   position: relative;
   display: inline-block;
@@ -7,7 +9,6 @@
 .sparkles-text-inner {
   position: relative;
   display: inline-block;
-  z-index: 1;
 }
 
 @keyframes sparkleAnim {
@@ -16,7 +17,7 @@
     transform: scale(0) rotate(75deg);
   }
   50% {
-    opacity: 0.85;
+    opacity: 1;
     transform: scale(var(--sparkle-scale)) rotate(120deg);
   }
   100% {
@@ -28,7 +29,7 @@
 .sparkle-svg {
   position: absolute;
   pointer-events: none;
-  z-index: 0;
+  z-index: 2;
   transform: translate(-50%, -50%);
-  animation: sparkleAnim 1.4s infinite ease-in-out;
+  animation: sparkleAnim 1.0s infinite ease-in-out;
 }

@@ -1,8 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 
-const DOMAIN = 'https://zhaaestheticsalon.in';
+const DOMAIN = 'https://www.zhaaestheticsalon.in';
 const TODAY = new Date().toISOString().split('T')[0];
+
+const BLOG_SLUGS = [
+  'best-bridal-makeup-artist-namakkal-mohanur',
+  'keratin-hair-treatment-guide-namakkal-mohanur',
+  'benefits-of-professional-hair-spa-mohanur-namakkal',
+  'pre-wedding-beauty-preparation-timeline-for-brides',
+  'latest-hair-colour-and-highlight-trends-namakkal',
+  'pre-bridal-skincare-routine-and-facials'
+];
 
 const PUBLIC_ROUTES = [
   {
@@ -11,8 +20,8 @@ const PUBLIC_ROUTES = [
     changefreq: 'weekly',
     image: {
       url: `${DOMAIN}/salon_green_theme_1.jpg`,
-      title: 'ZHa Aesthetic Salon — Luxury Beauty Salon',
-      caption: 'Professional beauty salon services',
+      title: 'ZHa Aesthetic Salon — Best Beauty Salon in Mohanur & Namakkal',
+      caption: 'Professional hair styling, HD bridal makeup & spa treatments in Mohanur & Namakkal',
     },
   },
   {
@@ -22,39 +31,49 @@ const PUBLIC_ROUTES = [
   },
   {
     path: '/bridal-planner',
-    priority: '0.90',
+    priority: '0.95',
     changefreq: 'monthly',
   },
   {
     path: '/gallery',
-    priority: '0.85',
+    priority: '0.90',
     changefreq: 'weekly',
   },
   {
     path: '/book-appointment',
-    priority: '0.90',
+    priority: '0.95',
     changefreq: 'monthly',
   },
   {
     path: '/about',
-    priority: '0.80',
+    priority: '0.85',
     changefreq: 'monthly',
   },
   {
     path: '/contact',
-    priority: '0.80',
+    priority: '0.85',
     changefreq: 'monthly',
   },
   {
     path: '/offers',
-    priority: '0.75',
+    priority: '0.80',
     changefreq: 'weekly',
   },
   {
     path: '/testimonials',
-    priority: '0.70',
+    priority: '0.80',
     changefreq: 'weekly',
   },
+  {
+    path: '/blog',
+    priority: '0.85',
+    changefreq: 'weekly',
+  },
+  ...BLOG_SLUGS.map(slug => ({
+    path: `/blog/${slug}`,
+    priority: '0.80',
+    changefreq: 'monthly'
+  }))
 ];
 
 function generateSitemapXML() {

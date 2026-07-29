@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  Calendar,
   Users,
   Crown,
   Clock,
@@ -9,11 +10,10 @@ import {
   ArrowLeft,
   ArrowRight,
   CheckCircle,
-  Sparkles,
-  Check,
-  ShieldCheck
+  Sparkles
 } from 'lucide-react';
 import { SparklesText } from '../components/SparklesText';
+import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import Breadcrumb from '../components/Breadcrumb';
 import { useSEO, PAGE_SEO } from '../hooks/useSEO';
 import { getSalonSettings } from '../services/settings';
@@ -49,8 +49,6 @@ const PACKAGES = [
   { id: 'diamond', name: 'Diamond Luxury Bridal Package', price: 89999, desc: 'Celebrity-grade full glam, multi-day coverage, dedicated coordinator, and body scrub.' },
   { id: 'custom', name: 'Custom Bridal Package', price: 15000, desc: 'Build your own package. Choose only the premium treatments and styling options you need.' }
 ];
-
-const STEP_LABELS = ['Bride Details', 'Family Services', 'Bridal Package', 'Trial Session', 'Summary Plan'];
 
 export default function BridalPlanner() {
   useSEO({
@@ -126,40 +124,44 @@ export default function BridalPlanner() {
     ]);
   };
 
-  const handleRemoveFamilyMember = (id: string) => {
-    setFamilyMembers(prev => prev.filter(m => m.id !== id));
-  };
-
   const handleUpdateFamilyMember = (id: string, field: keyof FamilyMember, val: string) => {
-    setFamilyMembers(prev => prev.map(m => m.id === id ? { ...m, [field]: val } : m));
+    setValidationError(null);
+    setFamilyMembers(prev =>
+      prev.map(member => (member.id === id ? { ...member, [field]: val } : member))
+    );
   };
 
+  const handleRemoveFamilyMember = (id: string) => {
+    setValidationError(null);
+    setFamilyMembers(prev => prev.filter(member => member.id !== id));
+  };
+
+  // Navigations & Validations
   const validateStep = () => {
     if (step === 1) {
       if (!brideName.trim()) {
-        setValidationError('Please enter the bride\'s full name.');
+        setValidationError("Please enter the Bride's Full Name.");
         return false;
       }
       if (!weddingDate) {
-        setValidationError('Please select your wedding date.');
+        setValidationError("Please select your Wedding Date.");
         return false;
       }
     }
     if (step === 2) {
-      for (const m of familyMembers) {
-        if (!m.name.trim()) {
-          setValidationError('Please fill in the name for all family members or remove empty rows.');
-          return false;
-        }
+      const invalid = familyMembers.some(m => !m.name.trim());
+      if (invalid) {
+        setValidationError("Please enter a name for all added family members.");
+        return false;
       }
     }
     if (step === 4) {
-      if (!trialDate) {
-        setValidationError('Please select a preferred date for your trial session.');
+      if (trialDate && !trialTime) {
+        setValidationError("Please select a Preferred Time Slot for your selected trial date.");
         return false;
       }
-      if (!trialTime) {
-        setValidationError('Please select a preferred time slot for your trial session.');
+      if (!trialDate && trialTime) {
+        setValidationError("Please select a Preferred Date for your selected trial time slot.");
         return false;
       }
     }
@@ -176,16 +178,18 @@ export default function BridalPlanner() {
     setStep(prev => prev - 1);
   };
 
-  // Format and send to WhatsApp
+  // Supabase Save - Bypassed per user request to directly redirect to WhatsApp
   const handleSavePlan = async () => {
     setLoading(true);
     const estimatedPrice = calculateTotal();
 
     try {
+      // Local reference ID simulation
       const fallbackId = `BP-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
       setSavedId(fallbackId);
       const finalId = fallbackId;
 
+      // Format dates
       const formattedWeddingDate = new Date(weddingDate).toLocaleDateString(undefined, { dateStyle: 'medium' });
       const formattedTrialDate = trialDate ? new Date(trialDate).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'N/A';
       const packageName = PACKAGES.find(p => p.id === selectedPkg)?.name || selectedPkg;
@@ -209,19 +213,19 @@ export default function BridalPlanner() {
         familyText = '• *No family members added*';
       }
 
-      const whatsappMessage = `🌸 *BRIDAL PLANNER CONFIRMATION — ZHA AESTHETIC SALON* 🌸
+      const whatsappMessage = `🌸 *BRIDAL PLAN CONFIRMED - ZHA AESTHETIC SALON* 🌸
 ----------------------------------------------
-*Reference ID:* ${finalId}
-*Date Logged:* ${new Date().toLocaleDateString(undefined, { dateStyle: 'medium' })}
+*Plan Reference ID:* ${finalId}
+*Date:* ${new Date().toLocaleDateString(undefined, { dateStyle: 'medium' })}
 
 ✨ *BRIDE DETAILS:*
-• *Bride Name:* ${brideName}
+• *Name:* ${brideName}
 • *Wedding Date:* ${formattedWeddingDate}
 
-💖 *PACKAGE DETAILS:*
-• *Package:* ${packageName}${customDetailsText}
+💖 *PLAN DETAILS:*
+• *Selected Package:* ${packageName}${customDetailsText}
 • *Trial Session:* ${formattedTrialDate} @ ${trialTime || 'N/A'}
-${notes ? `• *Special Notes:* ${notes}` : ''}
+${notes ? `• *Additional Notes:* ${notes}` : ''}
 
 👥 *FAMILY SERVICES (${familyMembers.length}):*
 ${familyText}
@@ -229,7 +233,8 @@ ${familyText}
 ----------------------------------------------
 💰 *ESTIMATED TOTAL AMOUNT:* *₹${estimatedPrice.toLocaleString()}*
 ----------------------------------------------
-Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!`;
+Thank you for planning with us! Please share payment details (UPI/Online) for verification.
+We look forward to serving you!`;
 
       setSuccess(true);
       const whatsappUrl = `https://wa.me/91${whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -243,6 +248,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
     }
   };
 
+  // Redirect to booking form
   const handleBookNow = () => {
     const selectedPackageName = PACKAGES.find(p => p.id === selectedPkg)?.name || 'Custom Bridal Package';
     navigate('/book-appointment', {
@@ -262,44 +268,28 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
 
   return (
     <main className="bridal-planner-page">
-      {/* Page Hero */}
-      <section className="page-hero">
+      {/* Hero */}
+      <section className="page-hero" style={{ height: '40vh', minHeight: '300px' }}>
         <div
           className="page-hero__bg"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80')" }}
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=80')" }}
         />
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <Breadcrumb items={[{ label: 'Bridal Planner' }]} />
-          <div className="section-label" style={{ color: 'var(--color-champagne)', marginTop: '8px' }}>
-            ✨ Bespoke Bridal Planning
-          </div>
+          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Bespoke Planning</div>
           <h1 className="page-hero__title">
             <SparklesText>Bridal Makeup & Package Planner</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">
-            Design your custom bridal makeover, trial session, and family packages with ZHA Aesthetic Salon.
-          </p>
+          <p className="page-hero__subtitle">Design your custom bridal makeover, trial session, and family packages with ZHa Aesthetic Salon.</p>
         </div>
       </section>
 
-      {/* Main Wizard Container */}
       <div className="planner-container">
         <div className="planner-card">
           {!success ? (
             <>
-              {/* Mobile Step Badge */}
-              <div className="planner-mobile-step-badge">
-                <div className="planner-mobile-step-badge__text">
-                  <span className="planner-mobile-step-badge__dot" />
-                  Step {step} of 5 — {STEP_LABELS[step - 1]}
-                </div>
-                <div className="planner-mobile-step-badge__count">
-                  {Math.round((step / 5) * 100)}%
-                </div>
-              </div>
-
-              {/* Desktop Step Indicator Bar */}
+              {/* Step Indicators */}
               <div className="planner-steps">
                 <div className="planner-steps__progress" style={{ width: `${((step - 1) / 4) * 100}%` }} />
                 {[
@@ -312,11 +302,8 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                   <div
                     key={s.num}
                     className={`planner-step ${step === s.num ? 'planner-step--active' : ''} ${step > s.num ? 'planner-step--completed' : ''}`}
-                    onClick={() => {
-                      if (s.num < step) setStep(s.num);
-                    }}
                   >
-                    {step > s.num ? <Check size={16} /> : s.num}
+                    {s.num}
                     <span className="planner-step__label">{s.label}</span>
                   </div>
                 ))}
@@ -333,28 +320,24 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
               {step === 1 && (
                 <div className="planner-step-fade">
                   <h2 className="planner-title">
-                    <Crown size={22} />
-                    Bride & Event Details
+                    <Calendar size={22} />
+                    Wedding Details
                   </h2>
-                  <div className="planner-form-grid">
+                  <div className="book-form">
                     <div className="form-group">
-                      <label className="form-label" htmlFor="brideName">
-                        Bride's Full Name <span className="form-label-req">*</span>
-                      </label>
+                      <label className="form-label" htmlFor="brideName">Bride's Full Name *</label>
                       <input
                         id="brideName"
                         className="form-input"
                         type="text"
-                        placeholder="e.g. Ananya Sharma"
+                        placeholder="Name of the beautiful bride"
                         value={brideName}
                         onChange={e => setBrideName(e.target.value)}
                         required
                       />
                     </div>
                     <div className="form-group">
-                      <label className="form-label" htmlFor="weddingDate">
-                        Wedding Date <span className="form-label-req">*</span>
-                      </label>
+                      <label className="form-label" htmlFor="weddingDate">Wedding Date *</label>
                       <input
                         id="weddingDate"
                         className="form-input"
@@ -374,65 +357,49 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                 <div className="planner-step-fade">
                   <h2 className="planner-title">
                     <Users size={22} />
-                    Family & Bridesmaids Makeover
+                    Family Makeup Services
                   </h2>
-                  <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', marginBottom: '20px', lineHeight: '1.6' }}>
-                    Add sisters, mothers, or bridesmaids who also need professional styling services (₹2,500 estimated per member).
+                  <p className="section-subtitle" style={{ marginBottom: 'var(--space-md)' }}>
+                    Add sisters, mothers, or bridesmaids who also need styling services (₹2,500 estimated per member).
                   </p>
                   
                   <div className="family-list">
-                    {familyMembers.length === 0 ? (
-                      <div style={{ textAlign: 'center', padding: '24px', background: 'rgba(255,255,255,0.01)', borderRadius: '14px', border: '1px dashed rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', fontSize: '14px' }}>
-                        No family members added yet. Click below to include bridesmaids or family.
+                    {familyMembers.map((member) => (
+                      <div key={member.id} className="family-row">
+                        <input
+                          className="form-input"
+                          type="text"
+                          placeholder="Member's Name"
+                          value={member.name}
+                          onChange={e => handleUpdateFamilyMember(member.id, 'name', e.target.value)}
+                        />
+                        <select
+                          className="form-input form-select"
+                          value={member.relation}
+                          onChange={e => handleUpdateFamilyMember(member.id, 'relation', e.target.value)}
+                        >
+                          {RELATIONSHIP_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                        <select
+                          className="form-input form-select"
+                          value={member.service}
+                          onChange={e => handleUpdateFamilyMember(member.id, 'service', e.target.value)}
+                        >
+                          {FAMILY_SERVICE_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                        <button
+                          type="button"
+                          className="btn-remove"
+                          onClick={() => handleRemoveFamilyMember(member.id)}
+                          aria-label="Remove member"
+                        >
+                          <Trash2 size={16} />
+                        </button>
                       </div>
-                    ) : (
-                      familyMembers.map((member) => (
-                        <div key={member.id} className="family-row">
-                          <div className="family-field">
-                            <span className="family-field__label">Member Name</span>
-                            <input
-                              className="form-input"
-                              type="text"
-                              placeholder="e.g. Priya Sharma"
-                              value={member.name}
-                              onChange={e => handleUpdateFamilyMember(member.id, 'name', e.target.value)}
-                            />
-                          </div>
-                          <div className="family-field">
-                            <span className="family-field__label">Relationship</span>
-                            <select
-                              className="form-input form-select"
-                              value={member.relation}
-                              onChange={e => handleUpdateFamilyMember(member.id, 'relation', e.target.value)}
-                            >
-                              {RELATIONSHIP_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                            </select>
-                          </div>
-                          <div className="family-field">
-                            <span className="family-field__label">Requested Service</span>
-                            <select
-                              className="form-input form-select"
-                              value={member.service}
-                              onChange={e => handleUpdateFamilyMember(member.id, 'service', e.target.value)}
-                            >
-                              {FAMILY_SERVICE_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                            </select>
-                          </div>
-                          <button
-                            type="button"
-                            className="btn-remove"
-                            onClick={() => handleRemoveFamilyMember(member.id)}
-                            aria-label="Remove member"
-                            title="Remove member"
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        </div>
-                      ))
-                    )}
+                    ))}
                   </div>
 
-                  <button type="button" className="btn-add" onClick={handleAddFamilyMember}>
+                  <button type="button" className="btn-add w-100" onClick={handleAddFamilyMember}>
                     <Plus size={16} /> Add Family Member
                   </button>
                 </div>
@@ -442,8 +409,8 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
               {step === 3 && (
                 <div className="planner-step-fade">
                   <h2 className="planner-title">
-                    <Sparkles size={22} />
-                    Choose Your Bridal Package
+                    <Crown size={22} />
+                    Choose Your Package
                   </h2>
                   <div className="package-select-grid">
                     {PACKAGES.map(pkg => (
@@ -452,11 +419,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                         className={`package-select-card ${selectedPkg === pkg.id ? 'package-select-card--active' : ''}`}
                         onClick={() => setSelectedPkg(pkg.id)}
                       >
-                        {selectedPkg === pkg.id && (
-                          <span className="package-select-card__badge">
-                            <Check size={12} /> SELECTED
-                          </span>
-                        )}
+                        {selectedPkg === pkg.id && <span className="package-select-card__badge">Selected</span>}
                         <div className="package-select-card__name">{pkg.name}</div>
                         <div className="package-select-card__price">
                           {pkg.id === 'custom' ? '₹15,000+' : `₹${pkg.price.toLocaleString()}`}
@@ -474,7 +437,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                           checked={customAddOns.hdMakeup}
                           onChange={e => setCustomAddOns(prev => ({ ...prev, hdMakeup: e.target.checked }))}
                         />
-                        <span>Premium HD Makeup (+₹15,000)</span>
+                        Premium HD Makeup (+₹15,000)
                       </label>
                       <label className="checkbox-option">
                         <input
@@ -482,7 +445,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                           checked={customAddOns.sareeDraping}
                           onChange={e => setCustomAddOns(prev => ({ ...prev, sareeDraping: e.target.checked }))}
                         />
-                        <span>Luxury Saree Draping (+₹3,000)</span>
+                        Luxury Saree Draping (+₹3,000)
                       </label>
                       <label className="checkbox-option">
                         <input
@@ -490,7 +453,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                           checked={customAddOns.nailArt}
                           onChange={e => setCustomAddOns(prev => ({ ...prev, nailArt: e.target.checked }))}
                         />
-                        <span>Gel Nail Extensions (+₹2,000)</span>
+                        Gel Nail Extensions (+₹2,000)
                       </label>
                       <label className="checkbox-option">
                         <input
@@ -498,7 +461,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                           checked={customAddOns.hairSpa}
                           onChange={e => setCustomAddOns(prev => ({ ...prev, hairSpa: e.target.checked }))}
                         />
-                        <span>Luxury Hair Treatment (+₹2,500)</span>
+                        Luxury Hair Treatment (+₹2,500)
                       </label>
                       <label className="checkbox-option">
                         <input
@@ -506,7 +469,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                           checked={customAddOns.personalArtist}
                           onChange={e => setCustomAddOns(prev => ({ ...prev, personalArtist: e.target.checked }))}
                         />
-                        <span>Personal Day Artist (+₹10,000)</span>
+                        Personal Day Artist (+₹10,000)
                       </label>
                     </div>
                   )}
@@ -518,28 +481,24 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                 <div className="planner-step-fade">
                   <h2 className="planner-title">
                     <Clock size={22} />
-                    Schedule Trial & Consultation
+                    Schedule Trial Session
                   </h2>
-                  <div className="planner-form-grid">
+                  <div className="book-form">
                     <div className="form-group">
-                      <label className="form-label" htmlFor="trialDate">
-                        Preferred Trial Date <span className="form-label-req">*</span>
-                      </label>
+                      <label className="form-label" htmlFor="trialDate">Preferred Date *</label>
                       <input
                         id="trialDate"
                         className="form-input"
                         type="date"
                         min={minDate}
-                        max={weddingDate || undefined}
+                        max={weddingDate}
                         value={trialDate}
                         onChange={e => setTrialDate(e.target.value)}
                         required
                       />
                     </div>
                     <div className="form-group">
-                      <label className="form-label" htmlFor="trialTime">
-                        Preferred Time Slot <span className="form-label-req">*</span>
-                      </label>
+                      <label className="form-label" htmlFor="trialTime">Preferred Time Slot *</label>
                       <select
                         id="trialTime"
                         className="form-input form-select"
@@ -548,25 +507,24 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                         required
                       >
                         <option value="">Select time slot...</option>
-                        <option value="10:00 AM">10:00 AM (Morning)</option>
-                        <option value="11:30 AM">11:30 AM (Late Morning)</option>
-                        <option value="02:00 PM">02:00 PM (Afternoon)</option>
-                        <option value="03:30 PM">03:30 PM (Late Afternoon)</option>
-                        <option value="05:00 PM">05:00 PM (Evening)</option>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="11:30 AM">11:30 AM</option>
+                        <option value="02:00 PM">02:00 PM</option>
+                        <option value="03:30 PM">03:30 PM</option>
+                        <option value="05:00 PM">05:00 PM</option>
                       </select>
                     </div>
-                  </div>
-
-                  <div className="form-group" style={{ marginTop: '20px' }}>
-                    <label className="form-label" htmlFor="notes">Additional Styling Requests / Notes</label>
-                    <textarea
-                      id="notes"
-                      className="form-input form-textarea"
-                      rows={3}
-                      placeholder="Mention any allergies, preferred cosmetics brand, custom saree draping styles, or specific hair accessories..."
-                      value={notes}
-                      onChange={e => setNotes(e.target.value)}
-                    />
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="notes">Additional Requests</label>
+                      <textarea
+                        id="notes"
+                        className="form-input form-textarea"
+                        rows={3}
+                        placeholder="Any allergies, custom cosmetic products, or specific bridal looks you want to test..."
+                        value={notes}
+                        onChange={e => setNotes(e.target.value)}
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -575,14 +533,14 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
               {step === 5 && (
                 <div className="planner-step-fade">
                   <h2 className="planner-title">
-                    <ShieldCheck size={22} />
-                    Personalized Bridal Estimate
+                    <Sparkles size={22} />
+                    Bridal Plan Summary
                   </h2>
 
                   <div className="summary-invoice">
                     <div className="invoice-header">
-                      <h3 className="invoice-title">Official Bridal Package Summary</h3>
-                      <div className="invoice-subtitle">ZHA Aesthetic Salon • Premium Bridal Studio</div>
+                      <h3 className="invoice-title">Personalized Bridal Plan</h3>
+                      <div className="invoice-subtitle">Zha Aesthetic Salon</div>
                     </div>
 
                     <div className="invoice-grid">
@@ -592,9 +550,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                       </div>
                       <div className="invoice-group">
                         <span className="invoice-label">Wedding Date</span>
-                        <span className="invoice-value">
-                          {weddingDate ? new Date(weddingDate).toLocaleDateString(undefined, { dateStyle: 'long' }) : 'N/A'}
-                        </span>
+                        <span className="invoice-value">{new Date(weddingDate).toLocaleDateString(undefined, { dateStyle: 'long' })}</span>
                       </div>
                       <div className="invoice-group">
                         <span className="invoice-label">Selected Package</span>
@@ -603,7 +559,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                       <div className="invoice-group">
                         <span className="invoice-label">Trial Session</span>
                         <span className="invoice-value">
-                          {trialDate ? new Date(trialDate).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'N/A'} @ {trialTime || 'N/A'}
+                          {new Date(trialDate).toLocaleDateString(undefined, { dateStyle: 'medium' })} @ {trialTime}
                         </span>
                       </div>
                     </div>
@@ -618,10 +574,10 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                       <tbody>
                         <tr>
                           <td>
-                            <strong>{PACKAGES.find(p => p.id === selectedPkg)?.name}</strong> (Base Makeover & Styling)
+                            {PACKAGES.find(p => p.id === selectedPkg)?.name} (Base)
                             {selectedPkg === 'custom' && (
-                              <div style={{ fontSize: '12px', color: '#D4AF37', marginTop: '4px' }}>
-                                Custom Extras: {[
+                              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                                Custom Options: {[
                                   customAddOns.hdMakeup && 'HD Makeup',
                                   customAddOns.sareeDraping && 'Saree Draping',
                                   customAddOns.nailArt && 'Gel Nails',
@@ -631,7 +587,7 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                               </div>
                             )}
                           </td>
-                          <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                          <td style={{ textAlign: 'right' }}>
                             {selectedPkg === 'custom' ? (
                               `₹${(
                                 15000 +
@@ -649,16 +605,16 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                         {familyMembers.length > 0 && (
                           <tr>
                             <td>
-                              <strong>Family & Guest Services</strong> ({familyMembers.length} member{familyMembers.length > 1 ? 's' : ''})
-                              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>
-                                {familyMembers.map(m => `${m.name} (${m.relation})`).join(', ')}
+                              Family Makeup Services ({familyMembers.length} member{familyMembers.length > 1 ? 's' : ''})
+                              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                                {familyMembers.map(m => `${m.name} (${m.relation} - ${m.service})`).join(', ')}
                               </div>
                             </td>
-                            <td style={{ textAlign: 'right', fontWeight: 600 }}>₹{(familyMembers.length * 2500).toLocaleString()}</td>
+                            <td style={{ textAlign: 'right' }}>₹{(familyMembers.length * 2500).toLocaleString()}</td>
                           </tr>
                         )}
                         <tr className="invoice-total-row">
-                          <td>Estimated Total Investment</td>
+                          <td>Estimated Total Price</td>
                           <td style={{ textAlign: 'right' }}>₹{calculateTotal().toLocaleString()}</td>
                         </tr>
                       </tbody>
@@ -677,31 +633,29 @@ Thank you for planning with ZHA Aesthetic Salon! We look forward to serving you!
                   <div />
                 )}
                 {step < 5 ? (
-                  <button type="button" className="btn-next-step" onClick={handleNext}>
-                    Next Step <ArrowRight size={16} />
+                  <button type="button" className="btn btn-primary" onClick={handleNext}>
+                    Next <ArrowRight size={16} />
                   </button>
                 ) : (
-                  <button type="button" className="btn-next-step" onClick={handleSavePlan} disabled={loading}>
-                    {loading ? 'Processing...' : 'Confirm & Save Plan'} <Sparkles size={16} />
-                  </button>
+                  <InteractiveHoverButton onClick={handleSavePlan} disabled={loading}>
+                    {loading ? 'Saving...' : 'Confirm & Save Plan'}
+                  </InteractiveHoverButton>
                 )}
               </div>
             </>
           ) : (
             /* Success screen */
             <div className="success-view planner-step-fade">
-              <CheckCircle className="success-icon" size={72} />
-              <h2 className="planner-title" style={{ border: 'none', marginBottom: '8px', fontSize: '2rem', justifyContent: 'center' }}>
-                Your Bridal Plan is Confirmed!
-              </h2>
-              <p style={{ color: 'rgba(255, 255, 255, 0.75)', fontSize: '15px', maxWidth: '520px', lineHeight: '1.6', margin: '0 auto' }}>
-                Congratulations! Your personalized estimate reference ID is <strong>#{savedId || 'BP-2026'}</strong>. We have opened WhatsApp to connect directly with our senior bridal consultant.
+              <CheckCircle className="success-icon" size={68} />
+              <h2 className="section-title">Your Bridal Plan is Saved!</h2>
+              <p className="section-subtitle">
+                Congratulations! Your personalized summary invoice is ready. We have successfully logged reference <strong>#{savedId || 'local'}</strong>.
               </p>
               
               <div className="success-actions">
-                <button type="button" className="btn-next-step" style={{ justifyContent: 'center' }} onClick={handleBookNow}>
-                  Book Appointment Now <ArrowRight size={16} />
-                </button>
+                <InteractiveHoverButton onClick={handleBookNow}>
+                  Book Appointment
+                </InteractiveHoverButton>
                 <button type="button" className="btn btn-outline" onClick={() => navigate('/')}>
                   Return to Home
                 </button>
