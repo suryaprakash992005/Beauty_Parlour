@@ -14,15 +14,6 @@ function xmlEscape(str) {
     .replace(/'/g, '&apos;');
 }
 
-const BLOG_SLUGS = [
-  'best-bridal-makeup-artist-namakkal-mohanur',
-  'keratin-hair-treatment-guide-namakkal-mohanur',
-  'benefits-of-professional-hair-spa-mohanur-namakkal',
-  'pre-wedding-beauty-preparation-timeline-for-brides',
-  'latest-hair-colour-and-highlight-trends-namakkal',
-  'pre-bridal-skincare-routine-and-facials'
-];
-
 const PUBLIC_ROUTES = [
   {
     path: '/',
@@ -74,16 +65,6 @@ const PUBLIC_ROUTES = [
     priority: '0.80',
     changefreq: 'weekly',
   },
-  {
-    path: '/blog',
-    priority: '0.85',
-    changefreq: 'weekly',
-  },
-  ...BLOG_SLUGS.map(slug => ({
-    path: `/blog/${slug}`,
-    priority: '0.80',
-    changefreq: 'monthly'
-  }))
 ];
 
 function generateSitemapXML() {

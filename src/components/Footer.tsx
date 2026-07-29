@@ -66,7 +66,6 @@ export default function Footer() {
                 { label: 'About Us',         to: '/about'     },
                 { label: 'Bridal Planner',   to: '/bridal-planner' },
                 { label: 'Gallery',          to: '/gallery'   },
-                { label: 'Beauty Blog',      to: '/blog'      },
                 { label: 'Offers',           to: '/offers'    },
                 { label: 'Testimonials',     to: '/testimonials' },
                 { label: 'Book Appointment', to: '/book-appointment' },

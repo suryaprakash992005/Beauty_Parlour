@@ -12,7 +12,6 @@ const NAV_LINKS = [
   { label: 'Services',        to: '/services' },
   { label: 'Bridal Planner',  to: '/bridal-planner' },
   { label: 'Gallery',         to: '/gallery' },
-  { label: 'Blog',            to: '/blog' },
   { label: 'Offers',          to: '/offers' },
   { label: 'Testimonials',    to: '/testimonials' },
   { label: 'About',           to: '/about' },

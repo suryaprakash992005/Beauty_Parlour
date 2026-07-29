@@ -189,10 +189,4 @@ export const PAGE_SEO = {
       'Discover special discounts on hair spa, hydra facials, keratin treatments & bridal packages at ZHa Aesthetic Salon in Mohanur & Namakkal.',
     canonical: '/offers',
   },
-  blog: {
-    title: 'Beauty & Bridal Hair Care Blog — Mohanur & Namakkal | ZHa Salon',
-    description:
-      'Expert hair care advice, HD bridal makeup guides, keratin treatment tips & pre-wedding skincare routines from ZHa Aesthetic Salon Mohanur & Namakkal.',
-    canonical: '/blog',
-  },
 };
