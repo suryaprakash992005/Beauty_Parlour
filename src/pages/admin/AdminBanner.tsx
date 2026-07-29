@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Save, Eye, Check, CloudUpload, CheckCircle } from 'lucide-react';
-import { getHomepageBanner, updateHomepageBanner, uploadHeroAsset } from '../../services/homepage';
+import React, { useState, useEffect } from 'react';
+import { Save, Eye, Check, CloudUpload, CheckCircle, Plus, Trash2, Edit3, Image as ImageIcon, Sliders } from 'lucide-react';
+import { getHomepageBanners, addHomepageBanner, updateHomepageBanner, deleteHomepageBanner, uploadHeroAsset } from '../../services/homepage';
 import type { HomepageBanner } from '../../services/homepage';
 
 export default function AdminBanner() {
-  const [banner, setBanner] = useState<HomepageBanner>({
+  const [banners, setBanners] = useState<HomepageBanner[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [editingBanner, setEditingBanner] = useState<HomepageBanner>({
     smallHeading: 'Bespoke Hair Artistry',
     mainHeading: 'Transform Your Style, Reveal Your Confidence',
     subtitle: 'Luxury Beauty Experience',
@@ -13,6 +15,8 @@ export default function AdminBanner() {
     secondaryBtn: 'Explore Services',
     imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80'
   });
+  
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -23,17 +27,49 @@ export default function AdminBanner() {
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
+  const fetchBanners = async () => {
+    try {
+      setLoading(true);
+      const data = await getHomepageBanners();
+      setBanners(data);
+      if (data.length > 0) {
+        setSelectedId(data[0].id || null);
+        setEditingBanner(data[0]);
+      }
+    } catch (err) {
+      console.error('Failed to load banners:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    getHomepageBanner()
-      .then(data => {
-        setBanner(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to load banner settings:', err);
-        setLoading(false);
-      });
+    fetchBanners();
   }, []);
+
+  const handleSelectBanner = (b: HomepageBanner) => {
+    setIsCreatingNew(false);
+    setSelectedId(b.id || null);
+    setEditingBanner(b);
+    setUploadSuccess(false);
+    setUploadProgress(null);
+  };
+
+  const handleStartNewBanner = () => {
+    setIsCreatingNew(true);
+    setSelectedId(null);
+    setEditingBanner({
+      smallHeading: 'ZHA Aesthetic Salon',
+      mainHeading: 'New Premium Hero Banner',
+      subtitle: 'Luxury Beauty Experience',
+      description: 'Custom headline & background image description for your salon campaign.',
+      primaryBtn: 'Book Appointment',
+      secondaryBtn: 'Explore Services',
+      imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80'
+    });
+    setUploadSuccess(false);
+    setUploadProgress(null);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -43,7 +79,7 @@ export default function AdminBanner() {
       const t1 = setTimeout(() => setUploadProgress(75), 150);
       const t2 = setTimeout(() => setUploadProgress(100), 300);
       reader.onloadend = () => {
-        setBanner(prev => ({ ...prev, imageUrl: reader.result as string }));
+        setEditingBanner(prev => ({ ...prev, imageUrl: reader.result as string }));
         setUploadSuccess(true);
         clearTimeout(t1);
         clearTimeout(t2);
@@ -74,7 +110,7 @@ export default function AdminBanner() {
       const t1 = setTimeout(() => setUploadProgress(60), 200);
       const t2 = setTimeout(() => setUploadProgress(100), 400);
       reader.onloadend = () => {
-        setBanner(prev => ({ ...prev, imageUrl: reader.result as string }));
+        setEditingBanner(prev => ({ ...prev, imageUrl: reader.result as string }));
         setUploadSuccess(true);
         clearTimeout(t1);
         clearTimeout(t2);
@@ -92,22 +128,28 @@ export default function AdminBanner() {
     setSaving(true);
     setErrorMsg(null);
     try {
-      let finalImageUrl = banner.imageUrl;
-      if (banner.imageUrl && banner.imageUrl.startsWith('data:')) {
-        finalImageUrl = await uploadHeroAsset(banner.imageUrl);
+      let finalImageUrl = editingBanner.imageUrl;
+      if (editingBanner.imageUrl && editingBanner.imageUrl.startsWith('data:')) {
+        finalImageUrl = await uploadHeroAsset(editingBanner.imageUrl);
       }
 
-      const updated = await updateHomepageBanner({
-        smallHeading: banner.smallHeading,
-        mainHeading: banner.mainHeading,
-        subtitle: banner.description,
-        description: banner.description,
-        primaryBtn: banner.primaryBtn,
-        secondaryBtn: banner.secondaryBtn,
+      const payload = {
+        ...editingBanner,
         imageUrl: finalImageUrl
-      });
+      };
 
-      setBanner(updated);
+      if (isCreatingNew) {
+        const created = await addHomepageBanner(payload);
+        setBanners(prev => [...prev, created]);
+        setSelectedId(created.id || null);
+        setEditingBanner(created);
+        setIsCreatingNew(false);
+      } else if (editingBanner.id) {
+        const updated = await updateHomepageBanner(payload);
+        setBanners(prev => prev.map(b => b.id === updated.id ? updated : b));
+        setEditingBanner(updated);
+      }
+
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (err: any) {
@@ -115,6 +157,25 @@ export default function AdminBanner() {
       setErrorMsg(err.message || String(err));
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id?: string) => {
+    if (!id) return;
+    if (!window.confirm('Are you sure you want to delete this banner slide?')) return;
+    
+    try {
+      await deleteHomepageBanner(id);
+      const updatedList = banners.filter(b => b.id !== id);
+      setBanners(updatedList);
+      if (updatedList.length > 0) {
+        setSelectedId(updatedList[0].id || null);
+        setEditingBanner(updatedList[0]);
+      } else {
+        handleStartNewBanner();
+      }
+    } catch (err: any) {
+      alert(`Failed to delete banner: ${err.message}`);
     }
   };
 
@@ -128,17 +189,84 @@ export default function AdminBanner() {
 
   return (
     <div className="admin-page-wrapper">
-      <div className="admin-page-header">
+      <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 className="admin-page-title">Home Banner Management</h2>
-          <p className="admin-page-desc">Modify the landing page hero banner text, CTAs, and background asset.</p>
+          <h2 className="admin-page-title">Home Hero Banner Carousel</h2>
+          <p className="admin-page-desc">Manage multiple hero banners ({banners.length} Active). Added banners cycle automatically on your homepage hero slider.</p>
         </div>
+        <button 
+          className="btn btn-primary" 
+          onClick={handleStartNewBanner}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}
+        >
+          <Plus size={16} /> Add New Banner Slide
+        </button>
+      </div>
+
+      {/* Banners List Selector */}
+      <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px', marginBottom: '24px' }}>
+        {banners.map((b, index) => {
+          const isSelected = !isCreatingNew && b.id === selectedId;
+          return (
+            <div 
+              key={b.id || index}
+              onClick={() => handleSelectBanner(b)}
+              style={{
+                minWidth: '220px',
+                padding: '12px 16px',
+                borderRadius: '12px',
+                background: isSelected ? 'rgba(34, 197, 94, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                border: isSelected ? '1px solid var(--admin-accent)' : '1px solid var(--admin-border)',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}
+            >
+              <div style={{ width: '48px', height: '48px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0, background: '#111' }}>
+                <img src={b.imageUrl} alt={b.mainHeading} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, overflow: 'hidden' }}>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  Slide {index + 1}: {b.mainHeading}
+                </span>
+                <span style={{ fontSize: '11px', color: 'var(--admin-text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {b.smallHeading}
+                </span>
+              </div>
+              {banners.length > 1 && (
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); handleDelete(b.id); }}
+                  style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px' }}
+                  title="Delete Slide"
+                >
+                  <Trash2 size={14} />
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <div className="admin-banner-grid">
         {/* Editor Form */}
         <form onSubmit={handleSave} className="admin-card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-          <h3 className="admin-card__title">Banner Configuration</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 className="admin-card__title">
+              {isCreatingNew ? 'Add New Banner Slide' : `Edit Banner Slide (${editingBanner.smallHeading})`}
+            </h3>
+            {selectedId && banners.length > 1 && !isCreatingNew && (
+              <button 
+                type="button" 
+                onClick={() => handleDelete(selectedId)}
+                style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                <Trash2 size={14} /> Delete Slide
+              </button>
+            )}
+          </div>
 
           {/* Image Upload Zone */}
           <div className="form-group">
@@ -201,9 +329,9 @@ export default function AdminBanner() {
             <input 
               id="banner-smallHeading"
               className="form-input" 
-              value={banner.smallHeading}
-              onChange={e => setBanner(prev => ({ ...prev, smallHeading: e.target.value }))}
-              placeholder="e.g. Zha Aesthetic Salon"
+              value={editingBanner.smallHeading}
+              onChange={e => setEditingBanner(prev => ({ ...prev, smallHeading: e.target.value }))}
+              placeholder="e.g. ZHA Aesthetic Salon"
               required
             />
           </div>
@@ -213,8 +341,8 @@ export default function AdminBanner() {
             <input 
               id="banner-mainHeading"
               className="form-input" 
-              value={banner.mainHeading}
-              onChange={e => setBanner(prev => ({ ...prev, mainHeading: e.target.value }))}
+              value={editingBanner.mainHeading}
+              onChange={e => setEditingBanner(prev => ({ ...prev, mainHeading: e.target.value }))}
               placeholder="Main premium title text"
               required
             />
@@ -226,8 +354,8 @@ export default function AdminBanner() {
               id="banner-description"
               className="form-input" 
               rows={3}
-              value={banner.description}
-              onChange={e => setBanner(prev => ({ ...prev, description: e.target.value }))}
+              value={editingBanner.description}
+              onChange={e => setEditingBanner(prev => ({ ...prev, description: e.target.value }))}
               placeholder="A brief premium caption describing the salon services"
               style={{ fontFamily: 'inherit', resize: 'vertical' }}
               required
@@ -240,8 +368,8 @@ export default function AdminBanner() {
               <input 
                 id="banner-primaryBtn"
                 className="form-input" 
-                value={banner.primaryBtn}
-                onChange={e => setBanner(prev => ({ ...prev, primaryBtn: e.target.value }))}
+                value={editingBanner.primaryBtn}
+                onChange={e => setEditingBanner(prev => ({ ...prev, primaryBtn: e.target.value }))}
                 required
               />
             </div>
@@ -250,8 +378,8 @@ export default function AdminBanner() {
               <input 
                 id="banner-secondaryBtn"
                 className="form-input" 
-                value={banner.secondaryBtn}
-                onChange={e => setBanner(prev => ({ ...prev, secondaryBtn: e.target.value }))}
+                value={editingBanner.secondaryBtn}
+                onChange={e => setEditingBanner(prev => ({ ...prev, secondaryBtn: e.target.value }))}
                 required
               />
             </div>
@@ -260,11 +388,11 @@ export default function AdminBanner() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: 'var(--space-lg)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
               <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
-                <Save size={14} /> {saving ? 'Saving...' : 'Update Banner'}
+                <Save size={14} /> {saving ? 'Saving...' : isCreatingNew ? 'Add Banner Slide' : 'Update Banner Slide'}
               </button>
               {saved && (
                 <div style={{ color: '#22c55e', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem' }}>
-                  <Check size={16} /> Banner updated successfully!
+                  <Check size={16} /> Banner saved successfully!
                 </div>
               )}
             </div>
@@ -298,7 +426,7 @@ export default function AdminBanner() {
             <div style={{
               position: 'absolute',
               inset: 0,
-              backgroundImage: `linear-gradient(135deg, rgba(11,11,11,0.92) 0%, rgba(24,24,24,0.7) 100%), url('${banner.imageUrl}')`,
+              backgroundImage: `linear-gradient(135deg, rgba(11,11,11,0.92) 0%, rgba(24,24,24,0.7) 100%), url('${editingBanner.imageUrl}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               zIndex: 0,
@@ -318,7 +446,7 @@ export default function AdminBanner() {
                 gap: '6px'
               }}>
                 <span style={{ width: '12px', height: '1.5px', background: 'var(--admin-accent)', display: 'inline-block' }}></span>
-                {banner.smallHeading}
+                {editingBanner.smallHeading}
               </div>
               <h2 style={{ 
                 fontSize: '22px', 
@@ -328,7 +456,7 @@ export default function AdminBanner() {
                 fontWeight: 600,
                 letterSpacing: '-0.5px'
               }}>
-                {banner.mainHeading}
+                {editingBanner.mainHeading}
               </h2>
               <p style={{ 
                 fontSize: '12.5px', 
@@ -337,7 +465,7 @@ export default function AdminBanner() {
                 marginBottom: '20px',
                 fontWeight: 400
               }}>
-                {banner.description}
+                {editingBanner.description}
               </p>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <div style={{
@@ -350,7 +478,7 @@ export default function AdminBanner() {
                   textTransform: 'uppercase',
                   letterSpacing: '0.04em',
                 }}>
-                  {banner.primaryBtn}
+                  {editingBanner.primaryBtn}
                 </div>
                 <div style={{
                   padding: '8px 16px',
@@ -363,7 +491,7 @@ export default function AdminBanner() {
                   letterSpacing: '0.04em',
                   background: 'rgba(255,255,255,0.02)'
                 }}>
-                  {banner.secondaryBtn}
+                  {editingBanner.secondaryBtn}
                 </div>
               </div>
             </div>

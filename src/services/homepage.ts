@@ -1,6 +1,5 @@
 import { supabase } from '../lib/supabase';
 
-// Helper to convert base64 image data to a Blob for upload
 function base64ToBlob(base64: string): Blob {
   const parts = base64.split(';base64,');
   const contentType = parts[0].split(':')[1];
@@ -14,6 +13,7 @@ function base64ToBlob(base64: string): Blob {
 }
 
 export interface HomepageBanner {
+  id?: string;
   smallHeading: string;
   mainHeading: string;
   subtitle: string;
@@ -40,7 +40,7 @@ export async function uploadHeroAsset(fileOrBase64: File | string): Promise<stri
     fileExtension = fileOrBase64.name.split('.').pop() || fileExtension;
   }
 
-  const fileName = `hero_${Date.now()}.${fileExtension}`;
+  const fileName = `hero_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExtension}`;
   
   const { data, error } = await supabase.storage
     .from('hero')
@@ -60,117 +60,190 @@ export async function uploadHeroAsset(fileOrBase64: File | string): Promise<stri
   return publicUrlData.publicUrl;
 }
 
-const DEFAULT_BANNER: HomepageBanner = {
-  smallHeading: 'Bespoke Hair Artistry',
-  mainHeading: 'Transform Your Style With Professional Beauty Experts',
-  subtitle: 'Luxury Beauty Experience',
-  description: 'Where premium style meets expert care. Experience the ultimate hair design, bridal cosmetics, nail artistry, and soothing spa therapies at Zha Aesthetic Salon.',
-  primaryBtn: 'Book Appointment',
-  secondaryBtn: 'Explore Services',
-  imageUrl: 'https://rkbxikbzjemccuppiuuu.supabase.co/storage/v1/object/public/hero/hero_1784208729302.webp',
-};
+const DEFAULT_BANNERS: HomepageBanner[] = [
+  {
+    id: 'default-1',
+    smallHeading: 'Bespoke Aesthetic Artistry',
+    mainHeading: 'Transform Your Style With Professional Beauty Experts',
+    subtitle: 'Luxury Beauty Experience',
+    description: 'Where premium style meets expert care. Experience the ultimate hair design, bridal cosmetics, nail artistry, and soothing spa therapies at ZHa Aesthetic Salon.',
+    primaryBtn: 'Book Appointment',
+    secondaryBtn: 'Explore Services',
+    imageUrl: 'https://rkbxikbzjemccuppiuuu.supabase.co/storage/v1/object/public/hero/hero_1784208729302.webp',
+  },
+  {
+    id: 'default-2',
+    smallHeading: 'Celebrity Bridal Suite',
+    mainHeading: 'Flawless HD Bridal Makeovers & Hair Artistry',
+    subtitle: 'Unmatched Elegance For Your Big Day',
+    description: 'Customized bridal grooming, airbrush makeup, and saree draping tailored for Indian brides in Mohanur & Namakkal.',
+    primaryBtn: 'Plan Your Bridal Look',
+    secondaryBtn: 'View Portfolio',
+    imageUrl: '/salon_green_theme_2.jpg',
+  },
+  {
+    id: 'default-3',
+    smallHeading: 'Organic Skincare & Keratin Therapy',
+    mainHeading: 'Nourish Your Hair & Glowing Skin',
+    subtitle: 'Advanced Spa Treatments',
+    description: 'Smooth frizz-free keratin hair treatments, hair botox, and rejuvenating hydra facials designed for ultimate shine.',
+    primaryBtn: 'Explore Treatments',
+    secondaryBtn: 'Book Facial',
+    imageUrl: '/salon_green_theme_3.jpg',
+  }
+];
 
-export async function getHomepageBanner(): Promise<HomepageBanner> {
+export async function getHomepageBanners(): Promise<HomepageBanner[]> {
   try {
     const { data, error } = await supabase
       .from('homepage_banner')
       .select('*')
-      .order('id', { ascending: true })
-      .limit(1);
+      .order('created_at', { ascending: true });
 
     if (error) {
       if (error.message.includes('column') || error.code === '42703') {
-        throw new Error("Database column mismatch: The columns in the 'homepage_banner' table do not match the expected schema.");
+        throw new Error("Database column mismatch: The columns in 'homepage_banner' do not match expected schema.");
       }
       throw error;
     }
 
     if (!data || data.length === 0) {
-      return DEFAULT_BANNER;
+      return DEFAULT_BANNERS;
     }
 
-    const banner = data[0];
-    return {
-      smallHeading: banner.top_label || DEFAULT_BANNER.smallHeading,
-      mainHeading: banner.title || DEFAULT_BANNER.mainHeading,
-      subtitle: banner.subtitle || DEFAULT_BANNER.subtitle,
-      description: banner.description || DEFAULT_BANNER.description,
-      primaryBtn: banner.primary_button || DEFAULT_BANNER.primaryBtn,
-      secondaryBtn: banner.secondary_button || DEFAULT_BANNER.secondaryBtn,
-      imageUrl: banner.image_url || DEFAULT_BANNER.imageUrl
-    };
+    return data.map(banner => ({
+      id: banner.id,
+      smallHeading: banner.top_label || 'ZHa Aesthetic Salon',
+      mainHeading: banner.title || 'Transform Your Style',
+      subtitle: banner.subtitle || 'Luxury Beauty Experience',
+      description: banner.description || 'Where premium style meets expert care.',
+      primaryBtn: banner.primary_button || 'Book Appointment',
+      secondaryBtn: banner.secondary_button || 'Explore Services',
+      imageUrl: banner.image_url || DEFAULT_BANNERS[0].imageUrl
+    }));
   } catch (err: any) {
-    console.error('Failed to get homepage banner:', err);
-    if (err.message && (err.message.includes('column') || err.message.includes('relation'))) {
-      throw err;
-    }
-    return DEFAULT_BANNER;
+    console.error('Failed to get homepage banners:', err);
+    return DEFAULT_BANNERS;
   }
 }
 
-export async function updateHomepageBanner(banner: Partial<HomepageBanner>): Promise<HomepageBanner> {
-  const { data: existingData, error: fetchError } = await supabase
-    .from('homepage_banner')
-    .select('id')
-    .order('id', { ascending: true })
-    .limit(1);
+export async function getHomepageBanner(): Promise<HomepageBanner> {
+  const banners = await getHomepageBanners();
+  return banners[0] || DEFAULT_BANNERS[0];
+}
 
-  if (fetchError) {
-    if (fetchError.message.includes('column') || fetchError.code === '42703') {
-      throw new Error("Database column mismatch: The columns in the 'homepage_banner' table do not match the expected schema.");
-    }
-    throw fetchError;
+export async function addHomepageBanner(banner: HomepageBanner): Promise<HomepageBanner> {
+  let finalImageUrl = banner.imageUrl;
+  if (banner.imageUrl && banner.imageUrl.startsWith('data:')) {
+    finalImageUrl = await uploadHeroAsset(banner.imageUrl);
   }
 
   const payload = {
     top_label: banner.smallHeading,
     title: banner.mainHeading,
-    subtitle: banner.subtitle,
+    subtitle: banner.subtitle || banner.description,
     description: banner.description,
     primary_button: banner.primaryBtn,
     secondary_button: banner.secondaryBtn,
-    image_url: banner.imageUrl
+    image_url: finalImageUrl
   };
 
-  let result;
-  if (existingData && existingData.length > 0) {
-    const { data, error } = await supabase
-      .from('homepage_banner')
-      .update(payload)
-      .eq('id', existingData[0].id)
-      .select()
-      .single();
+  const { data, error } = await supabase
+    .from('homepage_banner')
+    .insert(payload)
+    .select()
+    .single();
 
-    if (error) {
-      if (error.message.includes('column') || error.code === '42703') {
-        throw new Error("Database column mismatch during update: Please check your 'homepage_banner' table columns.");
-      }
-      throw error;
-    }
-    result = data;
-  } else {
-    const { data, error } = await supabase
-      .from('homepage_banner')
-      .insert(payload)
-      .select()
-      .single();
-
-    if (error) {
-      if (error.message.includes('column') || error.code === '42703') {
-        throw new Error("Database column mismatch during insert: Please check your 'homepage_banner' table columns.");
-      }
-      throw error;
-    }
-    result = data;
+  if (error) {
+    throw new Error(`Failed to create new banner: ${error.message}`);
   }
 
   return {
-    smallHeading: result.top_label,
-    mainHeading: result.title,
-    subtitle: result.subtitle || '',
-    description: result.description,
-    primaryBtn: result.primary_button,
-    secondaryBtn: result.secondary_button,
-    imageUrl: result.image_url
+    id: data.id,
+    smallHeading: data.top_label,
+    mainHeading: data.title,
+    subtitle: data.subtitle || '',
+    description: data.description,
+    primaryBtn: data.primary_button,
+    secondaryBtn: data.secondary_button,
+    imageUrl: data.image_url
   };
+}
+
+export async function updateHomepageBanner(banner: Partial<HomepageBanner> & { id?: string }): Promise<HomepageBanner> {
+  let finalImageUrl = banner.imageUrl;
+  if (banner.imageUrl && banner.imageUrl.startsWith('data:')) {
+    finalImageUrl = await uploadHeroAsset(banner.imageUrl);
+  }
+
+  const payload = {
+    top_label: banner.smallHeading,
+    title: banner.mainHeading,
+    subtitle: banner.subtitle || banner.description,
+    description: banner.description,
+    primary_button: banner.primaryBtn,
+    secondary_button: banner.secondaryBtn,
+    image_url: finalImageUrl
+  };
+
+  if (banner.id) {
+    const { data, error } = await supabase
+      .from('homepage_banner')
+      .update(payload)
+      .eq('id', banner.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return {
+      id: data.id,
+      smallHeading: data.top_label,
+      mainHeading: data.title,
+      subtitle: data.subtitle || '',
+      description: data.description,
+      primaryBtn: data.primary_button,
+      secondaryBtn: data.secondary_button,
+      imageUrl: data.image_url
+    };
+  } else {
+    // If no ID provided, update first row or insert
+    const { data: existingData } = await supabase
+      .from('homepage_banner')
+      .select('id')
+      .order('id', { ascending: true })
+      .limit(1);
+
+    if (existingData && existingData.length > 0) {
+      const { data, error } = await supabase
+        .from('homepage_banner')
+        .update(payload)
+        .eq('id', existingData[0].id)
+        .select()
+        .single();
+      if (error) throw error;
+      return {
+        id: data.id,
+        smallHeading: data.top_label,
+        mainHeading: data.title,
+        subtitle: data.subtitle || '',
+        description: data.description,
+        primaryBtn: data.primary_button,
+        secondaryBtn: data.secondary_button,
+        imageUrl: data.image_url
+      };
+    } else {
+      return addHomepageBanner(banner as HomepageBanner);
+    }
+  }
+}
+
+export async function deleteHomepageBanner(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('homepage_banner')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(`Failed to delete banner: ${error.message}`);
+  }
 }
