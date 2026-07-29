@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Eye, Check, CloudUpload, CheckCircle, Plus, Trash2, Edit3, Image as ImageIcon, Sliders } from 'lucide-react';
+import { Save, Eye, Check, CloudUpload, CheckCircle, Plus, Trash2 } from 'lucide-react';
 import { getHomepageBanners, addHomepageBanner, updateHomepageBanner, deleteHomepageBanner, uploadHeroAsset } from '../../services/homepage';
 import type { HomepageBanner } from '../../services/homepage';
 
