@@ -4,6 +4,16 @@ import path from 'path';
 const DOMAIN = 'https://www.zhaaestheticsalon.in';
 const TODAY = new Date().toISOString().split('T')[0];
 
+function xmlEscape(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 const BLOG_SLUGS = [
   'best-bridal-makeup-artist-namakkal-mohanur',
   'keratin-hair-treatment-guide-namakkal-mohanur',
@@ -78,13 +88,13 @@ const PUBLIC_ROUTES = [
 
 function generateSitemapXML() {
   const urls = PUBLIC_ROUTES.map((route) => {
-    const fullUrl = `${DOMAIN}${route.path}`;
+    const fullUrl = xmlEscape(`${DOMAIN}${route.path}`);
     const imageBlock = route.image
       ? `
     <image:image>
-      <image:loc>${route.image.url}</image:loc>
-      <image:title>${route.image.title}</image:title>
-      <image:caption>${route.image.caption}</image:caption>
+      <image:loc>${xmlEscape(route.image.url)}</image:loc>
+      <image:title>${xmlEscape(route.image.title)}</image:title>
+      <image:caption>${xmlEscape(route.image.caption)}</image:caption>
     </image:image>`
       : '';
 
