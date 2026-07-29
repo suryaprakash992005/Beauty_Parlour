@@ -1,18 +1,15 @@
 import { useEffect } from 'react';
 
 const SITE_NAME = 'ZHa Aesthetic Salon';
-const DEFAULT_TITLE = 'Best Beauty Salon in Namakkal | ZHa Aesthetic Salon | Hair, Bridal & Spa';
+const DEFAULT_TITLE = `${SITE_NAME} — Luxury Beauty Salon & Hair Spa`;
 const DEFAULT_DESCRIPTION =
-  'Visit ZHa Aesthetic Salon, the best premium unisex beauty salon in Namakkal, located in Mohanur. Expert hair styling, bridal makeup, keratin treatment, facials, hair spa, nails, waxing and skincare.';
-const DEFAULT_KEYWORDS =
-  'Best Salon in Namakkal, Best Beauty Salon Namakkal, Hair Salon Namakkal, Unisex Salon Namakkal, Beauty Parlour Namakkal, Luxury Salon Namakkal, Bridal Makeup Namakkal, Keratin Treatment Namakkal, Hair Spa Namakkal, Facial Namakkal, Waxing Namakkal, Hair Styling Namakkal, Hair Colour Namakkal, Pedicure Namakkal, Manicure Namakkal, Nail Extension Namakkal, Salon Near Me, Best Salon Near Me, Salon in Mohanur, Beauty Salon Mohanur, Bridal Makeup Mohanur, Hair Spa Mohanur, Hair Cut Mohanur, Salon Near Mohanur';
+  'ZHa Aesthetic Salon — Professional hair styling, bridal makeup, keratin treatment, facials & luxury spa. Book your appointment now!';
 const SITE_URL = 'https://zhaaestheticsalon.in';
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 interface SEOProps {
   title?: string;
   description?: string;
-  keywords?: string;
   canonical?: string;
   ogType?: string;
   ogImage?: string;
@@ -22,13 +19,12 @@ interface SEOProps {
 }
 
 /**
- * Sets dynamic per-page SEO: <title>, meta description, keywords, canonical,
+ * Sets dynamic per-page SEO: <title>, meta description, canonical,
  * Open Graph, Twitter Card, and optional JSON-LD schema injection.
  */
 export function useSEO({
   title,
   description,
-  keywords,
   canonical,
   ogType = 'website',
   ogImage = OG_IMAGE,
@@ -36,9 +32,8 @@ export function useSEO({
   breadcrumbs,
   schema,
 }: SEOProps = {}) {
-  const pageTitle = title ? (title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`) : DEFAULT_TITLE;
+  const pageTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
   const pageDesc = description || DEFAULT_DESCRIPTION;
-  const pageKeywords = keywords || DEFAULT_KEYWORDS;
   const pageUrl = canonical ? `${SITE_URL}${canonical}` : SITE_URL;
 
   useEffect(() => {
@@ -50,6 +45,7 @@ export function useSEO({
       let el = document.querySelector<HTMLMetaElement>(selector);
       if (!el) {
         el = document.createElement('meta');
+        // parse attr=val from selector like name="description"
         const match = selector.match(/\[(\w+)="([^"]+)"\]/);
         if (match) el.setAttribute(match[1], match[2]);
         document.head.appendChild(el);
@@ -58,7 +54,6 @@ export function useSEO({
     };
 
     setMeta('meta[name="description"]', pageDesc);
-    setMeta('meta[name="keywords"]', pageKeywords);
     setMeta('meta[name="robots"]', noIndex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large');
 
     // ── Canonical ──
@@ -109,10 +104,12 @@ export function useSEO({
     }
 
     return () => {
+      // Cleanup page-specific schema on unmount
       removeSchema('__breadcrumb-schema__');
       removeSchema('__page-schema__');
     };
-  }, [pageTitle, pageDesc, pageUrl, pageKeywords]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageTitle, pageDesc, pageUrl]);
 }
 
 function injectSchema(id: string, data: Record<string, unknown>) {
@@ -129,66 +126,60 @@ function removeSchema(id: string) {
   if (existing) existing.remove();
 }
 
-/** Page-level SEO configs targeting Namakkal as primary location & Mohanur as exact physical location */
+/** Page-level SEO configs for all routes */
 export const PAGE_SEO = {
   home: {
-    title: 'Best Beauty Salon in Namakkal | ZHa Aesthetic Salon | Hair, Bridal & Spa',
+    title: 'Luxury Beauty Salon — Hair, Bridal & Spa',
     description:
-      'Visit ZHa Aesthetic Salon, the best premium unisex beauty salon in Namakkal, located in Mohanur. Expert hair styling, bridal makeup, keratin treatment, facials, hair spa, nails, waxing and skincare.',
+      'ZHa Aesthetic Salon is your premium beauty destination. Expert hair styling, bridal makeup, keratin treatment, facials, waxing & spa. Book an appointment today!',
     canonical: '/',
   },
   about: {
-    title: 'About ZHa Aesthetic Salon — Best Beauty Salon in Namakkal',
+    title: 'About ZHa Aesthetic Salon — Our Story & Expert Team',
     description:
-      'Discover ZHa Aesthetic Salon, the top unisex beauty salon in Namakkal, located in Mohanur. Certified hair stylists, HD bridal makeup artists & luxury skin care experts.',
+      'Discover the story behind ZHa Aesthetic Salon. Over a decade of luxury beauty expertise — certified stylists, premium products, and a passion for elegance.',
     canonical: '/about',
   },
   services: {
-    title: 'Hair Cut, Keratin & Bridal Services in Namakkal — ZHa Salon',
+    title: 'Beauty Services — Hair, Skin, Bridal & More',
     description:
-      'Top beauty services in Namakkal: hair cut, keratin treatment, HD bridal makeup, hair spa, facials, waxing & nail extensions at ZHa Aesthetic Salon in Mohanur.',
+      'Explore all beauty services at ZHa Aesthetic Salon: hair cuts, blow dry, keratin, hair spa, facials, bridal makeup, waxing, threading, manicure & pedicure.',
     canonical: '/services',
   },
   gallery: {
-    title: 'Bridal Makeup & Hair Transformation Gallery in Namakkal',
+    title: 'Portfolio Gallery — ZHa Aesthetic Salon',
     description:
-      'View stunning hair transformations, HD bridal makeup, and glowing skin facials at ZHa Aesthetic Salon, the best salon in Namakkal, located in Mohanur.',
+      'Browse our stunning portfolio of bridal makeovers, hair transformations, nail art, and skin treatments at ZHa Aesthetic Salon.',
     canonical: '/gallery',
   },
   contact: {
-    title: 'Contact ZHa Aesthetic Salon — Best Salon in Namakkal, Mohanur',
+    title: 'Contact Us — ZHa Aesthetic Salon',
     description:
-      'Contact ZHa Aesthetic Salon located at 1st Floor, MPS Traders Building, opposite Taluka Office, Mohanur, Namakkal District. Call +91 96889 99188.',
+      'Get in touch with ZHa Aesthetic Salon. Call +91 82709 04659, visit us, or send us a message online.',
     canonical: '/contact',
   },
   book: {
-    title: 'Book Salon Appointment in Namakkal — ZHa Aesthetic Salon',
+    title: 'Book an Appointment — ZHa Aesthetic Salon',
     description:
-      'Book your haircut, HD bridal makeup, keratin treatment or hair spa online at ZHa Aesthetic Salon, the best beauty salon in Namakkal, located in Mohanur.',
+      'Book your beauty appointment online at ZHa Aesthetic Salon. Choose from hair styling, facials, bridal makeup, keratin, waxing & more.',
     canonical: '/book-appointment',
   },
   bridal: {
-    title: 'Best Bridal Makeup in Namakkal — Packages & Airbrush Makeup',
+    title: 'Bridal Makeup & Packages — ZHa Aesthetic Salon',
     description:
-      'Book the best bridal makeup in Namakkal at ZHa Aesthetic Salon in Mohanur. HD bridal makeup, airbrush makeup, saree draping & pre-bridal grooming.',
+      'Plan your dream bridal look with ZHa Aesthetic Salon. Comprehensive bridal packages including HD bridal makeup, hairstyling, saree draping & pre-bridal grooming.',
     canonical: '/bridal-planner',
   },
   testimonials: {
-    title: 'Client Reviews & Ratings — Best Salon in Namakkal',
+    title: 'Client Reviews & Testimonials — ZHa Aesthetic Salon',
     description:
-      'Read authentic client reviews for ZHa Aesthetic Salon, the highest-rated unisex beauty salon in Namakkal, located in Mohanur. Premium hair, bridal & spa care.',
+      'Read genuine client reviews about ZHa Aesthetic Salon. See what our happy customers say about our hair, bridal, and spa services.',
     canonical: '/testimonials',
   },
   offers: {
-    title: 'Exclusive Beauty Offers in Namakkal — ZHa Aesthetic Salon',
+    title: 'Exclusive Beauty Offers & Deals — ZHa Aesthetic Salon',
     description:
-      'Claim special discounts on bridal makeup, hair spa, facial packages and keratin treatment at ZHa Aesthetic Salon, the top luxury salon in Namakkal, Mohanur.',
+      'Discover exclusive seasonal offers, bridal discounts, and loyalty deals at ZHa Aesthetic Salon. Premium beauty at exceptional value.',
     canonical: '/offers',
-  },
-  blogs: {
-    title: 'Beauty Blog & Hair Care Tips in Namakkal — ZHa Aesthetic Salon',
-    description:
-      'Read expert beauty advice, bridal makeup trends, keratin treatment benefits, and hair care tips from ZHa Aesthetic Salon in Namakkal, Mohanur.',
-    canonical: '/blogs',
   },
 };

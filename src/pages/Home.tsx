@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback, useState, useMemo, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Star, ArrowRight, ChevronDown, MapPin } from 'lucide-react';
+import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import ShinyText from '../components/ShinyText';
@@ -22,6 +22,20 @@ const DomeGallery = lazy(() => import('../components/DomeGallery'));
 /* ─── Responsive Hero Background Assets ─── */
 const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth <= 768;
 
+const HERO_BGS_DESKTOP = [
+  '/salon_green_theme_1.jpg',
+  '/salon_green_theme_2.jpg',
+  '/salon_green_theme_3.jpg'
+];
+
+const HERO_BGS_MOBILE = [
+  '/salon_green_theme_1_mobile.jpg',
+  '/salon_green_theme_2_mobile.jpg',
+  '/salon_green_theme_3_mobile.jpg'
+];
+
+const HERO_BGS = IS_MOBILE ? HERO_BGS_MOBILE : HERO_BGS_DESKTOP;
+
 interface TestimonialData {
   id: string | number;
   reviewer_name: string;
@@ -37,29 +51,6 @@ const FALLBACK_TESTIMONIALS: TestimonialData[] = [
   { id: 'f-4', review_text: 'From the moment I walked in, I felt like royalty. The ambience, service, and results — simply exceptional.', reviewer_name: 'Sneha Joshi', rating: 5, review_date: '2026-07-01' },
   { id: 'f-5', review_text: 'The keratin treatment smoothened my hair beyond imagination. I wake up with perfect hair every single day now!', reviewer_name: 'Divya Patel', rating: 5, review_date: '2026-07-04' },
   { id: 'f-6', review_text: 'My party makeup turned heads all night. The makeup artist understood exactly my vibe — flawless and glamorous!', reviewer_name: 'Riya Verma', rating: 5, review_date: '2026-07-08' }
-];
-
-const HOMEPAGE_FAQS = [
-  {
-    q: 'Which is the best salon in Namakkal?',
-    a: 'ZHa Aesthetic Salon is widely recognized as the best unisex beauty salon in Namakkal, located in Mohanur. We offer top-rated hair styling, HD bridal makeup, keratin treatments, luxury facials, and spa care.'
-  },
-  {
-    q: 'Where can I get bridal makeup in Namakkal?',
-    a: 'ZHa Aesthetic Salon provides the best bridal makeup in Namakkal. Located in Mohanur, we specialize in HD bridal makeup, airbrush makeup, saree draping, bridal hair styling, and comprehensive pre-bridal grooming packages.'
-  },
-  {
-    q: 'Which salon offers keratin treatment in Namakkal?',
-    a: 'ZHa Aesthetic Salon offers professional keratin treatment and hair smoothening in Namakkal, using certified luxury products for long-lasting, frizz-free, silky smooth hair.'
-  },
-  {
-    q: 'Which is the best unisex salon in Namakkal?',
-    a: 'ZHa Aesthetic Salon is the leading unisex salon in Namakkal, located in Mohanur, offering dedicated expert hair stylists, aesthetic facial therapists, and grooming services for ladies and gentlemen.'
-  },
-  {
-    q: 'Where is ZHa Aesthetic Salon located?',
-    a: 'ZHa Aesthetic Salon is located at 1st Floor, MPS Traders Building, Opposite Taluka Office, Nehru Nagar, Mohanur, Namakkal District, Tamil Nadu - 637015. Call +91 96889 99188 to book your appointment.'
-  }
 ];
 
 /* ─── Counter Stat ─── */
@@ -119,8 +110,8 @@ function BeforeAfterSlider() {
       onMouseMove={e => { if (dragging.current) setPos(e.clientX); }}
       onTouchMove={e => { if (dragging.current) setPos(e.touches[0].clientX); }}
     >
-      <img className="slider-img" src={bridalBeforeImg} alt="Before Makeup Transformation at Best Beauty Salon in Namakkal" loading="lazy" decoding="async" width="600" height="450" />
-      <img className="slider-img slider-after" ref={afterRef} src={bridalAfterImg} alt="After HD Bridal Makeup Transformation at ZHa Aesthetic Salon Mohanur Namakkal" loading="lazy" decoding="async" width="600" height="450" />
+      <img className="slider-img" src={bridalBeforeImg} alt="Before Makeup Transformation" loading="lazy" decoding="async" width="600" height="450" />
+      <img className="slider-img slider-after" ref={afterRef} src={bridalAfterImg} alt="After Makeup Transformation" loading="lazy" decoding="async" width="600" height="450" />
       <div className="slider-handle" ref={handleRef} />
       <div className="slider-labels">
         <span className="slider-label">Before</span>
@@ -139,7 +130,6 @@ export default function Home() {
   const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   useScrollReveal([services]);
 
@@ -190,7 +180,7 @@ export default function Home() {
       .catch(err => console.error('Failed to load gallery for dome:', err));
 
     const slideTimer = setInterval(() => {
-      setBgIndex(prev => (prev + 1) % 3);
+      setBgIndex(prev => (prev + 1) % HERO_BGS.length);
     }, 5500);
 
     return () => clearInterval(slideTimer);
@@ -275,11 +265,11 @@ export default function Home() {
         <div className="container hero__content">
           <div className="hero__eyebrow">
             <Sparkles size={12} />
-            {banner?.smallHeading || 'ZHA Aesthetic Salon — Mohanur, Namakkal'}
+            {banner?.smallHeading || 'ZHA Aesthetic Salon'}
           </div>
           <h1 className="hero__title">
             <ShinyText
-              text={banner?.mainHeading || 'Best Beauty Salon in Namakkal | Premium Unisex Salon'}
+              text={banner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
               disabled={false}
               speed={3.5}
               color="rgba(255, 255, 255, 0.95)"
@@ -291,12 +281,8 @@ export default function Home() {
             />
           </h1>
           <p className="hero__subtitle">
-            {banner?.subtitle || banner?.description || 'ZHa Aesthetic Salon is the premier unisex beauty parlour in Namakkal, located in Mohanur. Experience luxury hair styling, HD bridal makeup, keratin treatment, hair spa & glowing skin facials.'}
+            {banner?.subtitle || banner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
           </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-champagne)', fontSize: '0.85rem', marginTop: '10px' }}>
-            <MapPin size={14} />
-            <span>Located in Mohanur, Namakkal District, Tamil Nadu</span>
-          </div>
           <div className="hero__actions">
             <InteractiveHoverButton to="/book-appointment">
               {banner?.primaryBtn || 'Book Appointment'}
@@ -326,13 +312,13 @@ export default function Home() {
       </section>
 
       {/* ── SERVICES ── */}
-      <section className="section" aria-label="Featured Services in Namakkal">
+      <section className="section" aria-label="Featured Services">
         <div className="container">
           <div className="section__header section__header--center reveal">
-            <div className="section-label">Top Hair, Skin & Bridal Care</div>
-            <h2 className="section-title">Best Salon Services in Namakkal</h2>
+            <div className="section-label">What We Offer</div>
+            <h2 className="section-title">Luxury Services Curated For You</h2>
             <p className="section-subtitle mx-auto">
-              From HD bridal makeup and keratin treatment to hair spa and aesthetic skin facials, every service is delivered with certified expertise at our Mohanur salon.
+              From bridal artistry to everyday indulgences, every service is delivered with unmatched expertise and premium products.
             </p>
           </div>
 
@@ -348,13 +334,13 @@ export default function Home() {
                 <article
                   key={s.id || i}
                   className={`service-card reveal delay-${(i % 4) + 1}`}
-                  aria-label={`${s.name} in Namakkal`}
+                  aria-label={s.name}
                 >
                   <div className="service-card__img-wrap">
                     <img 
                       className="service-card__img" 
                       src={s.imageUrl} 
-                      alt={`${s.name} in Namakkal - ZHa Aesthetic Salon Mohanur`} 
+                      alt={s.name} 
                       loading="lazy" 
                       decoding="async" 
                       width="400" 
@@ -377,7 +363,7 @@ export default function Home() {
 
           <div className="text-center mt-3xl">
             <Link to="/services" className="btn btn-primary">
-              View All Services in Namakkal <ArrowRight size={16} />
+              View All Services <ArrowRight size={16} />
             </Link>
           </div>
         </div>
@@ -387,10 +373,10 @@ export default function Home() {
       <section className="before-after" aria-label="Transformation Gallery">
         <div className="container">
           <div className="section__header section__header--center reveal" style={{ color: 'white' }}>
-            <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Hair & Bridal Transformations</div>
-            <h2 className="section-title" style={{ color: 'var(--color-white)' }}>Best Hair Stylist & Makeup Artist in Namakkal</h2>
+            <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Transformations</div>
+            <h2 className="section-title" style={{ color: 'var(--color-white)' }}>See The Difference We Make</h2>
             <p className="section-subtitle mx-auto" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              Drag the slider to witness real bridal and hair transformations at ZHA Aesthetic Salon, Mohanur, Namakkal District.
+              Drag the slider to witness the professional styling transformations at ZHA Aesthetic Salon.
             </p>
           </div>
           <BeforeAfterSlider />
@@ -401,14 +387,14 @@ export default function Home() {
       <section className="offers-banner" aria-label="Current Offers">
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
           <div className="section__header section__header--center reveal">
-            <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Exclusive Deals in Namakkal</div>
-            <h2 className="section-title" style={{ color: 'var(--color-white)' }}>Premium Salon Offers For You</h2>
+            <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Exclusive Deals</div>
+            <h2 className="section-title" style={{ color: 'var(--color-white)' }}>Premium Offers For You</h2>
           </div>
           <div className="offers-grid">
             {[
-              { discount: '30% OFF', title: 'Bridal Package Namakkal', desc: 'Book any HD bridal makeup package and receive a complimentary luxury hair spa.', tag: 'Limited Time Offer' },
-              { discount: '₹999',    title: 'Glowing Skin Facial',    desc: 'Signature luxury glow facial starting at just ₹999 at our Mohanur salon.', tag: 'New Client Special' },
-              { discount: '2 FOR 1', title: 'Hair Spa & Stylist Package', desc: 'Bring a friend and enjoy double the hair care treatments at half the price.', tag: 'Popular Deal' },
+              { discount: '30% OFF', title: 'Bridal Season Special', desc: 'Book any bridal package and get a complimentary hair spa included.', tag: 'Limited Time' },
+              { discount: '₹999',    title: 'Luxury Facial',         desc: 'Our signature luxury facial starting at just ₹999. First visit exclusive.', tag: 'New Client Offer' },
+              { discount: '2 FOR 1', title: 'Bring A Friend',        desc: 'Bring your bestie and enjoy double the services at the price of one.', tag: 'Friends & Family' },
             ].map((o, i) => (
               <div key={i} className={`offer-card reveal delay-${i + 1}`}>
                 <div className="offer-card__discount">{o.discount}</div>
@@ -429,8 +415,8 @@ export default function Home() {
       <section className="testimonials" aria-label="Client Testimonials">
         <div className="container">
           <div className="section__header section__header--center reveal">
-            <div className="section-label">Client Reviews</div>
-            <h2 className="section-title">What Clients Say About The Best Salon in Namakkal</h2>
+            <div className="section-label">Client Love</div>
+            <h2 className="section-title">Words From Our Beautiful Clients</h2>
           </div>
         </div>
         <div className="testimonials-track" aria-label="Testimonials carousel">
@@ -449,72 +435,6 @@ export default function Home() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* ── FREQUENTLY ASKED QUESTIONS (SEO FAQ SECTION) ── */}
-      <section className="section" aria-label="Frequently Asked Questions" style={{ backgroundColor: 'var(--color-bg-dark, #121212)' }}>
-        <div className="container">
-          <div className="section__header section__header--center reveal">
-            <div className="section-label">Got Questions?</div>
-            <h2 className="section-title">Frequently Asked Questions</h2>
-            <p className="section-subtitle mx-auto">
-              Everything you need to know about ZHa Aesthetic Salon, the best unisex beauty salon in Namakkal.
-            </p>
-          </div>
-
-          <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {HOMEPAGE_FAQS.map((faq, index) => {
-              const isOpen = openFaq === index;
-              return (
-                <div 
-                  key={index}
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                    border: '1px solid rgba(212, 175, 55, 0.15)',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  <button
-                    onClick={() => setOpenFaq(isOpen ? null : index)}
-                    style={{
-                      width: '100%',
-                      padding: '20px 24px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      background: 'none',
-                      border: 'none',
-                      color: '#FFFFFF',
-                      fontSize: '1rem',
-                      fontWeight: 600,
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      gap: '16px'
-                    }}
-                  >
-                    <span>{faq.q}</span>
-                    <ChevronDown 
-                      size={18} 
-                      style={{ 
-                        transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                        transition: 'transform 0.3s ease',
-                        color: 'var(--color-champagne)',
-                        flexShrink: 0
-                      }} 
-                    />
-                  </button>
-                  {isOpen && (
-                    <div style={{ padding: '0 24px 20px 24px', color: 'rgba(255, 255, 255, 0.75)', fontSize: '0.95rem', lineHeight: '1.65' }}>
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
         </div>
       </section>
 

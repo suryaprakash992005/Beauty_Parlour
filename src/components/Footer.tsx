@@ -29,7 +29,7 @@ export default function Footer() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: 'var(--space-md)' }}>
               {settings?.logoUrl && (
                 <div className="navbar__logo-circle" style={{ width: '40px', height: '40px', flexShrink: 0 }}>
-                  <img src={settings.logoUrl} alt={settings?.studioName || 'ZHa Aesthetic Salon — Best Salon in Namakkal'} className="navbar__logo-circle-img" loading="lazy" />
+                  <img src={settings.logoUrl} alt={settings?.studioName || 'ZHa Aesthetic Salon'} className="navbar__logo-circle-img" loading="lazy" />
                 </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
@@ -40,8 +40,8 @@ export default function Footer() {
               </div>
             </div>
             <p className="footer__desc">
-              ZHa Aesthetic Salon is the best unisex beauty salon in Namakkal, located in Mohanur. 
-              Offering expert hair styling, HD bridal makeup, keratin treatment, facials & luxury spa care.
+              A premier luxury salon destination for professional hair styling, 
+              bridal makeup, keratin treatment, facials, and spa care.
             </p>
             <div className="footer__socials">
               {[
@@ -62,12 +62,11 @@ export default function Footer() {
             <ul className="footer__links">
               {[
                 { label: 'Home',             to: '/'          },
-                { label: 'Services in Namakkal', to: '/services'  },
+                { label: 'Services',         to: '/services'  },
                 { label: 'About Us',         to: '/about'     },
-                { label: 'Bridal Packages',  to: '/bridal-planner' },
+                { label: 'Bridal Planner',   to: '/bridal-planner' },
                 { label: 'Gallery',          to: '/gallery'   },
                 { label: 'Offers',           to: '/offers'    },
-                { label: 'Beauty Blog',      to: '/blogs'     },
                 { label: 'Testimonials',     to: '/testimonials' },
                 { label: 'Book Appointment', to: '/book-appointment' },
                 { label: 'Contact',          to: '/contact'   },
@@ -82,8 +81,8 @@ export default function Footer() {
             <h3 className="footer__col-title">Contact Us</h3>
             <div className="footer__contact-item">
               <Phone size={16} className="footer__contact-icon" aria-hidden="true" />
-              <a href="tel:+919688999188" style={{ color: 'inherit', textDecoration: 'none' }}>
-                {settings?.phone || '+91 96889 99188 / +91 82709 04659'}
+              <a href={`tel:${(settings?.phone || '+918270904659').replace(/[^+\d]/g, '')}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                {settings?.phone || '+91 82709 04659'}
               </a>
             </div>
             <div className="footer__contact-item">
@@ -95,25 +94,32 @@ export default function Footer() {
             <div className="footer__contact-item">
               <MapPin size={16} className="footer__contact-icon" aria-hidden="true" />
               <a href="https://maps.app.goo.gl/BP8hTwHFbmMcDkHc9" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
-                {settings?.address || '1st Floor, MPS Traders Building, Opposite Taluka Office, Nehru Nagar, Mohanur, Namakkal District, Tamil Nadu - 637015'}
+                {settings?.address || '1st floor, MPS Traders Building, opposite to Taluka Office, Nehru Nagar, Mohanur, Tamil Nadu 637015'}
               </a>
             </div>
             <div className="footer__contact-item">
               <Clock size={16} className="footer__contact-icon" aria-hidden="true" />
               <span>
-                {settings?.openHoursWeekdays || 'Mon–Fri: 9 AM – 9 PM'} | {settings?.openHoursWeekends || 'Sat–Sun: 7 AM – 9 PM'}
+                {settings?.openHoursWeekdays || 'Mon–Fri: 9 AM – 9 PM'}
+                <br />
+                {settings?.openHoursWeekends || 'Sat–Sun: 7 AM – 9 PM'}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="footer__bottom">
-          <span>© {year} ZHa Aesthetic Salon — Best Salon in Namakkal, Mohanur. All rights reserved.</span>
-          <div className="footer__bottom-links">
-            <Link to="/about">About</Link>
-            <Link to="/services">Services</Link>
-            <Link to="/blogs">Blog</Link>
-            <Link to="/contact">Contact</Link>
+        <div className="container footer__bottom">
+          <div className="footer__copyright">
+            © {year} {settings?.studioName || 'ZHA'} Aesthetic Salon. All rights reserved. Crafted with luxury.
+          </div>
+          <div style={{ display: 'flex', gap: '1.5rem' }}>
+            {['Privacy Policy', 'Terms of Service'].map(t => (
+              <a key={t} href="#" style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.3)', transition: 'color 0.3s' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-champagne)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}>
+                {t}
+              </a>
+            ))}
           </div>
         </div>
       </div>

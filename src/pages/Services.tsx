@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Sparkles, MapPin } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useScrollReveal } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import { SparklesText } from '../components/SparklesText';
@@ -62,17 +62,13 @@ export default function Services() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <Breadcrumb items={[{ label: 'Services' }]} />
-          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Top Services in Namakkal</div>
+          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Offerings</div>
           <h1 className="page-hero__title">
-            <SparklesText>Beauty Services in Namakkal</SparklesText>
+            <SparklesText>Luxury Services</SparklesText>
           </h1>
           <p className="page-hero__subtitle">
-            Explore premier beauty offerings at ZHa Aesthetic Salon in Mohanur: expert hair cuts, keratin treatment, HD bridal makeup, hair spa, facials, waxing & nail care in Namakkal.
+            Premium hair, bridal, skin care & spa services crafted to perfection by ZHa Aesthetic Salon.
           </p>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--color-champagne)', fontSize: '0.85rem', marginTop: '12px' }}>
-            <MapPin size={14} />
-            <span>Serving Namakkal, Mohanur & Namakkal District</span>
-          </div>
         </div>
       </section>
 
@@ -95,7 +91,7 @@ export default function Services() {
         <div className="services-search-container" style={{ width: '100%', maxWidth: '480px', position: 'relative', marginTop: '4px' }}>
           <input
             type="text"
-            placeholder="Search for keratin, bridal makeup, hair spa in Namakkal..."
+            placeholder="Search for haircuts, spa, facial..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
@@ -165,15 +161,7 @@ export default function Services() {
               {filtered.map((s, i) => (
                 <article key={s.id || i} className={`service-card-full delay-${(i % 4) + 1}`}>
                   <div className="service-card-full__img-wrap">
-                    <img 
-                      src={s.imageUrl} 
-                      alt={`${s.name} in Namakkal — ZHa Aesthetic Salon Mohanur`} 
-                      loading="lazy" 
-                      decoding="async" 
-                      className="service-card-full__img" 
-                      width="400"
-                      height="280"
-                    />
+                    <img src={s.imageUrl} alt={s.name} loading="lazy" className="service-card-full__img" />
                     <span className="service-card-full__cat">{s.category}</span>
                   </div>
                   <div className="service-card-full__body">

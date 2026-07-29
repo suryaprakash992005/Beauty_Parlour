@@ -55,11 +55,6 @@ const PUBLIC_ROUTES = [
     priority: '0.70',
     changefreq: 'weekly',
   },
-  {
-    path: '/blogs',
-    priority: '0.85',
-    changefreq: 'weekly',
-  },
 ];
 
 function generateSitemapXML() {

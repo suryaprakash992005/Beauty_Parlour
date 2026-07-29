@@ -92,11 +92,11 @@ export default function Gallery() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <Breadcrumb items={[{ label: 'Gallery' }]} />
-          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Top Salon Gallery in Namakkal</div>
+          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Our Work</div>
           <h1 className="page-hero__title">
-            <SparklesText>Beauty & Bridal Gallery in Namakkal</SparklesText>
+            <SparklesText>Beauty Gallery</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">A curated showcase of hair transformations, HD bridal makeovers, keratin treatment & glowing skin facials at ZHa Aesthetic Salon in Mohanur, Namakkal District.</p>
+          <p className="page-hero__subtitle">A curated showcase of hair transformations, bridal makeovers & spa artistry at ZHa Aesthetic Salon.</p>
         </div>
       </section>
 

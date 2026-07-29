@@ -16,7 +16,6 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Book from './pages/Book';
 import Testimonials from './pages/Testimonials';
-import Blogs from './pages/Blogs';
 import NotFound from './pages/NotFound';
 
 // Auth & Admin Pages (Lazy Loaded for High Performance)
@@ -72,8 +71,6 @@ function PublicLayout() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/book-appointment" element={<Book />} />
           <Route path="/testimonials" element={<Testimonials />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/blog" element={<Navigate to="/blogs" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </PageTransition>

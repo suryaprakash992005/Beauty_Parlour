@@ -27,11 +27,11 @@ export default function Offers() {
         <div className="page-hero__overlay" />
         <div className="container page-hero__content">
           <Breadcrumb items={[{ label: 'Offers' }]} />
-          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Exclusive Deals in Namakkal</div>
+          <div className="section-label" style={{ color: 'var(--color-champagne)' }}>Exclusive Deals</div>
           <h1 className="page-hero__title">
-            <SparklesText>Salon Offers in Namakkal</SparklesText>
+            <SparklesText>Beauty Offers</SparklesText>
           </h1>
-          <p className="page-hero__subtitle">Exclusive hair styling, keratin treatment, facial & HD bridal makeup deals at ZHa Aesthetic Salon in Mohanur, Namakkal District.</p>
+          <p className="page-hero__subtitle">Exclusive hair styling, facial, and bridal package deals at ZHa Aesthetic Salon.</p>
         </div>
       </section>
 
