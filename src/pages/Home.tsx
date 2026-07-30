@@ -4,7 +4,7 @@ import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
 import ShinyText from '../components/ShinyText';
-import { getHomepageBanners } from '../services/homepage';
+import { getHomepageBanner } from '../services/homepage';
 import type { HomepageBanner } from '../services/homepage';
 import { getServices } from '../services/services';
 import type { ServiceItem } from '../services/services';
@@ -19,7 +19,22 @@ import '../styles/home.css';
 // Lazy-load heavy below-the-fold 3D Dome Gallery
 const DomeGallery = lazy(() => import('../components/DomeGallery'));
 
+/* ─── Responsive Hero Background Assets ─── */
 const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth <= 768;
+
+const HERO_BGS_DESKTOP = [
+  '/salon_green_theme_1.jpg',
+  '/salon_green_theme_2.jpg',
+  '/salon_green_theme_3.jpg'
+];
+
+const HERO_BGS_MOBILE = [
+  '/salon_green_theme_1_mobile.jpg',
+  '/salon_green_theme_2_mobile.jpg',
+  '/salon_green_theme_3_mobile.jpg'
+];
+
+const HERO_BGS = IS_MOBILE ? HERO_BGS_MOBILE : HERO_BGS_DESKTOP;
 
 interface TestimonialData {
   id: string | number;
@@ -110,7 +125,7 @@ function BeforeAfterSlider() {
 export default function Home() {
   useSEO(PAGE_SEO.home);
   const [bgIndex, setBgIndex] = useState(0);
-  const [banners, setBanners] = useState<HomepageBanner[]>([]);
+  const [banner, setBanner] = useState<HomepageBanner | null>(null);
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -119,14 +134,10 @@ export default function Home() {
   useScrollReveal([services]);
 
   useEffect(() => {
-    // Load All Homepage Banners
-    getHomepageBanners()
-      .then(data => {
-        if (data && data.length > 0) {
-          setBanners(data);
-        }
-      })
-      .catch(err => console.error('Failed to load homepage banners:', err));
+    // Load Homepage Banner config
+    getHomepageBanner()
+      .then(data => setBanner(data))
+      .catch(err => console.error('Failed to load banner:', err));
 
     // Load Featured Services
     getServices()
@@ -167,33 +178,15 @@ export default function Home() {
         }
       })
       .catch(err => console.error('Failed to load gallery for dome:', err));
+
+    const slideTimer = setInterval(() => {
+      setBgIndex(prev => (prev + 1) % HERO_BGS.length);
+    }, 5500);
+
+    return () => clearInterval(slideTimer);
   }, []);
 
-  // Timer to cycle through banners smoothly
-  useEffect(() => {
-    if (banners.length <= 1) return;
-    const slideTimer = setInterval(() => {
-      setBgIndex(prev => (prev + 1) % banners.length);
-    }, 5500);
-    return () => clearInterval(slideTimer);
-  }, [banners.length]);
-
-  // Preload all banner images into memory for zero lag
-  useEffect(() => {
-    banners.forEach(b => {
-      if (b.imageUrl) {
-        const img = new Image();
-        img.src = b.imageUrl;
-      }
-    });
-  }, [banners]);
-
-  // Active banner data
-  const currentBanner = useMemo(() => {
-    return banners[bgIndex] || banners[0] || null;
-  }, [banners, bgIndex]);
-
-  // Memoized Particle data
+  // Memoized Particle data (Lightweight count for mobile)
   const particles = useMemo(() => {
     const count = IS_MOBILE ? 5 : 12;
     return Array.from({ length: count }, (_, i) => ({
@@ -208,21 +201,38 @@ export default function Home() {
     }));
   }, []);
 
+  // Stable hero slides list (Paints initial hero instantly, crossfades smoothly one by one)
+  const heroSlides = useMemo(() => {
+    const primary = banner?.imageUrl || (IS_MOBILE ? '/salon_green_theme_1_mobile.jpg' : 'https://rkbxikbzjemccuppiuuu.supabase.co/storage/v1/object/public/hero/hero_1784208729302.webp');
+    const slide2  = IS_MOBILE ? '/salon_green_theme_2_mobile.jpg' : '/salon_green_theme_2.jpg';
+    const slide3  = IS_MOBILE ? '/salon_green_theme_3_mobile.jpg' : '/salon_green_theme_3.jpg';
+    return [primary, slide2, slide3];
+  }, [banner?.imageUrl]);
+
+  // Preload all hero slides into memory so transitions on mobile/desktop are 100% instant and gapless
+  useEffect(() => {
+    heroSlides.forEach(url => {
+      if (url) {
+        const img = new Image();
+        img.src = url;
+      }
+    });
+  }, [heroSlides]);
+
   return (
     <main>
       {/* ── HERO ── */}
       <section className="hero" aria-label="Hero">
         <div className="hero__bg" />
         
-        {/* Render background images for all banner slides */}
-        {banners.map((b, idx) => {
+        {heroSlides.map((url, idx) => {
           const isVisible = idx === bgIndex;
           return (
             <div
-              key={b.id || idx}
+              key={idx}
               className="hero__image-overlay"
               style={{
-                backgroundImage: `url('${b.imageUrl}')`,
+                backgroundImage: `url('${url}')`,
                 opacity: isVisible ? 1.0 : 0,
                 transition: 'opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1)',
                 willChange: 'opacity'
@@ -252,14 +262,13 @@ export default function Home() {
         </div>
 
         <div className="container hero__content">
-          <div className="hero__eyebrow" key={`eyebrow-${bgIndex}`} style={{ transition: 'opacity 0.8s ease' }}>
+          <div className="hero__eyebrow">
             <Sparkles size={12} />
-            {currentBanner?.smallHeading || 'ZHA Aesthetic Salon'}
+            {banner?.smallHeading || 'ZHA Aesthetic Salon'}
           </div>
-
-          <h1 className="hero__title" key={`title-${bgIndex}`}>
+          <h1 className="hero__title">
             <ShinyText
-              text={currentBanner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
+              text={banner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
               disabled={false}
               speed={3.5}
               color="rgba(255, 255, 255, 0.95)"
@@ -270,53 +279,18 @@ export default function Home() {
               direction="left"
             />
           </h1>
-
-          <p className="hero__subtitle" key={`sub-${bgIndex}`} style={{ transition: 'opacity 0.8s ease' }}>
-            {currentBanner?.subtitle || currentBanner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
+          <p className="hero__subtitle">
+            {banner?.subtitle || banner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
           </p>
-
-          <div className="hero__actions" key={`btn-${bgIndex}`}>
+          <div className="hero__actions">
             <InteractiveHoverButton to="/book-appointment">
-              {currentBanner?.primaryBtn || 'Book Appointment'}
+              {banner?.primaryBtn || 'Book Appointment'}
             </InteractiveHoverButton>
             <Link to="/services" className="btn btn-outline-white">
-              {currentBanner?.secondaryBtn || 'Explore Services'}
+              {banner?.secondaryBtn || 'Explore Services'}
             </Link>
           </div>
         </div>
-
-        {/* Banner Navigation Dots */}
-        {banners.length > 1 && (
-          <div 
-            style={{ 
-              position: 'absolute', 
-              bottom: '28px', 
-              left: '50%', 
-              transform: 'translateX(-50%)', 
-              display: 'flex', 
-              gap: '10px', 
-              zIndex: 10 
-            }}
-          >
-            {banners.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setBgIndex(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                style={{
-                  width: idx === bgIndex ? '32px' : '10px',
-                  height: '10px',
-                  borderRadius: '100px',
-                  background: idx === bgIndex ? 'var(--color-champagne)' : 'rgba(255, 255, 255, 0.35)',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
-                  boxShadow: idx === bgIndex ? '0 0 10px rgba(212, 175, 55, 0.5)' : 'none'
-                }}
-              />
-            ))}
-          </div>
-        )}
 
         <div className="hero__scroll-indicator" aria-hidden="true">
           <div className="hero__scroll-line" />
@@ -474,7 +448,7 @@ export default function Home() {
           <div style={{ width: '100%', height: '520px', position: 'relative', marginTop: 'var(--space-xl)', overflow: 'hidden' }} className="reveal">
             <Suspense fallback={
               <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                <div className="book-loader" style={{ width: '28px', height: '28px', borderTopColor: 'var(--color-champagne)' }} />
+                <div className="book-loader" style={{ width: '32px', height: '32px', borderTopColor: 'var(--color-champagne)' }} />
               </div>
             }>
               <DomeGallery 

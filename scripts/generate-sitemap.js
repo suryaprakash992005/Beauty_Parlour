@@ -1,18 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const DOMAIN = 'https://www.zhaaestheticsalon.in';
+const DOMAIN = 'https://zhaaestheticsalon.in';
 const TODAY = new Date().toISOString().split('T')[0];
-
-function xmlEscape(str) {
-  if (!str) return '';
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
 
 const PUBLIC_ROUTES = [
   {
@@ -21,8 +11,8 @@ const PUBLIC_ROUTES = [
     changefreq: 'weekly',
     image: {
       url: `${DOMAIN}/salon_green_theme_1.jpg`,
-      title: 'ZHa Aesthetic Salon — Best Beauty Salon in Mohanur & Namakkal',
-      caption: 'Professional hair styling, HD bridal makeup & spa treatments in Mohanur & Namakkal',
+      title: 'ZHa Aesthetic Salon — Luxury Beauty Salon',
+      caption: 'Professional beauty salon services',
     },
   },
   {
@@ -32,50 +22,50 @@ const PUBLIC_ROUTES = [
   },
   {
     path: '/bridal-planner',
-    priority: '0.95',
+    priority: '0.90',
     changefreq: 'monthly',
   },
   {
     path: '/gallery',
-    priority: '0.90',
+    priority: '0.85',
     changefreq: 'weekly',
   },
   {
     path: '/book-appointment',
-    priority: '0.95',
+    priority: '0.90',
     changefreq: 'monthly',
   },
   {
     path: '/about',
-    priority: '0.85',
+    priority: '0.80',
     changefreq: 'monthly',
   },
   {
     path: '/contact',
-    priority: '0.85',
+    priority: '0.80',
     changefreq: 'monthly',
   },
   {
     path: '/offers',
-    priority: '0.80',
+    priority: '0.75',
     changefreq: 'weekly',
   },
   {
     path: '/testimonials',
-    priority: '0.80',
+    priority: '0.70',
     changefreq: 'weekly',
   },
 ];
 
 function generateSitemapXML() {
   const urls = PUBLIC_ROUTES.map((route) => {
-    const fullUrl = xmlEscape(`${DOMAIN}${route.path}`);
+    const fullUrl = `${DOMAIN}${route.path}`;
     const imageBlock = route.image
       ? `
     <image:image>
-      <image:loc>${xmlEscape(route.image.url)}</image:loc>
-      <image:title>${xmlEscape(route.image.title)}</image:title>
-      <image:caption>${xmlEscape(route.image.caption)}</image:caption>
+      <image:loc>${route.image.url}</image:loc>
+      <image:title>${route.image.title}</image:title>
+      <image:caption>${route.image.caption}</image:caption>
     </image:image>`
       : '';
 
