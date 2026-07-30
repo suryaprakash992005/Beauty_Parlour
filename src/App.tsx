@@ -9,8 +9,11 @@ import { WhatsAppButton, ScrollToTop, PageTransition } from './components/shared
 // Public Pages (Eager Loaded)
 import Home from './pages/Home';
 import Services from './pages/Services';
+import ServiceDetail from './pages/ServiceDetail';
 import BridalPlanner from './pages/BridalPlanner';
 import Gallery from './pages/Gallery';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import Offers from './pages/Offers';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -64,8 +67,11 @@ function PublicLayout() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/bridal-planner" element={<BridalPlanner />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/offers" element={<Offers />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

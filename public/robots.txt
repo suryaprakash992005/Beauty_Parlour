@@ -1,17 +1,19 @@
 User-agent: *
 Allow: /
 
-# Disallow admin panel from crawlers
+# Disallow admin panel & auth pages from crawlers
 Disallow: /admin
 Disallow: /admin/
 Disallow: /admin-login
+Disallow: /forgot-password
+Disallow: /reset-password
 
 # Block common bot traps
 Disallow: /api/
 Disallow: /*.json$
 
 # Sitemap
-Sitemap: https://zhaaestheticsalon.in/sitemap.xml
+Sitemap: https://www.zhaaestheticsalon.in/sitemap.xml
 
 # Crawl-delay for polite bots
 Crawl-delay: 1

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const DOMAIN = 'https://zhaaestheticsalon.in';
+const DOMAIN = 'https://www.zhaaestheticsalon.in';
 const TODAY = new Date().toISOString().split('T')[0];
 
 const PUBLIC_ROUTES = [
@@ -11,8 +11,8 @@ const PUBLIC_ROUTES = [
     changefreq: 'weekly',
     image: {
       url: `${DOMAIN}/salon_green_theme_1.jpg`,
-      title: 'ZHa Aesthetic Salon — Luxury Beauty Salon',
-      caption: 'Professional beauty salon services',
+      title: 'ZHA Aesthetic Salon — Luxury Beauty Salon in Mohanur',
+      caption: 'Professional beauty salon services in Mohanur, Namakkal',
     },
   },
   {
@@ -21,8 +21,73 @@ const PUBLIC_ROUTES = [
     changefreq: 'weekly',
   },
   {
+    path: '/services/hair-spa',
+    priority: '0.90',
+    changefreq: 'weekly',
+  },
+  {
+    path: '/services/bridal-makeup',
+    priority: '0.90',
+    changefreq: 'weekly',
+  },
+  {
+    path: '/services/keratin-treatment',
+    priority: '0.90',
+    changefreq: 'weekly',
+  },
+  {
+    path: '/services/facials',
+    priority: '0.90',
+    changefreq: 'weekly',
+  },
+  {
+    path: '/services/hair-colour',
+    priority: '0.90',
+    changefreq: 'weekly',
+  },
+  {
+    path: '/services/smoothening',
+    priority: '0.90',
+    changefreq: 'weekly',
+  },
+  {
+    path: '/services/threading',
+    priority: '0.85',
+    changefreq: 'weekly',
+  },
+  {
+    path: '/services/waxing',
+    priority: '0.85',
+    changefreq: 'weekly',
+  },
+  {
+    path: '/services/manicure-pedicure',
+    priority: '0.85',
+    changefreq: 'weekly',
+  },
+  {
     path: '/bridal-planner',
     priority: '0.90',
+    changefreq: 'monthly',
+  },
+  {
+    path: '/blog',
+    priority: '0.85',
+    changefreq: 'weekly',
+  },
+  {
+    path: '/blog/benefits-of-hair-spa',
+    priority: '0.80',
+    changefreq: 'monthly',
+  },
+  {
+    path: '/blog/how-to-choose-bridal-makeup',
+    priority: '0.80',
+    changefreq: 'monthly',
+  },
+  {
+    path: '/blog/facial-guide-glowing-skin',
+    priority: '0.80',
     changefreq: 'monthly',
   },
   {

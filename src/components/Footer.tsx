@@ -63,6 +63,7 @@ export default function Footer() {
               {[
                 { label: 'Home',             to: '/'          },
                 { label: 'Services',         to: '/services'  },
+                { label: 'Blog & Guides',    to: '/blog'      },
                 { label: 'About Us',         to: '/about'     },
                 { label: 'Bridal Planner',   to: '/bridal-planner' },
                 { label: 'Gallery',          to: '/gallery'   },

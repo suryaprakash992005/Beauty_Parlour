@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
-const SITE_NAME = 'ZHa Aesthetic Salon';
-const DEFAULT_TITLE = `${SITE_NAME} — Luxury Beauty Salon & Hair Spa`;
+const SITE_NAME = 'ZHA Aesthetic Salon';
+const DEFAULT_TITLE = `${SITE_NAME} | Beauty Salon in Mohanur | Hair Spa, Facial & Bridal`;
 const DEFAULT_DESCRIPTION =
-  'ZHa Aesthetic Salon — Professional hair styling, bridal makeup, keratin treatment, facials & luxury spa. Book your appointment now!';
-const SITE_URL = 'https://zhaaestheticsalon.in';
+  'ZHA Aesthetic Salon is the premier beauty salon in Mohanur, Namakkal. Professional hair spa, facials, HD bridal makeup, keratin treatment, threading & waxing. Book now!';
+const SITE_URL = 'https://www.zhaaestheticsalon.in';
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 interface SEOProps {
@@ -32,7 +32,7 @@ export function useSEO({
   breadcrumbs,
   schema,
 }: SEOProps = {}) {
-  const pageTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
+  const pageTitle = title ? (title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`) : DEFAULT_TITLE;
   const pageDesc = description || DEFAULT_DESCRIPTION;
   const pageUrl = canonical ? `${SITE_URL}${canonical}` : SITE_URL;
 
@@ -45,7 +45,6 @@ export function useSEO({
       let el = document.querySelector<HTMLMetaElement>(selector);
       if (!el) {
         el = document.createElement('meta');
-        // parse attr=val from selector like name="description"
         const match = selector.match(/\[(\w+)="([^"]+)"\]/);
         if (match) el.setAttribute(match[1], match[2]);
         document.head.appendChild(el);
@@ -104,7 +103,6 @@ export function useSEO({
     }
 
     return () => {
-      // Cleanup page-specific schema on unmount
       removeSchema('__breadcrumb-schema__');
       removeSchema('__page-schema__');
     };
@@ -129,57 +127,63 @@ function removeSchema(id: string) {
 /** Page-level SEO configs for all routes */
 export const PAGE_SEO = {
   home: {
-    title: 'Luxury Beauty Salon — Hair, Bridal & Spa',
+    title: 'ZHA Aesthetic Salon | Beauty Salon in Mohanur | Hair Spa, Facial & Bridal',
     description:
-      'ZHa Aesthetic Salon is your premium beauty destination. Expert hair styling, bridal makeup, keratin treatment, facials, waxing & spa. Book an appointment today!',
+      'ZHA Aesthetic Salon is the premier beauty salon in Mohanur, Namakkal. Professional hair spa, facials, HD bridal makeup, keratin treatment, threading & waxing. Book now!',
     canonical: '/',
   },
   about: {
-    title: 'About ZHa Aesthetic Salon — Our Story & Expert Team',
+    title: 'About ZHA Aesthetic Salon | Premier Beauty Parlour in Mohanur, Namakkal',
     description:
-      'Discover the story behind ZHa Aesthetic Salon. Over a decade of luxury beauty expertise — certified stylists, premium products, and a passion for elegance.',
+      'Learn about ZHA Aesthetic Salon in Mohanur. Over a decade of luxury beauty expertise — certified hair stylists, facial experts, and premium bridal makeup artists.',
     canonical: '/about',
   },
   services: {
-    title: 'Beauty Services — Hair, Skin, Bridal & More',
+    title: 'Beauty Services in Mohanur | Hair Spa, Facial, Keratin & Makeup | ZHA Salon',
     description:
-      'Explore all beauty services at ZHa Aesthetic Salon: hair cuts, blow dry, keratin, hair spa, facials, bridal makeup, waxing, threading, manicure & pedicure.',
+      'Explore beauty salon services in Mohanur: Hair Spa, HD Bridal Makeup, Keratin Treatment, Facials, Hair Colouring, Waxing, Threading, Manicure & Pedicure.',
     canonical: '/services',
   },
   gallery: {
-    title: 'Portfolio Gallery — ZHa Aesthetic Salon',
+    title: 'Beauty Portfolio & Bridal Makeovers | ZHA Aesthetic Salon Mohanur',
     description:
-      'Browse our stunning portfolio of bridal makeovers, hair transformations, nail art, and skin treatments at ZHa Aesthetic Salon.',
+      'View our gallery of real bridal makeovers, hair spa transformations, skin facials, and beauty treatments at ZHA Aesthetic Salon in Mohanur, Namakkal.',
     canonical: '/gallery',
   },
   contact: {
-    title: 'Contact Us — ZHa Aesthetic Salon',
+    title: 'Contact ZHA Aesthetic Salon | Beauty Parlour in Mohanur, Namakkal',
     description:
-      'Get in touch with ZHa Aesthetic Salon. Call +91 82709 04659, visit us, or send us a message online.',
+      'Contact ZHA Aesthetic Salon in Mohanur, Namakkal. Call +91 82709 04659 or visit our salon opposite Taluka Office, Nehru Nagar, Mohanur.',
     canonical: '/contact',
   },
   book: {
-    title: 'Book an Appointment — ZHa Aesthetic Salon',
+    title: 'Book Appointment Online | ZHA Aesthetic Salon Mohanur',
     description:
-      'Book your beauty appointment online at ZHa Aesthetic Salon. Choose from hair styling, facials, bridal makeup, keratin, waxing & more.',
+      'Book your beauty appointment online at ZHA Aesthetic Salon Mohanur. Choose your preferred date & time for hair, facial, bridal, or spa services.',
     canonical: '/book-appointment',
   },
   bridal: {
-    title: 'Bridal Makeup & Packages — ZHa Aesthetic Salon',
+    title: 'Bridal Makeup in Mohanur | HD & Airbrush Packages | ZHA Aesthetic Salon',
     description:
-      'Plan your dream bridal look with ZHa Aesthetic Salon. Comprehensive bridal packages including HD bridal makeup, hairstyling, saree draping & pre-bridal grooming.',
+      'Plan your dream wedding look with ZHA Aesthetic Salon Mohanur. HD & Airbrush bridal makeup, saree draping, bridal hair styling & pre-bridal packages.',
     canonical: '/bridal-planner',
   },
   testimonials: {
-    title: 'Client Reviews & Testimonials — ZHa Aesthetic Salon',
+    title: 'Client Reviews & Ratings | ZHA Aesthetic Salon Mohanur',
     description:
-      'Read genuine client reviews about ZHa Aesthetic Salon. See what our happy customers say about our hair, bridal, and spa services.',
+      'Read 5-star Google reviews from happy clients in Mohanur & Namakkal. Experience why ZHA Aesthetic Salon is Mohanur\'s favorite beauty destination.',
     canonical: '/testimonials',
   },
   offers: {
-    title: 'Exclusive Beauty Offers & Deals — ZHa Aesthetic Salon',
+    title: 'Exclusive Beauty Offers & Deals in Mohanur | ZHA Aesthetic Salon',
     description:
-      'Discover exclusive seasonal offers, bridal discounts, and loyalty deals at ZHa Aesthetic Salon. Premium beauty at exceptional value.',
+      'Discover limited-time beauty offers, facial discounts, and bridal package savings at ZHA Aesthetic Salon in Mohanur, Namakkal.',
     canonical: '/offers',
+  },
+  blog: {
+    title: 'Beauty Tips & Hair Care Blog | ZHA Aesthetic Salon Mohanur',
+    description:
+      'Read expert hair care advice, skin care tips, bridal makeup guides, and beauty trends from the professional stylists at ZHA Aesthetic Salon Mohanur.',
+    canonical: '/blog',
   },
 };
