@@ -171,6 +171,9 @@
     -webkit-backface-visibility: hidden !important;
     backface-visibility: hidden !important;
     transform: translateZ(0) !important;
+  }
+
+  .hero__image-overlay.active {
     will-change: opacity !important;
   }
 }

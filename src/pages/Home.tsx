@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
-import ShinyText from '../components/ShinyText';
 import { getHomepageBanner } from '../services/homepage';
 import type { HomepageBanner } from '../services/homepage';
 import { getServices } from '../services/services';
@@ -230,13 +229,8 @@ export default function Home() {
           return (
             <div
               key={idx}
-              className="hero__image-overlay"
-              style={{
-                backgroundImage: `url('${url}')`,
-                opacity: isVisible ? 1.0 : 0,
-                transition: 'opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1)',
-                willChange: 'opacity'
-              }}
+              className={`hero__image-overlay ${isVisible ? 'active' : ''}`}
+              style={{ backgroundImage: `url('${url}')` }}
               aria-hidden="true"
             />
           );
@@ -267,17 +261,9 @@ export default function Home() {
             {banner?.smallHeading || 'ZHA Aesthetic Salon'}
           </div>
           <h1 className="hero__title">
-            <ShinyText
-              text={banner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
-              disabled={false}
-              speed={3.5}
-              color="rgba(255, 255, 255, 0.95)"
-              shineColor="#D4AF37"
-              spread={120}
-              yoyo={false}
-              pauseOnHover={false}
-              direction="left"
-            />
+            <span className="hero__title-text">
+              {banner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
+            </span>
           </h1>
           <p className="hero__subtitle">
             {banner?.subtitle || banner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
