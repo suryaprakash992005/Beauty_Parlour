@@ -67,7 +67,7 @@ const DEFAULT_BANNER: HomepageBanner = {
   description: 'Where premium style meets expert care. Experience the ultimate hair design, bridal cosmetics, nail artistry, and soothing spa therapies at Zha Aesthetic Salon.',
   primaryBtn: 'Book Appointment',
   secondaryBtn: 'Explore Services',
-  imageUrl: 'https://rkbxikbzjemccuppiuuu.supabase.co/storage/v1/object/public/hero/hero_1784208729302.webp',
+  imageUrl: '/salon_green_theme_1.jpg',
 };
 
 export async function getHomepageBanner(): Promise<HomepageBanner> {
