@@ -21,20 +21,6 @@ const DomeGallery = lazy(() => import('../components/DomeGallery'));
 /* ─── Responsive Hero Background Assets ─── */
 const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth <= 768;
 
-const HERO_BGS_DESKTOP = [
-  '/salon_green_theme_1.jpg',
-  '/salon_green_theme_2.jpg',
-  '/salon_green_theme_3.jpg'
-];
-
-const HERO_BGS_MOBILE = [
-  '/salon_green_theme_1_mobile.jpg',
-  '/salon_green_theme_2_mobile.jpg',
-  '/salon_green_theme_3_mobile.jpg'
-];
-
-const HERO_BGS = IS_MOBILE ? HERO_BGS_MOBILE : HERO_BGS_DESKTOP;
-
 interface TestimonialData {
   id: string | number;
   reviewer_name: string;
@@ -179,8 +165,8 @@ export default function Home() {
       .catch(err => console.error('Failed to load gallery for dome:', err));
 
     const slideTimer = setInterval(() => {
-      setBgIndex(prev => (prev + 1) % HERO_BGS.length);
-    }, 5500);
+      setBgIndex(prev => (prev + 1) % 3);
+    }, 6500);
 
     return () => clearInterval(slideTimer);
   }, []);
