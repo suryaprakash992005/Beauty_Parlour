@@ -107,14 +107,9 @@ export function ScrollToTop() {
 /* ── Page Transition Wrapper ── */
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
-  const isFirstRender = useRef(true);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
     setVisible(false);
     const t = requestAnimationFrame(() => {
       requestAnimationFrame(() => setVisible(true));
@@ -126,8 +121,8 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     <div
       style={{
         opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(8px)',
-        transition: isFirstRender.current ? 'none' : 'opacity 0.35s ease-out, transform 0.35s ease-out',
+        transform: visible ? 'translateY(0)' : 'translateY(12px)',
+        transition: 'opacity 0.45s cubic-bezier(0.25,1,0.5,1), transform 0.45s cubic-bezier(0.25,1,0.5,1)',
         willChange: 'opacity, transform',
       }}
     >
