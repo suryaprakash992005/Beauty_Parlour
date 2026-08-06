@@ -55,23 +55,35 @@ export async function uploadBannerImage(fileOrBase64: File | string): Promise<st
 
 // ─────────────────────────────────────────────────────────────
 //  READ slides (sorted by sort_order, only active)
+//  Falls back to id ordering if sort_order column doesn't exist
 // ─────────────────────────────────────────────────────────────
 
 export async function getBannerSlides(): Promise<BannerSlide[]> {
-  const { data, error } = await supabase
+  // Try sort_order first; fall back to id if the column is missing
+  let { data, error } = await supabase
     .from('banner_slides')
     .select('*')
     .eq('is_active', true)
     .order('sort_order', { ascending: true });
 
+  if (error && error.message.includes('sort_order')) {
+    const fallback = await supabase
+      .from('banner_slides')
+      .select('*')
+      .eq('is_active', true)
+      .order('id', { ascending: true });
+    data = fallback.data;
+    error = fallback.error;
+  }
+
   if (error) throw new Error(`Failed to load slides: ${error.message}`);
   if (!data || data.length === 0) return [];
 
-  return data.map((row) => ({
+  return data.map((row, i) => ({
     id: row.id,
     imageUrl: row.image_url,
-    sortOrder: row.sort_order,
-    isActive: row.is_active,
+    sortOrder: row.sort_order ?? i,
+    isActive: row.is_active ?? true,
   }));
 }
 
@@ -80,19 +92,28 @@ export async function getBannerSlides(): Promise<BannerSlide[]> {
 // ─────────────────────────────────────────────────────────────
 
 export async function getAllBannerSlides(): Promise<BannerSlide[]> {
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from('banner_slides')
     .select('*')
     .order('sort_order', { ascending: true });
 
+  if (error && error.message.includes('sort_order')) {
+    const fallback = await supabase
+      .from('banner_slides')
+      .select('*')
+      .order('id', { ascending: true });
+    data = fallback.data;
+    error = fallback.error;
+  }
+
   if (error) throw new Error(`Failed to load slides: ${error.message}`);
   if (!data) return [];
 
-  return data.map((row) => ({
+  return data.map((row, i) => ({
     id: row.id,
     imageUrl: row.image_url,
-    sortOrder: row.sort_order,
-    isActive: row.is_active,
+    sortOrder: row.sort_order ?? i,
+    isActive: row.is_active ?? true,
   }));
 }
 
@@ -101,14 +122,34 @@ export async function getAllBannerSlides(): Promise<BannerSlide[]> {
 // ─────────────────────────────────────────────────────────────
 
 export async function addBannerSlide(imageUrl: string, sortOrder: number): Promise<BannerSlide> {
-  const { data, error } = await supabase
-    .from('banner_slides')
-    .insert({ image_url: imageUrl, sort_order: sortOrder, is_active: true })
-    .select()
-    .single();
+  // Try inserting with sort_order; if that column doesn't exist, insert without it
+  const payloadFull = { image_url: imageUrl, sort_order: sortOrder, is_active: true };
+  const payloadMin  = { image_url: imageUrl, is_active: true };
 
-  if (error) throw new Error(`Failed to add slide: ${error.message}`);
-  return { id: data.id, imageUrl: data.image_url, sortOrder: data.sort_order, isActive: data.is_active };
+  let result: any;
+  let err: any;
+
+  ({ data: result, error: err } = await (supabase
+    .from('banner_slides')
+    .insert(payloadFull)
+    .select()
+    .single() as any));
+
+  if (err && err.message.includes('sort_order')) {
+    ({ data: result, error: err } = await (supabase
+      .from('banner_slides')
+      .insert(payloadMin)
+      .select()
+      .single() as any));
+  }
+
+  if (err) throw new Error(`Failed to add slide: ${err.message}`);
+  return {
+    id: result.id,
+    imageUrl: result.image_url,
+    sortOrder: result.sort_order ?? 0,
+    isActive: result.is_active ?? true,
+  };
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -125,12 +166,16 @@ export async function deleteBannerSlide(id: number): Promise<void> {
 // ─────────────────────────────────────────────────────────────
 
 export async function reorderBannerSlides(slides: { id: number; sortOrder: number }[]): Promise<void> {
+  // Only run if sort_order column exists
   const updates = slides.map(({ id, sortOrder }) =>
     supabase.from('banner_slides').update({ sort_order: sortOrder }).eq('id', id)
   );
   const results = await Promise.all(updates);
-  for (const { error } of results) {
-    if (error) throw new Error(`Failed to reorder: ${error.message}`);
+  for (const res of results) {
+    const err = (res as any).error;
+    if (err && !err.message.includes('sort_order')) {
+      throw new Error(`Failed to reorder: ${err.message}`);
+    }
   }
 }
 
