@@ -179,51 +179,58 @@ export async function updateHomepageBanner(banner: Partial<HomepageBanner>): Pro
     ? banner.slideUrls
     : (banner.imageUrl ? [banner.imageUrl] : DEFAULT_SLIDE_URLS);
 
-  const payload = {
-    top_label: banner.smallHeading,
-    title: banner.mainHeading,
-    subtitle: banner.subtitle,
-    description: banner.description,
-    primary_button: banner.primaryBtn,
-    secondary_button: banner.secondaryBtn,
-    image_url: slideUrlsArray[0] || banner.imageUrl,
-    slide_urls: JSON.stringify(slideUrlsArray),
-  };
+  // Try with slide_urls first, gracefully fall back without it if column missing
+  async function doUpsert(includeSlideUrls: boolean) {
+    const payload: Record<string, unknown> = {
+      top_label: banner.smallHeading,
+      title: banner.mainHeading,
+      subtitle: banner.subtitle,
+      description: banner.description,
+      primary_button: banner.primaryBtn,
+      secondary_button: banner.secondaryBtn,
+      image_url: slideUrlsArray[0] || banner.imageUrl,
+    };
+
+    if (includeSlideUrls) {
+      payload.slide_urls = JSON.stringify(slideUrlsArray);
+    }
+
+    if (existingData && existingData.length > 0) {
+      const { data, error } = await supabase
+        .from('homepage_banner')
+        .update(payload)
+        .eq('id', existingData[0].id)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    } else {
+      const { data, error } = await supabase
+        .from('homepage_banner')
+        .insert(payload)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    }
+  }
 
   let result;
-  if (existingData && existingData.length > 0) {
-    const { data, error } = await supabase
-      .from('homepage_banner')
-      .update(payload)
-      .eq('id', existingData[0].id)
-      .select()
-      .single();
-
-    if (error) {
-      if (error.message.includes('column') || error.code === '42703') {
-        throw new Error(
-          "Database column mismatch during update: Please check your 'homepage_banner' table columns."
-        );
-      }
-      throw error;
+  try {
+    result = await doUpsert(true);
+  } catch (err: any) {
+    // If slide_urls column doesn't exist, retry without it
+    if (
+      err?.message?.includes('slide_urls') ||
+      err?.code === '42703'
+    ) {
+      console.warn(
+        '[Banner] slide_urls column not found — saving without it. Run: ALTER TABLE homepage_banner ADD COLUMN IF NOT EXISTS slide_urls TEXT;'
+      );
+      result = await doUpsert(false);
+    } else {
+      throw err;
     }
-    result = data;
-  } else {
-    const { data, error } = await supabase
-      .from('homepage_banner')
-      .insert(payload)
-      .select()
-      .single();
-
-    if (error) {
-      if (error.message.includes('column') || error.code === '42703') {
-        throw new Error(
-          "Database column mismatch during insert: Please check your 'homepage_banner' table columns."
-        );
-      }
-      throw error;
-    }
-    result = data;
   }
 
   const savedSlides = parseSlideUrls(result.slide_urls);
