@@ -18,12 +18,22 @@ import '../styles/home.css';
 // Lazy-load heavy below-the-fold 3D Dome Gallery
 const DomeGallery = lazy(() => import('../components/DomeGallery'));
 
-/* ─── Responsive Hero Fallback Assets (used if admin hasn't uploaded slides) ─── */
+/* ─── Responsive Hero Background Assets ─── */
 const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth <= 768;
 
-const FALLBACK_SLIDES = IS_MOBILE
-  ? ['/salon_green_theme_1_mobile.jpg', '/salon_green_theme_2_mobile.jpg', '/salon_green_theme_3_mobile.jpg']
-  : ['/salon_green_theme_1.jpg', '/salon_green_theme_2.jpg', '/salon_green_theme_3.jpg'];
+const HERO_BGS_DESKTOP = [
+  '/salon_green_theme_1.jpg',
+  '/salon_green_theme_2.jpg',
+  '/salon_green_theme_3.jpg'
+];
+
+const HERO_BGS_MOBILE = [
+  '/salon_green_theme_1_mobile.jpg',
+  '/salon_green_theme_2_mobile.jpg',
+  '/salon_green_theme_3_mobile.jpg'
+];
+
+const HERO_BGS = IS_MOBILE ? HERO_BGS_MOBILE : HERO_BGS_DESKTOP;
 
 interface TestimonialData {
   id: string | number;
@@ -168,12 +178,14 @@ export default function Home() {
       })
       .catch(err => console.error('Failed to load gallery for dome:', err));
 
-    // Slide timer will be driven by the heroSlides computed below
-    // (timer reset happens in a separate effect keyed on heroSlides.length)
-    return () => {};
+    const slideTimer = setInterval(() => {
+      setBgIndex(prev => (prev + 1) % HERO_BGS.length);
+    }, 5500);
+
+    return () => clearInterval(slideTimer);
   }, []);
 
-  // ── Memoized Particle data (Lightweight count for mobile) ───────────────
+  // Memoized Particle data (Lightweight count for mobile)
   const particles = useMemo(() => {
     const count = IS_MOBILE ? 5 : 12;
     return Array.from({ length: count }, (_, i) => ({
@@ -188,24 +200,18 @@ export default function Home() {
     }));
   }, []);
 
-  // ── Build hero slides: prefer admin-managed slideUrls, fall back to local ─
+  // Stable hero slides list (Paints initial hero instantly from local Edge asset for first-time visitors)
   const heroSlides = useMemo(() => {
-    if (banner?.slideUrls && banner.slideUrls.length > 0) {
-      return banner.slideUrls;
-    }
-    return FALLBACK_SLIDES;
-  }, [banner?.slideUrls]);
+    const defaultPrimary = IS_MOBILE ? '/salon_green_theme_1_mobile.jpg' : '/salon_green_theme_1.jpg';
+    const primary = (banner?.imageUrl && banner.imageUrl !== '/salon_green_theme_1.jpg' && !banner.imageUrl.includes('hero_1784208729302.webp'))
+      ? banner.imageUrl
+      : defaultPrimary;
+    const slide2  = IS_MOBILE ? '/salon_green_theme_2_mobile.jpg' : '/salon_green_theme_2.jpg';
+    const slide3  = IS_MOBILE ? '/salon_green_theme_3_mobile.jpg' : '/salon_green_theme_3.jpg';
+    return [primary, slide2, slide3];
+  }, [banner?.imageUrl]);
 
-  // ── Slide auto-advance timer (resets when slide count changes) ─────────
-  useEffect(() => {
-    if (heroSlides.length <= 1) return;
-    const t = setInterval(() => {
-      setBgIndex(prev => (prev + 1) % heroSlides.length);
-    }, 5500);
-    return () => clearInterval(t);
-  }, [heroSlides.length]);
-
-  // ── Preload all hero slides into browser cache ───────────────────────────
+  // Preload all hero slides into memory so transitions on mobile/desktop are 100% instant and gapless
   useEffect(() => {
     heroSlides.forEach(url => {
       if (url) {
