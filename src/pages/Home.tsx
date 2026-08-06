@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { Sparkles, Star, ArrowRight } from 'lucide-react';
 import { useScrollReveal, useCounterAnimation } from '../components/shared';
 import { InteractiveHoverButton } from '../components/InteractiveHoverButton';
-import { getHomepageBanner } from '../services/homepage';
-import type { HomepageBanner } from '../services/homepage';
+import { getBannerSlides } from '../services/homepage';
+import type { BannerSlide } from '../services/homepage';
 import { getServices } from '../services/services';
 import type { ServiceItem } from '../services/services';
 import { getPublishedReviews } from '../services/reviews';
@@ -18,22 +18,7 @@ import '../styles/home.css';
 // Lazy-load heavy below-the-fold 3D Dome Gallery
 const DomeGallery = lazy(() => import('../components/DomeGallery'));
 
-/* ─── Responsive Hero Background Assets ─── */
 const IS_MOBILE = typeof window !== 'undefined' && window.innerWidth <= 768;
-
-const HERO_BGS_DESKTOP = [
-  '/salon_green_theme_1.jpg',
-  '/salon_green_theme_2.jpg',
-  '/salon_green_theme_3.jpg'
-];
-
-const HERO_BGS_MOBILE = [
-  '/salon_green_theme_1_mobile.jpg',
-  '/salon_green_theme_2_mobile.jpg',
-  '/salon_green_theme_3_mobile.jpg'
-];
-
-const HERO_BGS = IS_MOBILE ? HERO_BGS_MOBILE : HERO_BGS_DESKTOP;
 
 interface TestimonialData {
   id: string | number;
@@ -124,7 +109,7 @@ function BeforeAfterSlider() {
 export default function Home() {
   useSEO(PAGE_SEO.home);
   const [bgIndex, setBgIndex] = useState(0);
-  const [banner, setBanner] = useState<HomepageBanner | null>(null);
+  const [heroSlides, setHeroSlides] = useState<BannerSlide[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -132,12 +117,31 @@ export default function Home() {
 
   useScrollReveal([services]);
 
+  // Load dynamic hero slides from Supabase
   useEffect(() => {
-    // Load Homepage Banner config
-    getHomepageBanner()
-      .then(data => setBanner(data))
-      .catch(err => console.error('Failed to load banner:', err));
+    getBannerSlides()
+      .then(slides => setHeroSlides(slides))
+      .catch(err => console.error('Failed to load hero slides:', err));
+  }, []);
 
+  // Slide auto-advance (only when slides are loaded)
+  useEffect(() => {
+    if (heroSlides.length <= 1) return;
+    const timer = setInterval(() => {
+      setBgIndex(prev => (prev + 1) % heroSlides.length);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, [heroSlides.length]);
+
+  // Preload all slides into browser memory for gapless transitions
+  useEffect(() => {
+    heroSlides.forEach(slide => {
+      const img = new Image();
+      img.src = slide.imageUrl;
+    });
+  }, [heroSlides]);
+
+  useEffect(() => {
     // Load Featured Services
     getServices()
       .then(data => {
@@ -177,12 +181,6 @@ export default function Home() {
         }
       })
       .catch(err => console.error('Failed to load gallery for dome:', err));
-
-    const slideTimer = setInterval(() => {
-      setBgIndex(prev => (prev + 1) % HERO_BGS.length);
-    }, 5500);
-
-    return () => clearInterval(slideTimer);
   }, []);
 
   // Memoized Particle data (Lightweight count for mobile)
@@ -200,44 +198,22 @@ export default function Home() {
     }));
   }, []);
 
-  // Stable hero slides list (Paints initial hero instantly from local Edge asset for first-time visitors)
-  const heroSlides = useMemo(() => {
-    const defaultPrimary = IS_MOBILE ? '/salon_green_theme_1_mobile.jpg' : '/salon_green_theme_1.jpg';
-    const primary = (banner?.imageUrl && banner.imageUrl !== '/salon_green_theme_1.jpg' && !banner.imageUrl.includes('hero_1784208729302.webp'))
-      ? banner.imageUrl
-      : defaultPrimary;
-    const slide2  = IS_MOBILE ? '/salon_green_theme_2_mobile.jpg' : '/salon_green_theme_2.jpg';
-    const slide3  = IS_MOBILE ? '/salon_green_theme_3_mobile.jpg' : '/salon_green_theme_3.jpg';
-    return [primary, slide2, slide3];
-  }, [banner?.imageUrl]);
-
-  // Preload all hero slides into memory so transitions on mobile/desktop are 100% instant and gapless
-  useEffect(() => {
-    heroSlides.forEach(url => {
-      if (url) {
-        const img = new Image();
-        img.src = url;
-      }
-    });
-  }, [heroSlides]);
-
   return (
     <main>
       {/* ── HERO ── */}
       <section className="hero" aria-label="Hero">
+        {/* Dark base — always visible even before slides load */}
         <div className="hero__bg" />
-        
-        {heroSlides.map((url, idx) => {
-          const isVisible = idx === bgIndex;
-          return (
-            <div
-              key={idx}
-              className={`hero__image-overlay ${isVisible ? 'active' : ''}`}
-              style={{ backgroundImage: `url('${url}')` }}
-              aria-hidden="true"
-            />
-          );
-        })}
+
+        {/* Dynamic slides from Supabase banner_slides */}
+        {heroSlides.map((slide, idx) => (
+          <div
+            key={slide.id}
+            className={`hero__image-overlay ${idx === bgIndex ? 'active' : ''}`}
+            style={{ backgroundImage: `url('${slide.imageUrl}')` }}
+            aria-hidden="true"
+          />
+        ))}
 
         {/* Soft luxury dark overlay */}
         <div className="hero__dark-overlay" />
@@ -261,25 +237,39 @@ export default function Home() {
         <div className="container hero__content">
           <div className="hero__eyebrow">
             <Sparkles size={12} />
-            {banner?.smallHeading || 'ZHA Aesthetic Salon'}
+            ZHA Aesthetic Salon
           </div>
           <h1 className="hero__title">
             <span className="hero__title-text">
-              {banner?.mainHeading || 'Transform Your Style With Professional Beauty Experts'}
+              Transform Your Style With Professional Beauty Experts
             </span>
           </h1>
           <p className="hero__subtitle">
-            {banner?.subtitle || banner?.description || 'Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.'}
+            Where premium style meets expert care. Experience the ultimate hair design, cosmetics, nail artistry, and soothing spa therapies.
           </p>
           <div className="hero__actions">
             <InteractiveHoverButton to="/book-appointment">
-              {banner?.primaryBtn || 'Book Appointment'}
+              Book Appointment
             </InteractiveHoverButton>
             <Link to="/services" className="btn btn-outline-white">
-              {banner?.secondaryBtn || 'Explore Services'}
+              Explore Services
             </Link>
           </div>
         </div>
+
+        {/* Slide dots */}
+        {heroSlides.length > 1 && (
+          <div className="hero__dots" aria-hidden="true">
+            {heroSlides.map((_, idx) => (
+              <button
+                key={idx}
+                className={`hero__dot ${idx === bgIndex ? 'active' : ''}`}
+                onClick={() => setBgIndex(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
 
         <div className="hero__scroll-indicator" aria-hidden="true">
           <div className="hero__scroll-line" />

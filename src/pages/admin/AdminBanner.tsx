@@ -1,122 +1,162 @@
-import { useState, useEffect } from 'react';
-import { Save, Eye, Check, CloudUpload, CheckCircle } from 'lucide-react';
-import { getHomepageBanner, updateHomepageBanner, uploadHeroAsset } from '../../services/homepage';
-import type { HomepageBanner } from '../../services/homepage';
+import { useState, useEffect, useRef } from 'react';
+import {
+  CloudUpload, Trash2, GripVertical, Plus, Eye, EyeOff,
+  CheckCircle, AlertCircle, X
+} from 'lucide-react';
+import {
+  getAllBannerSlides,
+  addBannerSlide,
+  deleteBannerSlide,
+  reorderBannerSlides,
+  toggleBannerSlide,
+  uploadBannerImage,
+} from '../../services/homepage';
+import type { BannerSlide } from '../../services/homepage';
+
+/* ── Small toast ── */
+function Toast({ msg, type }: { msg: string; type: 'success' | 'error' }) {
+  return (
+    <div style={{
+      position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999,
+      background: type === 'success' ? '#064e3b' : '#450a0a',
+      border: `1px solid ${type === 'success' ? '#22c55e' : '#ef4444'}`,
+      color: 'white', padding: '12px 20px', borderRadius: '10px',
+      display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px',
+      boxShadow: '0 8px 24px rgba(0,0,0,0.4)', animation: 'zoomIn 0.25s ease'
+    }}>
+      {type === 'success'
+        ? <CheckCircle size={16} style={{ color: '#22c55e', flexShrink: 0 }} />
+        : <AlertCircle size={16} style={{ color: '#ef4444', flexShrink: 0 }} />
+      }
+      {msg}
+    </div>
+  );
+}
 
 export default function AdminBanner() {
-  const [banner, setBanner] = useState<HomepageBanner>({
-    smallHeading: 'Bespoke Hair Artistry',
-    mainHeading: 'Transform Your Style, Reveal Your Confidence',
-    subtitle: 'Luxury Beauty Experience',
-    description: 'Experience premium luxury hair styling, organic skincare therapies, and celebrity-grade bridal makeovers at Zha Aesthetic Salon.',
-    primaryBtn: 'Book Appointment',
-    secondaryBtn: 'Explore Services',
-    imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80'
-  });
+  const [slides, setSlides] = useState<BannerSlide[]>([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [dragActiveUpload, setDragActiveUpload] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // Uploader drag and progress states
-  const [dragActive, setDragActive] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
+  // Drag-to-reorder state
+  const dragItemRef = useRef<number | null>(null);
+  const dragOverRef = useRef<number | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3500);
+  };
 
   useEffect(() => {
-    getHomepageBanner()
-      .then(data => {
-        setBanner(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to load banner settings:', err);
-        setLoading(false);
-      });
+    load();
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      setUploadProgress(30);
-      const t1 = setTimeout(() => setUploadProgress(75), 150);
-      const t2 = setTimeout(() => setUploadProgress(100), 300);
-      reader.onloadend = () => {
-        setBanner(prev => ({ ...prev, imageUrl: reader.result as string }));
-        setUploadSuccess(true);
-        clearTimeout(t1);
-        clearTimeout(t2);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      const reader = new FileReader();
-      setUploadProgress(20);
-      const t1 = setTimeout(() => setUploadProgress(60), 200);
-      const t2 = setTimeout(() => setUploadProgress(100), 400);
-      reader.onloadend = () => {
-        setBanner(prev => ({ ...prev, imageUrl: reader.result as string }));
-        setUploadSuccess(true);
-        clearTimeout(t1);
-        clearTimeout(t2);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const simulateUpload = () => {
-    document.getElementById('banner-image-file')?.click();
-  };
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
-    setErrorMsg(null);
+  async function load() {
+    setLoading(true);
     try {
-      let finalImageUrl = banner.imageUrl;
-      if (banner.imageUrl && banner.imageUrl.startsWith('data:')) {
-        finalImageUrl = await uploadHeroAsset(banner.imageUrl);
-      }
-
-      const updated = await updateHomepageBanner({
-        smallHeading: banner.smallHeading,
-        mainHeading: banner.mainHeading,
-        subtitle: banner.description,
-        description: banner.description,
-        primaryBtn: banner.primaryBtn,
-        secondaryBtn: banner.secondaryBtn,
-        imageUrl: finalImageUrl
-      });
-
-      setBanner(updated);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
+      const data = await getAllBannerSlides();
+      setSlides(data);
     } catch (err: any) {
-      console.error('Error saving banner settings:', err);
-      setErrorMsg(err.message || String(err));
+      showToast(err.message || 'Failed to load slides', 'error');
     } finally {
-      setSaving(false);
+      setLoading(false);
     }
-  };
+  }
+
+  // ── Upload new slide ──────────────────────────────────────────
+  async function handleUpload(file: File) {
+    if (!file.type.startsWith('image/')) {
+      showToast('Only image files are allowed.', 'error');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const url = await uploadBannerImage(file);
+      const nextOrder = slides.length > 0 ? Math.max(...slides.map(s => s.sortOrder)) + 1 : 0;
+      const newSlide = await addBannerSlide(url, nextOrder);
+      setSlides(prev => [...prev, newSlide]);
+      showToast('Slide added successfully!');
+    } catch (err: any) {
+      showToast(err.message || 'Upload failed', 'error');
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  function onFileInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (files) Array.from(files).forEach(handleUpload);
+    e.target.value = '';
+  }
+
+  function onDragOver(e: React.DragEvent) { e.preventDefault(); setDragActiveUpload(true); }
+  function onDragLeave() { setDragActiveUpload(false); }
+  function onDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragActiveUpload(false);
+    if (e.dataTransfer.files) Array.from(e.dataTransfer.files).forEach(handleUpload);
+  }
+
+  // ── Delete ────────────────────────────────────────────────────
+  async function handleDelete(id: number) {
+    if (!confirm('Delete this banner slide? This cannot be undone.')) return;
+    try {
+      await deleteBannerSlide(id);
+      setSlides(prev => prev.filter(s => s.id !== id));
+      showToast('Slide deleted.');
+    } catch (err: any) {
+      showToast(err.message || 'Delete failed', 'error');
+    }
+  }
+
+  // ── Toggle visible/hidden ────────────────────────────────────
+  async function handleToggle(slide: BannerSlide) {
+    try {
+      await toggleBannerSlide(slide.id, !slide.isActive);
+      setSlides(prev => prev.map(s => s.id === slide.id ? { ...s, isActive: !s.isActive } : s));
+      showToast(slide.isActive ? 'Slide hidden.' : 'Slide visible.');
+    } catch (err: any) {
+      showToast(err.message || 'Toggle failed', 'error');
+    }
+  }
+
+  // ── Drag-to-reorder ──────────────────────────────────────────
+  function onDragStart(idx: number) { dragItemRef.current = idx; }
+  function onDragEnterCard(idx: number) { dragOverRef.current = idx; }
+
+  async function onDragEnd() {
+    const from = dragItemRef.current;
+    const to   = dragOverRef.current;
+    if (from === null || to === null || from === to) {
+      dragItemRef.current = null;
+      dragOverRef.current = null;
+      return;
+    }
+
+    const reordered = [...slides];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(to, 0, moved);
+
+    // Assign sequential sort orders
+    const updated = reordered.map((s, i) => ({ ...s, sortOrder: i }));
+    setSlides(updated);
+    dragItemRef.current = null;
+    dragOverRef.current = null;
+
+    try {
+      await reorderBannerSlides(updated.map(s => ({ id: s.id, sortOrder: s.sortOrder })));
+      showToast('Order saved!');
+    } catch (err: any) {
+      showToast(err.message || 'Reorder failed', 'error');
+      load(); // rollback
+    }
+  }
 
   if (loading) {
     return (
@@ -128,248 +168,243 @@ export default function AdminBanner() {
 
   return (
     <div className="admin-page-wrapper">
+      {toast && <Toast msg={toast.msg} type={toast.type} />}
+
+      {/* Full-screen preview overlay */}
+      {previewUrl && (
+        <div
+          onClick={() => setPreviewUrl(null)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 10000,
+            background: 'rgba(0,0,0,0.9)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'zoom-out'
+          }}
+        >
+          <button
+            onClick={() => setPreviewUrl(null)}
+            style={{
+              position: 'absolute', top: '20px', right: '20px',
+              background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white',
+              borderRadius: '50%', width: '40px', height: '40px',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}
+          >
+            <X size={20} />
+          </button>
+          <img
+            src={previewUrl}
+            alt="Preview"
+            style={{ maxWidth: '90vw', maxHeight: '90vh', borderRadius: '12px', objectFit: 'contain' }}
+          />
+        </div>
+      )}
+
       <div className="admin-page-header">
         <div>
-          <h2 className="admin-page-title">Home Banner Management</h2>
-          <p className="admin-page-desc">Modify the landing page hero banner text, CTAs, and background asset.</p>
+          <h2 className="admin-page-title">Banner Slides</h2>
+          <p className="admin-page-desc">
+            Upload images, drag to reorder, and toggle visibility. Images appear on the home page hero slider.
+          </p>
+        </div>
+        <div style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>
+          {slides.filter(s => s.isActive).length} active · {slides.length} total slides
         </div>
       </div>
 
-      <div className="admin-banner-grid">
-        {/* Editor Form */}
-        <form onSubmit={handleSave} className="admin-card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-          <h3 className="admin-card__title">Banner Configuration</h3>
+      {/* ── Upload Zone ── */}
+      <div
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
+        onDrop={onDrop}
+        onClick={() => fileInputRef.current?.click()}
+        style={{
+          border: `2px dashed ${dragActiveUpload ? 'var(--admin-accent)' : 'var(--admin-border)'}`,
+          borderRadius: '16px',
+          background: dragActiveUpload ? 'rgba(34,197,94,0.04)' : 'rgba(255,255,255,0.01)',
+          padding: '40px 32px',
+          textAlign: 'center',
+          cursor: uploading ? 'not-allowed' : 'pointer',
+          transition: 'all 0.25s',
+          marginBottom: '32px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '10px',
+        }}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          style={{ display: 'none' }}
+          onChange={onFileInputChange}
+          disabled={uploading}
+        />
 
-          {/* Image Upload Zone */}
-          <div className="form-group">
-            <label className="form-label">Hero Background Image</label>
-            <input 
-              type="file" 
-              id="banner-image-file"
-              accept="image/*" 
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-            />
-            <div 
-              className={`admin-drag-drop-zone ${dragActive ? 'active' : ''}`}
-              onDragEnter={handleDrag}
-              onDragOver={handleDrag}
-              onDragLeave={handleDrag}
-              onDrop={handleDrop}
-              onClick={simulateUpload}
-              style={{
-                border: '2px dashed var(--color-border)',
-                borderRadius: 'var(--radius-xl)',
-                background: 'rgba(255, 255, 255, 0.01)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 'var(--space-xl)',
-                minHeight: '160px',
-                textAlign: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.3s'
-              }}
-            >
-              {uploadProgress === null ? (
-                <>
-                  <CloudUpload size={32} style={{ color: 'var(--color-champagne)', marginBottom: '8px' }} />
-                  <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '2px' }}>Drag & Drop Image</strong>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>or click to upload image</span>
-                </>
-              ) : !uploadSuccess ? (
-                <div style={{ width: '100%' }}>
-                  <div className="book-loader" style={{ width: '22px', height: '22px', borderTopColor: 'var(--color-champagne)', marginBottom: '8px' }}></div>
-                  <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '4px' }}>Uploading...</strong>
-                  <div style={{ width: '100%', height: '3px', background: 'rgba(255,255,255,0.05)', borderRadius: '100px', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', background: 'var(--color-champagne)', width: `${uploadProgress}%`, transition: 'width 0.15s ease' }}></div>
+        {uploading ? (
+          <>
+            <div className="book-loader" style={{ width: '28px', height: '28px', borderTopColor: 'var(--admin-accent)' }} />
+            <strong style={{ color: 'white', fontSize: '14px' }}>Uploading…</strong>
+          </>
+        ) : (
+          <>
+            <div style={{
+              width: '56px', height: '56px', borderRadius: '50%',
+              background: 'rgba(34,197,94,0.08)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              <Plus size={26} style={{ color: 'var(--admin-accent)' }} />
+            </div>
+            <strong style={{ color: 'white', fontSize: '15px' }}>Add Banner Images</strong>
+            <span style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>
+              Drag & drop images here, or <span style={{ color: 'var(--admin-accent)', fontWeight: 600 }}>click to browse</span>
+            </span>
+            <span style={{ color: 'var(--color-text-muted)', fontSize: '12px', marginTop: '-4px' }}>
+              Supports JPG, PNG, WebP · Multiple files allowed
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* ── Slides Grid ── */}
+      {slides.length === 0 ? (
+        <div style={{
+          textAlign: 'center', padding: '60px 20px',
+          color: 'var(--color-text-muted)', fontSize: '14px'
+        }}>
+          <CloudUpload size={42} style={{ opacity: 0.3, marginBottom: '12px', display: 'block', margin: '0 auto 12px' }} />
+          <p>No banner slides yet.</p>
+          <p style={{ marginTop: '4px', opacity: 0.6 }}>Upload your first image above to get started.</p>
+        </div>
+      ) : (
+        <>
+          <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '16px' }}>
+            <GripVertical size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+            Drag cards to reorder — changes are saved automatically.
+          </p>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+            gap: '20px',
+          }}>
+            {slides.map((slide, idx) => (
+              <div
+                key={slide.id}
+                draggable
+                onDragStart={() => onDragStart(idx)}
+                onDragEnter={() => onDragEnterCard(idx)}
+                onDragEnd={onDragEnd}
+                style={{
+                  background: 'var(--admin-card-bg)',
+                  border: `1px solid ${slide.isActive ? 'var(--admin-border)' : 'rgba(255,255,255,0.06)'}`,
+                  borderRadius: '14px',
+                  overflow: 'hidden',
+                  opacity: slide.isActive ? 1 : 0.45,
+                  transition: 'opacity 0.3s, transform 0.2s',
+                  cursor: 'grab',
+                  userSelect: 'none',
+                }}
+              >
+                {/* Slide image */}
+                <div
+                  onClick={() => setPreviewUrl(slide.imageUrl)}
+                  style={{
+                    position: 'relative',
+                    aspectRatio: '16/9',
+                    overflow: 'hidden',
+                    background: '#111',
+                    cursor: 'zoom-in',
+                  }}
+                >
+                  <img
+                    src={slide.imageUrl}
+                    alt={`Slide ${idx + 1}`}
+                    loading="lazy"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                  {/* Order badge */}
+                  <div style={{
+                    position: 'absolute', top: '10px', left: '10px',
+                    background: 'rgba(0,0,0,0.75)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: 'white', padding: '3px 10px',
+                    borderRadius: '100px', fontSize: '12px', fontWeight: 700,
+                    backdropFilter: 'blur(4px)',
+                  }}>
+                    #{idx + 1}
+                  </div>
+                  {!slide.isActive && (
+                    <div style={{
+                      position: 'absolute', inset: 0,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: 'rgba(0,0,0,0.45)',
+                    }}>
+                      <EyeOff size={28} style={{ color: 'rgba(255,255,255,0.5)' }} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Actions row */}
+                <div style={{
+                  display: 'flex', alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 14px',
+                  gap: '8px',
+                }}>
+                  {/* Drag handle hint */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-text-muted)', fontSize: '12px', minWidth: 0, overflow: 'hidden' }}>
+                    <GripVertical size={14} />
+                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {slide.isActive ? 'Visible' : 'Hidden'}
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                    {/* Toggle visibility */}
+                    <button
+                      onClick={() => handleToggle(slide)}
+                      title={slide.isActive ? 'Hide slide' : 'Show slide'}
+                      style={{
+                        width: '32px', height: '32px',
+                        borderRadius: '8px',
+                        background: slide.isActive ? 'rgba(34,197,94,0.12)' : 'rgba(255,255,255,0.05)',
+                        border: `1px solid ${slide.isActive ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                        color: slide.isActive ? '#22c55e' : 'rgba(255,255,255,0.4)',
+                        cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      {slide.isActive ? <Eye size={15} /> : <EyeOff size={15} />}
+                    </button>
+
+                    {/* Delete */}
+                    <button
+                      onClick={() => handleDelete(slide.id)}
+                      title="Delete slide"
+                      style={{
+                        width: '32px', height: '32px',
+                        borderRadius: '8px',
+                        background: 'rgba(239,68,68,0.08)',
+                        border: '1px solid rgba(239,68,68,0.2)',
+                        color: '#ef4444',
+                        cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      <Trash2 size={15} />
+                    </button>
                   </div>
                 </div>
-              ) : (
-                <div style={{ animation: 'zoomIn 0.3s ease' }}>
-                  <CheckCircle size={32} style={{ color: '#22c55e', marginBottom: '8px' }} />
-                  <strong style={{ display: 'block', fontSize: '0.8rem', color: 'white', marginBottom: '2px' }}>Image Loaded!</strong>
-                  <span style={{ fontSize: '0.68rem', color: '#22c55e', fontWeight: 600 }}>Ready to save</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" htmlFor="banner-smallHeading">Small Top Label (Eyebrow)</label>
-            <input 
-              id="banner-smallHeading"
-              className="form-input" 
-              value={banner.smallHeading}
-              onChange={e => setBanner(prev => ({ ...prev, smallHeading: e.target.value }))}
-              placeholder="e.g. Zha Aesthetic Salon"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" htmlFor="banner-mainHeading">Main Heading Title</label>
-            <input 
-              id="banner-mainHeading"
-              className="form-input" 
-              value={banner.mainHeading}
-              onChange={e => setBanner(prev => ({ ...prev, mainHeading: e.target.value }))}
-              placeholder="Main premium title text"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" htmlFor="banner-description">Hero Subtitle/Description</label>
-            <textarea 
-              id="banner-description"
-              className="form-input" 
-              rows={3}
-              value={banner.description}
-              onChange={e => setBanner(prev => ({ ...prev, description: e.target.value }))}
-              placeholder="A brief premium caption describing the salon services"
-              style={{ fontFamily: 'inherit', resize: 'vertical' }}
-              required
-            />
-          </div>
-
-          <div className="admin-grid-2col">
-            <div className="form-group">
-              <label className="form-label" htmlFor="banner-primaryBtn">Primary Button Label</label>
-              <input 
-                id="banner-primaryBtn"
-                className="form-input" 
-                value={banner.primaryBtn}
-                onChange={e => setBanner(prev => ({ ...prev, primaryBtn: e.target.value }))}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="banner-secondaryBtn">Secondary Button Label</label>
-              <input 
-                id="banner-secondaryBtn"
-                className="form-input" 
-                value={banner.secondaryBtn}
-                onChange={e => setBanner(prev => ({ ...prev, secondaryBtn: e.target.value }))}
-                required
-              />
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: 'var(--space-lg)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-              <button className="btn btn-primary" type="submit" disabled={saving} style={{ fontSize: '0.82rem' }}>
-                <Save size={14} /> {saving ? 'Saving...' : 'Update Banner'}
-              </button>
-              {saved && (
-                <div style={{ color: '#22c55e', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem' }}>
-                  <Check size={16} /> Banner updated successfully!
-                </div>
-              )}
-            </div>
-            {errorMsg && (
-              <div style={{ color: '#ef4444', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem', marginTop: '4px' }}>
-                ✕ {errorMsg}
               </div>
-            )}
+            ))}
           </div>
-        </form>
-
-        {/* Live Preview Box */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--admin-accent)' }}>
-            <Eye size={16} />
-            <strong style={{ textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.1em', fontWeight: 600 }}>Live Hero Preview</strong>
-          </div>
-          <div className="banner-preview-card" style={{
-            position: 'relative',
-            height: '420px',
-            borderRadius: '12px',
-            overflow: 'hidden',
-            border: '1px solid var(--admin-border)',
-            boxShadow: 'var(--admin-shadow)',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '32px',
-            background: '#0a0a0a',
-          }}>
-            {/* Background Image mock */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: `linear-gradient(135deg, rgba(11,11,11,0.92) 0%, rgba(24,24,24,0.7) 100%), url('${banner.imageUrl}')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              zIndex: 0,
-            }} />
-
-            {/* Simulated Hero Content */}
-            <div style={{ position: 'relative', zIndex: 1, color: 'white', maxWidth: '380px' }}>
-              <div style={{ 
-                fontSize: '10px', 
-                textTransform: 'uppercase', 
-                letterSpacing: '0.2em', 
-                color: 'var(--admin-accent)',
-                fontWeight: 600,
-                marginBottom: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}>
-                <span style={{ width: '12px', height: '1.5px', background: 'var(--admin-accent)', display: 'inline-block' }}></span>
-                {banner.smallHeading}
-              </div>
-              <h2 style={{ 
-                fontSize: '22px', 
-                lineHeight: '1.25',
-                color: 'white',
-                marginBottom: '12px',
-                fontWeight: 600,
-                letterSpacing: '-0.5px'
-              }}>
-                {banner.mainHeading}
-              </h2>
-              <p style={{ 
-                fontSize: '12.5px', 
-                color: 'rgba(255,255,255,0.7)', 
-                lineHeight: '1.5',
-                marginBottom: '20px',
-                fontWeight: 400
-              }}>
-                {banner.description}
-              </p>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <div style={{
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  background: 'var(--admin-accent-gradient)',
-                  color: '#000',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
-                }}>
-                  {banner.primaryBtn}
-                </div>
-                <div style={{
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  color: 'white',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
-                  background: 'rgba(255,255,255,0.02)'
-                }}>
-                  {banner.secondaryBtn}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }
