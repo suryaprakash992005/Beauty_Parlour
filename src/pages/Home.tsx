@@ -109,7 +109,6 @@ function BeforeAfterSlider() {
 export default function Home() {
   useSEO(PAGE_SEO.home);
   const [bgIndex, setBgIndex] = useState(0);
-  const [heroSlides, setHeroSlides] = useState<BannerSlide[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [homeReviews, setHomeReviews] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -117,10 +116,28 @@ export default function Home() {
 
   useScrollReveal([services]);
 
-  // Load dynamic hero slides from Supabase
+  // Default fallback slides so new users see hero images instantly on Frame 1
+  const defaultSlides = useMemo<BannerSlide[]>(() => [
+    { id: -1, imageUrl: IS_MOBILE ? '/salon_green_theme_1_mobile.jpg' : '/salon_green_theme_1.jpg', sortOrder: 0, isActive: true },
+    { id: -2, imageUrl: IS_MOBILE ? '/salon_green_theme_2_mobile.jpg' : '/salon_green_theme_2.jpg', sortOrder: 1, isActive: true },
+    { id: -3, imageUrl: IS_MOBILE ? '/salon_green_theme_3_mobile.jpg' : '/salon_green_theme_3.jpg', sortOrder: 2, isActive: true },
+  ], []);
+
+  const [heroSlides, setHeroSlides] = useState<BannerSlide[]>(defaultSlides);
+
+  // Load dynamic hero slides from Supabase with smooth pre-decoding
   useEffect(() => {
     getBannerSlides()
-      .then(slides => setHeroSlides(slides))
+      .then(slides => {
+        if (slides && slides.length > 0) {
+          // Pre-decode dynamic slide 0 in background memory so new users never see a black frame
+          const img = new Image();
+          img.src = slides[0].imageUrl;
+          const applySlides = () => setHeroSlides(slides);
+          img.onload = applySlides;
+          img.onerror = applySlides;
+        }
+      })
       .catch(err => console.error('Failed to load hero slides:', err));
   }, []);
 

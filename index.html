@@ -65,18 +65,75 @@
     <meta name="application-name" content="ZHA Aesthetic Salon" />
     <meta name="msapplication-TileColor" content="#0B0B0B" />
 
-    <!-- ── Performance: Preconnect to critical origins ── -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- ── Performance: Preconnect to font servers ── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="dns-prefetch" href="https://supabase.co" />
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
 
-    <!-- ── Primary Font Stylesheet with display=swap ── -->
+    <!-- ── Preload Fonts for ZERO Layout Shift (FOUT Prevention) ── -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600;700&family=Great+Vibes&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600;700&family=Great+Vibes&display=swap" />
 
+    <!-- ── Instant Hero Preload for New Users ── -->
+    <link rel="preload" as="image" href="/salon_green_theme_1_mobile.jpg" media="(max-width: 768px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/salon_green_theme_1.jpg" media="(min-width: 769px)" fetchpriority="high" />
 
-
+    <!-- ── Critical inline styling for Smooth Luxury Opening ── -->
+    <style>
+      /* Ensure fallback font metric stability */
+      html {
+        font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-color: #0B0B0B;
+        color: #FFFFFF;
+      }
+      h1, h2, h3, .font-serif {
+        font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+      }
+      #app-splash-screen {
+        position: fixed;
+        inset: 0;
+        background-color: #0B0B0B;
+        z-index: 999999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+      }
+      #app-splash-screen.loaded {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .splash-logo-wrap {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        padding: 3px;
+        background: linear-gradient(135deg, #D4AF37, #8B7326);
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.35);
+        animation: splashPulse 1.8s infinite ease-in-out;
+      }
+      .splash-logo-inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .splash-text {
+        margin-top: 18px;
+        font-family: 'Jost', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: #D4AF37;
+      }
+      @keyframes splashPulse {
+        0%, 100% { transform: scale(1); opacity: 0.85; }
+        50% { transform: scale(1.06); opacity: 1; box-shadow: 0 0 40px rgba(212, 175, 55, 0.55); }
+      }
+    </style>
 
     <!-- ── Enterprise Schema.org JSON-LD (BeautySalon + LocalBusiness + OfferCatalog) ── -->
     <script type="application/ld+json">
@@ -303,6 +360,22 @@
     </script>
   </head>
   <body>
+    <!-- ── Luxury App Opening Curtain ── -->
+    <div id="app-splash-screen" aria-hidden="true">
+      <div class="splash-logo-wrap">
+        <img src="/logo.jpg" alt="ZHA Aesthetic Salon" class="splash-logo-inner" />
+      </div>
+      <div class="splash-text">ZHA Aesthetic Salon</div>
+    </div>
+    <script>
+      // Gracefully dismiss splash curtain once DOM is ready & initial frame painted
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          var splash = document.getElementById('app-splash-screen');
+          if (splash) splash.classList.add('loaded');
+        }, 450);
+      });
+    </script>
     <div id="root"></div>
     <noscript>
       <div style="text-align:center;padding:40px;font-family:sans-serif;">
