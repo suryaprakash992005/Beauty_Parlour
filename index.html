@@ -418,13 +418,23 @@
       </div>
     </div>
     <script>
-      // 100% Isomorphic Logo Flight Animation from center screen to Navbar logo (top-left)
+      // 100% Isomorphic Logo Flight Animation (Mobile & Desktop Responsive)
       function runLogoFlightAnimation() {
         var splash = document.getElementById('app-splash-screen');
         var splashBrand = document.getElementById('splash-brand-group');
-        var navLogo = document.querySelector('.navbar__logo-group');
 
         if (!splash || !splashBrand) return;
+
+        // Find the currently VISIBLE navbar logo (handles mobile vs desktop headers)
+        var allLogos = document.querySelectorAll('.navbar__logo-group');
+        var navLogo = null;
+        for (var i = 0; i < allLogos.length; i++) {
+          var r = allLogos[i].getBoundingClientRect();
+          if (r.width > 0 && r.height > 0) {
+            navLogo = allLogos[i];
+            break;
+          }
+        }
 
         if (navLogo) {
           var navRect = navLogo.getBoundingClientRect();
