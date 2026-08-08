@@ -78,7 +78,7 @@
     <link rel="preload" as="image" href="/salon_green_theme_1_mobile.jpg" media="(max-width: 768px)" fetchpriority="high" />
     <link rel="preload" as="image" href="/salon_green_theme_1.jpg" media="(min-width: 769px)" fetchpriority="high" />
 
-    <!-- ── Critical inline styling for Luxury Logo Flight Animation ── -->
+    <!-- ── Critical inline styling for 100% Isomorphic Logo Flight Animation ── -->
     <style>
       /* Ensure font metric stability */
       html {
@@ -109,10 +109,10 @@
 
       .splash-brand-group {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
         gap: 12px;
-        transform-origin: center center;
+        transform-origin: 0 0;
         will-change: transform;
         transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
       }
@@ -122,18 +122,19 @@
         background-color: transparent;
       }
       #app-splash-screen.animating .splash-brand-group {
-        transform: translate3d(var(--target-x, -35vw), var(--target-y, -42vh), 0) scale(var(--target-scale, 0.45));
+        transform: translate3d(var(--target-x, 0px), var(--target-y, 0px), 0) scale(var(--target-scale, 1));
       }
 
       .splash-logo-circle {
-        width: 76px;
-        height: 76px;
+        width: 58px;
+        height: 58px;
         border-radius: 50%;
         padding: 2px;
         background: #1e1510;
-        border: 2px solid #D4AF37;
-        box-shadow: 0 0 30px rgba(212, 175, 55, 0.45);
+        border: 1.5px solid #D4AF37;
+        box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
         overflow: hidden;
+        flex-shrink: 0;
         animation: splashGlow 2s infinite ease-in-out;
       }
       .splash-logo-img {
@@ -145,30 +146,29 @@
       .splash-text-wrap {
         display: flex;
         flex-direction: column;
-        align-items: center;
         line-height: 1.1;
       }
       .splash-brand-name {
-        font-family: 'Great Vibes', cursive, serif;
-        font-size: 3rem;
-        color: #D4AF37;
+        font-family: 'Great Vibes', cursive, serif !important;
+        font-size: 3.2rem !important;
+        font-weight: 400 !important;
+        color: #D4AF37 !important;
         line-height: 0.75;
         margin-top: 6px;
-        text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
       }
       .splash-brand-tagline {
-        font-family: 'Jost', sans-serif;
-        font-size: 0.65rem;
-        font-weight: 700;
-        letter-spacing: 0.22em;
-        color: rgba(255, 255, 255, 0.7);
+        font-family: 'Jost', sans-serif !important;
+        font-size: 0.62rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.18em !important;
+        color: rgba(255, 255, 255, 0.7) !important;
         text-transform: uppercase;
-        margin-top: 4px;
+        margin-top: 2px;
       }
 
       @keyframes splashGlow {
         0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(212, 175, 55, 0.35); }
-        50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
+        50% { transform: scale(1.04); box-shadow: 0 0 35px rgba(212, 175, 55, 0.55); }
       }
     </style>
 
@@ -410,7 +410,7 @@
       </div>
     </div>
     <script>
-      // Smooth Logo Flight Animation from center screen to Navbar logo (top-left)
+      // 100% Isomorphic Logo Flight Animation from center screen to Navbar logo (top-left)
       function runLogoFlightAnimation() {
         var splash = document.getElementById('app-splash-screen');
         var splashBrand = document.getElementById('splash-brand-group');
@@ -422,14 +422,14 @@
           var navRect = navLogo.getBoundingClientRect();
           var splashRect = splashBrand.getBoundingClientRect();
 
-          if (navRect.width > 0 && navRect.height > 0) {
-            var deltaX = navRect.left + (navRect.width / 2) - (splashRect.left + (splashRect.width / 2));
-            var deltaY = navRect.top + (navRect.height / 2) - (splashRect.top + (splashRect.height / 2));
+          if (navRect.width > 0 && navRect.height > 0 && splashRect.width > 0) {
+            var deltaX = navRect.left - splashRect.left;
+            var deltaY = navRect.top - splashRect.top;
             var scale = navRect.height / splashRect.height;
 
             splash.style.setProperty('--target-x', deltaX + 'px');
             splash.style.setProperty('--target-y', deltaY + 'px');
-            splash.style.setProperty('--target-scale', Math.max(0.35, Math.min(0.85, scale)));
+            splash.style.setProperty('--target-scale', scale);
           }
         }
 
@@ -440,18 +440,8 @@
         }, 900);
       }
 
-      // Trigger logo flight after short initial splash presentation
-      window.addEventListener('load', function() {
-        setTimeout(runLogoFlightAnimation, 450);
-      });
-
-      // Fallback timer if load event is delayed
-      setTimeout(function() {
-        var splash = document.getElementById('app-splash-screen');
-        if (splash && !splash.classList.contains('animating')) {
-          runLogoFlightAnimation();
-        }
-      }, 1000);
+      // Initial presentation wait time: 3.2 seconds (3200ms) as requested
+      setTimeout(runLogoFlightAnimation, 3200);
     </script>
     <div id="root"></div>
     <noscript>
