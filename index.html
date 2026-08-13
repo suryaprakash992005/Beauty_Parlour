@@ -103,21 +103,22 @@
         overflow: hidden;
       }
       #app-splash-screen.loaded {
-        opacity: 0;
-        visibility: hidden;
+        opacity: 0 !important;
+        visibility: hidden !important;
       }
 
       /* Hide static navbar logo during flight animation to prevent double-vision ghosting */
       body.splash-active .navbar__logo-group {
         opacity: 0 !important;
-        transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        visibility: hidden !important;
       }
 
       .splash-brand-group {
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 19.2px;
+        gap: 12px;
+        transform: scale(1.6);
         transform-origin: 0 0;
         will-change: transform;
         backface-visibility: hidden;
@@ -134,20 +135,20 @@
       #app-splash-screen.animating .splash-brand-group {
         transform: translate3d(var(--target-x, 0px), var(--target-y, 0px), 0) scale(var(--target-scale, 1));
       }
-      /* Pause GPU shadow animations during flight to guarantee 60fps mobile performance */
+      /* Pause GPU shadow animations during flight to guarantee 60fps performance */
       #app-splash-screen.animating .splash-logo-circle {
         animation: none !important;
-        box-shadow: 0 0 15px rgba(212, 175, 55, 0.3) !important;
+        box-shadow: 0 0 10px rgba(212, 175, 55, 0.2) !important;
       }
 
       .splash-logo-circle {
-        width: 67.2px;
-        height: 67.2px;
+        width: 42px;
+        height: 42px;
         border-radius: 50%;
         padding: 2px;
         background: #1e1510;
-        border: 1.6px solid #D4AF37;
-        box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        border: 1px solid #D4AF37;
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         overflow: hidden;
         flex-shrink: 0;
         animation: splashGlow 2s infinite ease-in-out;
@@ -167,27 +168,27 @@
       }
       .splash-brand-name {
         font-family: 'Great Vibes', cursive, serif !important;
-        font-size: 4.0rem !important;
+        font-size: 2.5rem !important;
         font-weight: 400 !important;
         color: #D4AF37 !important;
-        line-height: 0.75;
-        margin-top: 9.6px;
-        letter-spacing: normal;
-        text-transform: none;
+        line-height: 0.75 !important;
+        margin-top: 6px !important;
+        letter-spacing: normal !important;
+        text-transform: none !important;
       }
       .splash-brand-tagline {
         font-family: 'Jost', sans-serif !important;
-        font-size: 0.88rem !important;
+        font-size: 0.55rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.18em !important;
         color: rgba(255, 255, 255, 0.7) !important;
-        text-transform: uppercase;
-        margin-top: 3.2px;
+        text-transform: uppercase !important;
+        margin-top: 2px !important;
       }
 
       @keyframes splashGlow {
-        0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(212, 175, 55, 0.35); }
-        50% { transform: scale(1.04); box-shadow: 0 0 35px rgba(212, 175, 55, 0.55); }
+        0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.35); }
+        50% { transform: scale(1.04); box-shadow: 0 0 30px rgba(212, 175, 55, 0.55); }
       }
     </style>
 
@@ -464,15 +465,12 @@
 
         splash.classList.add('animating');
 
-        // Staggered frame handoff: fade in static navbar logo right as landing finishes (780ms)
-        setTimeout(function() {
-          document.body.classList.remove('splash-active');
-        }, 780);
-
-        // Hide splash container after navbar logo is fully visible (980ms)
+        // At 850ms (exact 0.85s flight completion): 0ms atomic handoff!
+        // Hide splash container and reveal static navbar logo in the exact same frame!
         setTimeout(function() {
           splash.classList.add('loaded');
-        }, 980);
+          document.body.classList.remove('splash-active');
+        }, 850);
       }
 
       // Initial presentation wait time: 3.2 seconds (3200ms) as requested
