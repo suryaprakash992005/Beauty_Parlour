@@ -103,57 +103,47 @@
         overflow: hidden;
       }
       #app-splash-screen.loaded {
-        opacity: 0 !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
+        opacity: 0;
+        visibility: hidden;
       }
 
-      /* Hide static navbar logo initially, fade in during splash handoff */
+      /* Hide static navbar logo during flight animation to prevent double-vision ghosting */
       body.splash-active .navbar__logo-group {
         opacity: 0 !important;
-        visibility: hidden !important;
+        transition: opacity 0.2s ease-in-out;
       }
 
-      /* Desktop / Laptop Base Layout (min-width: 768px) */
       .splash-brand-group {
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 12px;
-        transform: scale(1.6);
-        transform-origin: 0 0;
-        will-change: transform;
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-        transform-style: preserve-3d;
-        -webkit-transform-style: preserve-3d;
-        transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
+        gap: 19.2px;
       }
 
-      #app-splash-screen.animating {
-        background-color: transparent;
+      /* Animated Flight transforms applied individually to circle and text */
+      #app-splash-screen.animating .splash-logo-circle {
+        transform: translate3d(var(--c-x, 0px), var(--c-y, 0px), 0) scale(var(--c-scale, 1));
       }
-
-      /* Desktop Flight Transform */
-      #app-splash-screen.animating .splash-brand-group {
-        transform: translate3d(var(--target-x, 0px), var(--target-y, 0px), 0) scale(var(--target-scale, 1));
+      #app-splash-screen.animating .splash-text-wrap {
+        transform: translate3d(var(--t-x, 0px), var(--t-y, 0px), 0) scale(var(--t-scale, 1));
       }
 
       .splash-logo-circle {
-        width: 42px;
-        height: 42px;
+        width: 67.2px;
+        height: 67.2px;
         border-radius: 50%;
         padding: 2px;
         background: #1e1510;
-        border: 1px solid #D4AF37;
-        box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        border: 1.6px solid #D4AF37;
+        box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
         overflow: hidden;
         flex-shrink: 0;
+        transform-origin: 0 0;
+        will-change: transform;
+        transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
         animation: splashGlow 2s infinite ease-in-out;
-      }
-      #app-splash-screen.animating .splash-logo-circle {
-        animation: none !important;
-        box-shadow: 0 0 10px rgba(212, 175, 55, 0.2) !important;
       }
       .splash-logo-img {
         width: 100%;
@@ -165,69 +155,56 @@
         display: flex;
         flex-direction: column;
         line-height: 1.1;
+        transform-origin: 0 0;
+        will-change: transform;
+        transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
       }
       .splash-brand-name {
         font-family: 'Great Vibes', cursive, serif !important;
-        font-size: 2.5rem !important;
+        font-size: 4.0rem !important;
         font-weight: 400 !important;
         color: #D4AF37 !important;
-        line-height: 0.75 !important;
-        margin-top: 6px !important;
-        letter-spacing: normal !important;
-        text-transform: none !important;
+        line-height: 0.75;
+        margin-top: 9.6px;
+        letter-spacing: normal;
+        text-transform: none;
       }
       .splash-brand-tagline {
         font-family: 'Jost', sans-serif !important;
-        font-size: 0.55rem !important;
+        font-size: 0.88rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.18em !important;
         color: rgba(255, 255, 255, 0.7) !important;
-        text-transform: uppercase !important;
-        margin-top: 2px !important;
+        text-transform: uppercase;
+        margin-top: 3.2px;
       }
 
-      /* Mobile Responsive Override (max-width: 767px) */
+      /* Mobile View Specific Layout overrides */
       @media (max-width: 767px) {
         .splash-brand-group {
-          flex-direction: column;
-          justify-content: center;
-          gap: 14px;
+          flex-direction: column !important;
+          gap: 16px !important;
           text-align: center;
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate3d(-50%, -50%, 0);
-          transform-origin: center center;
-          transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.75s cubic-bezier(0.65, 0, 0.35, 1);
-        }
-        #app-splash-screen.animating .splash-brand-group {
-          transform: translate3d(calc(-50% + var(--target-x, -35vw)), calc(-50% + var(--target-y, -42vh)), 0) scale(var(--target-scale, 0.45));
-          opacity: 0;
         }
         .splash-logo-circle {
-          width: 72px;
-          height: 72px;
-          border: 2px solid #D4AF37;
-          box-shadow: 0 0 30px rgba(212, 175, 55, 0.45);
-        }
-        .splash-text-wrap {
-          align-items: center;
+          width: 58px !important;
+          height: 58px !important;
         }
         .splash-brand-name {
-          font-size: 3.2rem !important;
-          margin-top: 6px !important;
-          text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+          font-size: 2.5rem !important;
+          margin-top: 4px !important;
         }
         .splash-brand-tagline {
-          font-size: 0.68rem !important;
-          letter-spacing: 0.22em !important;
-          margin-top: 4px !important;
+          font-size: 0.65rem !important;
+          margin-top: 1px !important;
         }
       }
 
       @keyframes splashGlow {
-        0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.35); }
-        50% { transform: scale(1.04); box-shadow: 0 0 30px rgba(212, 175, 55, 0.55); }
+        0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(212, 175, 55, 0.35); }
+        50% { transform: scale(1.04); box-shadow: 0 0 35px rgba(212, 175, 55, 0.55); }
       }
     </style>
 
@@ -469,14 +446,13 @@
       </div>
     </div>
     <script>
-      // Responsive Logo Flight Animation (Desktop Isomorphic 1:1 + Mobile Centered Crossfade)
+      // 100% Isomorphic Logo Flight Animation (Mobile & Desktop Responsive)
       function runLogoFlightAnimation() {
         var splash = document.getElementById('app-splash-screen');
-        var splashBrand = document.getElementById('splash-brand-group');
+        var splashCircle = document.querySelector('#app-splash-screen .splash-logo-circle');
+        var splashText = document.querySelector('#app-splash-screen .splash-text-wrap');
 
-        if (!splash || !splashBrand) return;
-
-        var isMobile = window.innerWidth <= 767;
+        if (!splash || !splashCircle || !splashText) return;
 
         // Find the currently VISIBLE navbar logo (handles mobile vs desktop headers)
         var allLogos = document.querySelectorAll('.navbar__logo-group');
@@ -490,54 +466,42 @@
         }
 
         if (navLogo) {
-          var navRect = navLogo.getBoundingClientRect();
-          var splashRect = splashBrand.getBoundingClientRect();
+          var navCircle = navLogo.querySelector('.navbar__logo-circle');
+          var navText = navLogo.querySelector('.navbar__logo-text-wrap');
 
-          if (navRect.width > 0 && navRect.height > 0 && splashRect.width > 0) {
-            if (isMobile) {
-              // Mobile centered flight math
-              var navCenterX = navRect.left + (navRect.width / 2);
-              var navCenterY = navRect.top + (navRect.height / 2);
-              var splashCenterX = splashRect.left + (splashRect.width / 2);
-              var splashCenterY = splashRect.top + (splashRect.height / 2);
+          if (navCircle && navText) {
+            var navCircleRect = navCircle.getBoundingClientRect();
+            var splashCircleRect = splashCircle.getBoundingClientRect();
+            var navTextRect = navText.getBoundingClientRect();
+            var splashTextRect = splashText.getBoundingClientRect();
 
-              var deltaX = navCenterX - splashCenterX;
-              var deltaY = navCenterY - splashCenterY;
-              var scale = Math.max(0.35, Math.min(0.75, navRect.height / splashRect.height));
+            // Calculate translation and scale for the logo circle
+            var cX = navCircleRect.left - splashCircleRect.left;
+            var cY = navCircleRect.top - splashCircleRect.top;
+            var cScale = navCircleRect.width / splashCircleRect.width;
 
-              splash.style.setProperty('--target-x', deltaX + 'px');
-              splash.style.setProperty('--target-y', deltaY + 'px');
-              splash.style.setProperty('--target-scale', scale);
-            } else {
-              // Desktop top-left 1:1 isomorphic flight math
-              var deltaX = navRect.left - splashRect.left;
-              var deltaY = navRect.top - splashRect.top;
-              var scale = navRect.height / splashRect.height;
+            // Calculate translation and scale for the text wrap
+            var tX = navTextRect.left - splashTextRect.left;
+            var tY = navTextRect.top - splashTextRect.top;
+            var tScale = navTextRect.height / splashTextRect.height;
 
-              splash.style.setProperty('--target-x', deltaX + 'px');
-              splash.style.setProperty('--target-y', deltaY + 'px');
-              splash.style.setProperty('--target-scale', scale);
-            }
+            splash.style.setProperty('--c-x', cX + 'px');
+            splash.style.setProperty('--c-y', cY + 'px');
+            splash.style.setProperty('--c-scale', cScale);
+
+            splash.style.setProperty('--t-x', tX + 'px');
+            splash.style.setProperty('--t-y', tY + 'px');
+            splash.style.setProperty('--t-scale', tScale);
           }
         }
 
         splash.classList.add('animating');
 
-        if (isMobile) {
-          // Mobile crossfade timing
-          setTimeout(function() {
-            document.body.classList.remove('splash-active');
-          }, 380);
-          setTimeout(function() {
-            splash.classList.add('loaded');
-          }, 850);
-        } else {
-          // Desktop 0ms atomic handoff timing at 850ms
-          setTimeout(function() {
-            splash.classList.add('loaded');
-            document.body.classList.remove('splash-active');
-          }, 850);
-        }
+        // End-of-animation handoff timing optimization: 850ms (matches CSS transition exactly to avoid lag)
+        setTimeout(function() {
+          splash.classList.add('loaded');
+          document.body.classList.remove('splash-active');
+        }, 850);
       }
 
       // Initial presentation wait time: 3.2 seconds (3200ms) as requested
