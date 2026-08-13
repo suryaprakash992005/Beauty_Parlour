@@ -110,7 +110,7 @@
       /* Hide static navbar logo during flight animation to prevent double-vision ghosting */
       body.splash-active .navbar__logo-group {
         opacity: 0 !important;
-        transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       .splash-brand-group {
@@ -120,6 +120,10 @@
         gap: 19.2px;
         transform-origin: 0 0;
         will-change: transform;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
         transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
       }
 
@@ -129,6 +133,11 @@
       }
       #app-splash-screen.animating .splash-brand-group {
         transform: translate3d(var(--target-x, 0px), var(--target-y, 0px), 0) scale(var(--target-scale, 1));
+      }
+      /* Pause GPU shadow animations during flight to guarantee 60fps mobile performance */
+      #app-splash-screen.animating .splash-logo-circle {
+        animation: none !important;
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.3) !important;
       }
 
       .splash-logo-circle {
@@ -142,6 +151,8 @@
         overflow: hidden;
         flex-shrink: 0;
         animation: splashGlow 2s infinite ease-in-out;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
       }
       .splash-logo-img {
         width: 100%;
@@ -453,10 +464,15 @@
 
         splash.classList.add('animating');
 
+        // Staggered frame handoff: fade in static navbar logo right as landing finishes (780ms)
+        setTimeout(function() {
+          document.body.classList.remove('splash-active');
+        }, 780);
+
+        // Hide splash container after navbar logo is fully visible (980ms)
         setTimeout(function() {
           splash.classList.add('loaded');
-          document.body.classList.remove('splash-active');
-        }, 900);
+        }, 980);
       }
 
       // Initial presentation wait time: 3.2 seconds (3200ms) as requested
