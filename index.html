@@ -118,15 +118,17 @@
         flex-direction: row;
         align-items: center;
         gap: 19.2px;
+        transform-origin: 0 0;
+        will-change: transform;
+        transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
       }
 
-      /* Animated Flight transforms applied individually to circle and text */
-      #app-splash-screen.animating .splash-logo-circle {
-        animation: none !important; /* Release transform lock from keyframe animation during flight */
-        transform: translate3d(var(--c-x, 0px), var(--c-y, 0px), 0) scale(var(--c-scale, 1));
+      /* Animated Flight to Navbar Top-Left Corner */
+      #app-splash-screen.animating {
+        background-color: transparent;
       }
-      #app-splash-screen.animating .splash-text-wrap {
-        transform: translate3d(var(--t-x, 0px), var(--t-y, 0px), 0) scale(var(--t-scale, 1));
+      #app-splash-screen.animating .splash-brand-group {
+        transform: translate3d(var(--target-x, 0px), var(--target-y, 0px), 0) scale(var(--target-scale, 1));
       }
 
       .splash-logo-circle {
@@ -139,11 +141,6 @@
         box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
         overflow: hidden;
         flex-shrink: 0;
-        transform-origin: 0 0;
-        will-change: transform;
-        transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
         animation: splashGlow 2s infinite ease-in-out;
       }
       .splash-logo-img {
@@ -156,11 +153,6 @@
         display: flex;
         flex-direction: column;
         line-height: 1.1;
-        transform-origin: 0 0;
-        will-change: transform;
-        transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
       }
       .splash-brand-name {
         font-family: 'Great Vibes', cursive, serif !important;
@@ -180,27 +172,6 @@
         color: rgba(255, 255, 255, 0.7) !important;
         text-transform: uppercase;
         margin-top: 3.2px;
-      }
-
-      /* Mobile View Specific Layout overrides */
-      @media (max-width: 767px) {
-        .splash-brand-group {
-          flex-direction: row !important;
-          gap: 12px !important;
-        }
-        .splash-logo-circle {
-          width: 52px !important;
-          height: 52px !important;
-          border-width: 1.2px !important;
-        }
-        .splash-brand-name {
-          font-size: 2.6rem !important;
-          margin-top: 6px !important;
-        }
-        .splash-brand-tagline {
-          font-size: 0.58rem !important;
-          margin-top: 2px !important;
-        }
       }
 
       @keyframes splashGlow {
@@ -450,10 +421,9 @@
       // 100% Isomorphic Logo Flight Animation (Mobile & Desktop Responsive)
       function runLogoFlightAnimation() {
         var splash = document.getElementById('app-splash-screen');
-        var splashCircle = document.querySelector('#app-splash-screen .splash-logo-circle');
-        var splashText = document.querySelector('#app-splash-screen .splash-text-wrap');
+        var splashBrand = document.getElementById('splash-brand-group');
 
-        if (!splash || !splashCircle || !splashText) return;
+        if (!splash || !splashBrand) return;
 
         // Find the currently VISIBLE navbar logo (handles mobile vs desktop headers)
         var allLogos = document.querySelectorAll('.navbar__logo-group');
@@ -467,42 +437,26 @@
         }
 
         if (navLogo) {
-          var navCircle = navLogo.querySelector('.navbar__logo-circle');
-          var navText = navLogo.querySelector('.navbar__logo-text-wrap');
+          var navRect = navLogo.getBoundingClientRect();
+          var splashRect = splashBrand.getBoundingClientRect();
 
-          if (navCircle && navText) {
-            var navCircleRect = navCircle.getBoundingClientRect();
-            var splashCircleRect = splashCircle.getBoundingClientRect();
-            var navTextRect = navText.getBoundingClientRect();
-            var splashTextRect = splashText.getBoundingClientRect();
+          if (navRect.width > 0 && navRect.height > 0 && splashRect.width > 0) {
+            var deltaX = navRect.left - splashRect.left;
+            var deltaY = navRect.top - splashRect.top;
+            var scale = navRect.height / splashRect.height;
 
-            // Calculate translation and scale for the logo circle
-            var cX = navCircleRect.left - splashCircleRect.left;
-            var cY = navCircleRect.top - splashCircleRect.top;
-            var cScale = navCircleRect.width / splashCircleRect.width;
-
-            // Calculate translation and scale for the text wrap
-            var tX = navTextRect.left - splashTextRect.left;
-            var tY = navTextRect.top - splashTextRect.top;
-            var tScale = navTextRect.height / splashTextRect.height;
-
-            splash.style.setProperty('--c-x', cX + 'px');
-            splash.style.setProperty('--c-y', cY + 'px');
-            splash.style.setProperty('--c-scale', cScale);
-
-            splash.style.setProperty('--t-x', tX + 'px');
-            splash.style.setProperty('--t-y', tY + 'px');
-            splash.style.setProperty('--t-scale', tScale);
+            splash.style.setProperty('--target-x', deltaX + 'px');
+            splash.style.setProperty('--target-y', deltaY + 'px');
+            splash.style.setProperty('--target-scale', scale);
           }
         }
 
         splash.classList.add('animating');
 
-        // End-of-animation handoff timing optimization: 850ms (matches CSS transition exactly to avoid lag)
         setTimeout(function() {
           splash.classList.add('loaded');
           document.body.classList.remove('splash-active');
-        }, 850);
+        }, 900);
       }
 
       // Initial presentation wait time: 3.2 seconds (3200ms) as requested
